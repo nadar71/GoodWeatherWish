@@ -7,28 +7,39 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.view.View.OnClickListener;
 
 import com.example.android.sunshine.R;
 
 public class ForecastAdapter extends  RecyclerView.Adapter<ForecastAdapter.ForecastAdapterViewHolder>{
 
     private String[] mWeatherData;
+    private final ForecastAdapterOnClickHandler mClickHandler;
 
-    // Std Constructor
-    public ForecastAdapter() {
+    public interface ForecastAdapterOnClickHandler{
+        void onClick(String weatherForDay);
     }
 
-    public ForecastAdapter(String[] mWeatherData) {
-        this.mWeatherData = mWeatherData;
+
+    public ForecastAdapter(ForecastAdapterOnClickHandler handler) {
+        mClickHandler = handler;
     }
 
     // ViewHolder class for item content
-    class ForecastAdapterViewHolder extends RecyclerView.ViewHolder{
+    class ForecastAdapterViewHolder extends RecyclerView.ViewHolder implements OnClickListener {
         public final TextView mWeatherTextView;
 
         public ForecastAdapterViewHolder(View itemView) {
             super(itemView);
             mWeatherTextView = (TextView)  itemView.findViewById(R.id.tv_weather_data);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            int adapterPosition = getAdapterPosition();
+            String dayForecast  = mWeatherData[adapterPosition];
+            mClickHandler.onClick(dayForecast);
         }
 
     }
@@ -51,7 +62,7 @@ public class ForecastAdapter extends  RecyclerView.Adapter<ForecastAdapter.Forec
     }
 
 
-    // Connect adpater view holder with item position
+    // Connect viewHolder with item position
     @Override
     public void onBindViewHolder(@NonNull ForecastAdapterViewHolder holder, int position) {
         String forecastForThisDay = mWeatherData[position];
@@ -70,6 +81,7 @@ public class ForecastAdapter extends  RecyclerView.Adapter<ForecastAdapter.Forec
     }
 
     // Update data in the recycle view
+    // Recalled in mainActivity task/loader
     void setWeatherData(String[] weatherData){
         mWeatherData = weatherData;
         notifyDataSetChanged();
