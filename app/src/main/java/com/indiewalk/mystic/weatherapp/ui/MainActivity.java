@@ -133,7 +133,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected String[] doInBackground(String... params) {
 
-            /* If there's no zip code, there's nothing to look up. */
             if (params.length == 0) {
                 return null;
             }
@@ -162,16 +161,6 @@ public class MainActivity extends AppCompatActivity {
             if (weatherData != null) {
                 showWeatherDataView();
                 mForecastAdapter.setWeatherData(weatherData);
-                /*
-                 * Iterate through the array and append the Strings to the TextView. The reason why we add
-                 * the "\n\n\n" after the String is to give visual separation between each String in the
-                 * TextView. Later, we'll learn about a better way to display lists of data.
-                 */
-                /*
-                for (String weatherString : weatherData) {
-                    mWeatherTextView.append((weatherString) + "\n\n\n");
-                }
-                */
             } else {
                 showErrorMessage();
             }
@@ -193,7 +182,6 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_refresh) {
-             // mWeatherTextView.setText("");
             // delete the data
             mForecastAdapter = null;
             loadWeatherData();
