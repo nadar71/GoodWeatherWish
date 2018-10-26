@@ -24,8 +24,14 @@
     <!--or something similar.-->
     <string name="app_name">Sunshine</string>
 
-    <!--Used in overflow menu to refresh weather data-->
+    <!--Used in menu to refresh weather data-->
     <string name="action_refresh">Refresh</string>
+
+    <!--Used in menu to open location on map -->
+    <string name="action_open_map">Open on Map</string>
+
+    <!--Used in menu to share weather details-->
+    <string name="action_share_details">Share Weather Details</string>
 
     <string name="error_message">
         An error has occurred. Please try again by clicking REFRESH

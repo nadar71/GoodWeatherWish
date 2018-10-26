@@ -16,11 +16,14 @@
 package com.indiewalk.mystic.weatherapp.ui;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -37,6 +40,8 @@ import com.indiewalk.mystic.weatherapp.utilities.OpenWeatherJsonUtils;
 import java.net.URL;
 
 public class MainActivity extends AppCompatActivity implements ForecastAdapter.ForecastAdapterOnClickHandler {
+
+    private static  final String TAG = MainActivity.class.getSimpleName();
 
     private RecyclerView mRecyclerView;
     private ForecastAdapter mForecastAdapter;
@@ -82,8 +87,12 @@ public class MainActivity extends AppCompatActivity implements ForecastAdapter.F
     // Touch item action
     @Override
     public void onClick(String weatherForDay) {
-        Toast.makeText(this,weatherForDay,Toast.LENGTH_LONG).show();
+        Context context = this;
+        Intent showDetailActivity = new Intent(context,DetailActivity.class );
+        showDetailActivity.putExtra(Intent.EXTRA_TEXT, weatherForDay);
+        startActivity(showDetailActivity);
     }
+
 
     // Get the user's preferred location for weather, and then tell some
     // background method to get the weather data in the background.
@@ -170,16 +179,48 @@ public class MainActivity extends AppCompatActivity implements ForecastAdapter.F
         return true;
     }
 
+    // Open location in map :
+    // @see <a"http://developer.android.com/guide/components/intents-common.html#Maps">
+    private void openLocationInMap(){
+        //String addressString = "20 via Giotto,chignolo d'isola, IT";
+        String addressString = "1600 Amphitheatre Parkway, CA";
+        // build uri
+        Uri geoLocation = Uri.parse("geo:0,0?q=" + addressString);
+
+        // invoke a map app to show location on map
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(geoLocation);
+
+        if (intent.resolveActivity(getPackageManager()) != null){
+            startActivity(intent);
+        } else {
+            Log.d(TAG, "Couldn't call " + geoLocation.toString()
+                    + ", no receiving apps installed!");
+        }
+
+    }
+
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
+        // Refresh data
         if (id == R.id.action_refresh) {
             // delete the data
             mForecastAdapter = null;
             loadWeatherData();
             return true;
         }
+
+        // Open map
+        if (id == R.id.action_map) {
+            openLocationInMap();
+            return true;
+        }
+
+
 
         return super.onOptionsItemSelected(item);
     }
