@@ -18,7 +18,7 @@ package com.indiewalk.mystic.weatherapp.utilities;
 import android.content.Context;
 import android.text.format.DateUtils;
 
-import com.example.android.sunshine.R;
+import com.indiewalk.mystic.weatherapp.R;
 
 import java.text.SimpleDateFormat;
 import java.util.TimeZone;

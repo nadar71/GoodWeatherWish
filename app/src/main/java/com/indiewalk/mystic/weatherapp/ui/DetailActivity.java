@@ -11,7 +11,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.example.android.sunshine.R;
+import com.indiewalk.mystic.weatherapp.R;
 
 public class DetailActivity extends AppCompatActivity {
     private static  final  String TAG = DetailActivity.class.getSimpleName();

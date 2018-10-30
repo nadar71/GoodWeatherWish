@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.view.View.OnClickListener;
 
-import com.example.android.sunshine.R;
+import com.indiewalk.mystic.weatherapp.R;
 
 public class ForecastAdapter extends  RecyclerView.Adapter<ForecastAdapter.ForecastAdapterViewHolder>{
 

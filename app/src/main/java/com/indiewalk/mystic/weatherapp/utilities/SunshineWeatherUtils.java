@@ -18,7 +18,7 @@ package com.indiewalk.mystic.weatherapp.utilities;
 import android.content.Context;
 import android.util.Log;
 
-import com.example.android.sunshine.R;
+import com.indiewalk.mystic.weatherapp.R;
 import com.indiewalk.mystic.weatherapp.data.SunshinePreferences;
 
 /**
