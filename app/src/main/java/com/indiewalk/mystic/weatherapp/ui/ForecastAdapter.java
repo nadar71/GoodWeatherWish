@@ -11,6 +11,10 @@ import android.view.View.OnClickListener;
 
 import com.indiewalk.mystic.weatherapp.R;
 
+
+/**
+ *  Adapter class for recycle view
+ */
 public class ForecastAdapter extends  RecyclerView.Adapter<ForecastAdapter.ForecastAdapterViewHolder>{
 
     private String[] mWeatherData;
@@ -25,7 +29,7 @@ public class ForecastAdapter extends  RecyclerView.Adapter<ForecastAdapter.Forec
         mClickHandler = handler;
     }
 
-    // ViewHolder class for item content
+    // ViewHolder class for single item content
     class ForecastAdapterViewHolder extends RecyclerView.ViewHolder implements OnClickListener {
         public final TextView mWeatherTextView;
 

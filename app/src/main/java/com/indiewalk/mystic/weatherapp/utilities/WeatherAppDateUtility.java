@@ -1,18 +1,3 @@
-/*
- * Copyright (C) 2016 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.indiewalk.mystic.weatherapp.utilities;
 
 import android.content.Context;
@@ -24,9 +9,9 @@ import java.text.SimpleDateFormat;
 import java.util.TimeZone;
 
 /**
- * Class for handling date conversions that are useful for Sunshine.
+ * Class for handling date conversions
  */
-public final class SunshineDateUtils {
+public final class WeatherAppDateUtility {
 
     public static final long SECOND_IN_MILLIS = 1000;
     public static final long MINUTE_IN_MILLIS = SECOND_IN_MILLIS * 60;
@@ -90,7 +75,7 @@ public final class SunshineDateUtils {
 
     /**
      * Helper method to convert the database representation of the date into something to display
-     * to users.  As classy and polished a user experience as "20140102" is, we can do better.
+     * to users.
      * <p/>
      * The day string for forecast uses the following logic:
      * For today: "Today, June 8"
@@ -113,12 +98,10 @@ public final class SunshineDateUtils {
         long currentDayNumber = getDayNumber(System.currentTimeMillis());
 
         if (dayNumber == currentDayNumber || showFullDate) {
-            /*
-             * If the date we're building the String for is today's date, the format
-             * is "Today, June 24"
-             */
+            //If the date we're building the String for is today's date, the format is "Today, June 24"
             String dayName = getDayName(context, localDate);
             String readableDate = getReadableDateString(context, localDate);
+
             if (dayNumber - currentDayNumber < 2) {
                 /*
                  * Since there is no localized format that returns "Today" or "Tomorrow" in the API
@@ -136,7 +119,7 @@ public final class SunshineDateUtils {
                 return readableDate;
             }
         } else if (dayNumber < currentDayNumber + 7) {
-            /* If the input date is less than a week in the future, just return the day name. */
+            // If the input date is less than a week in the future, just return the day name.
             return getDayName(context, localDate);
         } else {
             int flags = DateUtils.FORMAT_SHOW_DATE

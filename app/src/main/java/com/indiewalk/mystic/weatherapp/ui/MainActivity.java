@@ -1,35 +1,22 @@
-/*
- * Copyright (C) 2016 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.indiewalk.mystic.weatherapp.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import android.support.v4.content.Loader;
-import android.support.v4.app.LoaderManager;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.AsyncTaskLoader;
+
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.preference.PreferenceManager;
+
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -37,30 +24,43 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.indiewalk.mystic.weatherapp.R;
-import com.indiewalk.mystic.weatherapp.data.SunshinePreferences;
+import com.indiewalk.mystic.weatherapp.data.UserPreferencesData;
 import com.indiewalk.mystic.weatherapp.utilities.NetworkUtils;
-import com.indiewalk.mystic.weatherapp.utilities.OpenWeatherJsonUtils;
+import com.indiewalk.mystic.weatherapp.utilities.OpenWeatherJsonUtility;
 
 import java.net.URL;
 
+/**
+ * MainActivity
+ * Implements :
+ * - ForecastAdapter.ForecastAdapterOnClickHandler : for clicking on an list item
+ * - LoaderCallbacks<String[]> : for precessing list of string loadeded through loader
+ * - SharedPreferences.OnSharedPreferenceChangeListener : for getting aware of changes in preferences and
+ *   loading/changing data displayed
+ */
 public class MainActivity extends AppCompatActivity implements 
 	ForecastAdapter.ForecastAdapterOnClickHandler ,
-        LoaderCallbacks<String[]>{
+        LoaderCallbacks<String[]>,
+        SharedPreferences.OnSharedPreferenceChangeListener
+  {
 
     private static  final String TAG = MainActivity.class.getSimpleName();
 
-    private RecyclerView mRecyclerView;
+    private RecyclerView    mRecyclerView;
     private ForecastAdapter mForecastAdapter;
 
-    private TextView mErrorMessageDisplay;
+    private TextView        mErrorMessageDisplay;
 
-    private ProgressBar mLoadingIndicator;
+    private ProgressBar     mLoadingIndicator;
 
     // id for the loader
     private static final int FORECAST_LOADER_ID = 0;
+
+    // flag for
+    private static boolean   PREFERENCES_HAVE_BEEN_UPDATED = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,15 +68,13 @@ public class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_forecast);
 
 
-        /* Using findViewById, we get a reference to our TextView from xml. This allows us to
-         * do things like set the text of the TextView.
-         */
+        // Get the recycle view layout
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerview_forecast);
 
         // This TextView is used to display errors and will be hidden if there are no errors
         mErrorMessageDisplay = (TextView) findViewById(R.id.tv_error_message_display);
 
-        // Create a LayoutManager
+        // Create a LayoutManager for the recyclerView
         LinearLayoutManager layoutManager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
 
         // Set the layoutManager in mRecyclerView
@@ -89,17 +87,22 @@ public class MainActivity extends AppCompatActivity implements
         mRecyclerView.setAdapter(mForecastAdapter);
 
         // The ProgressBar that will indicate to the user that we are loading data.
+        // Invisible when data woud have been loaded
         mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_loading_indicator);
-        //Init Loader using loader manager
-	int loaderId = FORECAST_LOADER_ID;
-	Bundle bundleForLoader = null;
-	LoaderCallbacks<String[]> callback = MainActivity.this;
-	getSupportLoaderManager().initLoader(loaderId, bundleForLoader, callback);
 
-        
+        //Init Loader using loader manager
+        int loaderId = FORECAST_LOADER_ID;
+        Bundle bundleForLoader = null;
+        LoaderCallbacks<String[]> callback = MainActivity.this;
+        getSupportLoaderManager().initLoader(loaderId, bundleForLoader, callback);
+
+        Log.d(TAG, "onCreate: registering preference changed listener");
+        //Register MainActivity as an OnPreferenceChangedListener for callback when a SharedPreference has changed.
+        PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this);
     }
 
-    // Create the Loader, define it's callback function
+
+    // Create the Loader, override it's callback functions
     @NonNull
     @Override
     public Loader<String[]> onCreateLoader(int id, @Nullable Bundle loaderArgs) {
@@ -131,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements
             @Override
             public String[] loadInBackground() {
 
-                String locationQuery = SunshinePreferences
+                String locationQuery = UserPreferencesData
                         .getPreferredWeatherLocation(MainActivity.this);
 
                 URL weatherRequestUrl = NetworkUtils.buildUrl(locationQuery);
@@ -140,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements
                     String jsonWeatherResponse = NetworkUtils
                             .getResponseFromHttpUrl(weatherRequestUrl);
 
-                    String[] simpleJsonWeatherData = OpenWeatherJsonUtils
+                    String[] simpleJsonWeatherData = OpenWeatherJsonUtility
                             .getSimpleWeatherStringsFromJson(MainActivity.this, jsonWeatherResponse);
 
                     return simpleJsonWeatherData;
@@ -161,11 +164,12 @@ public class MainActivity extends AppCompatActivity implements
         };
     }
 
-    // Called qhen loader finishes
+    // Called when loader finishes
     @Override
     public void onLoadFinished(Loader<String[]> loader, String[] data) {
         mLoadingIndicator.setVisibility(View.INVISIBLE);
         mForecastAdapter.setWeatherData(data);
+
         if (null == data) {
             showErrorMessage();
         } else {
@@ -177,9 +181,7 @@ public class MainActivity extends AppCompatActivity implements
     public void onLoaderReset(Loader<String[]> loader) {
     }
 
-    /**
-     * To reset data list
-     */
+    // To reset data list
     private void invalidateData() {
         mForecastAdapter.setWeatherData(null);
     }
@@ -196,41 +198,117 @@ public class MainActivity extends AppCompatActivity implements
 
      // Make the View for the weather data visible and hide the error message.
     private void showWeatherDataView() {
-        /* First, make sure the error is invisible */
+        // Make error invisible and show data
         mErrorMessageDisplay.setVisibility(View.INVISIBLE);
-        /* Then, make sure the weather data is visible */
         mRecyclerView.setVisibility(View.VISIBLE);
     }
 
     // Make the error message visible and hide the weather View.
     private void showErrorMessage() {
-        /* First, hide the currently visible data */
+        // Hide the currently visible data and  show the error
         mRecyclerView.setVisibility(View.INVISIBLE);
-        /* Then, show the error */
         mErrorMessageDisplay.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * Override OnStart for :
+     * - checking changes in SharedPreferences
+     */
+    @Override
+    protected void onStart() {
+        super.onStart();
 
+        /** TODO : TEMPORARY SOLUTION
+         *  in case metrics has changed in preferences, reload all data from a new query to upate the main list.
+         *  NOT OPTIMAL SOLUTION, only the simplest one for getting job done at the moment
+         */
+        if (PREFERENCES_HAVE_BEEN_UPDATED) {
+            getSupportLoaderManager().restartLoader(FORECAST_LOADER_ID, null, this);
+            PREFERENCES_HAVE_BEEN_UPDATED = false;
+        }
+    }
 
+    /**
+     * Override onDestroy for :
+     * - unregistered checking changes in SharedPreferences
+     */
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        // Unregister MainActivity as an OnPreferenceChangedListener to avoid memory leaks.
+        PreferenceManager.getDefaultSharedPreferences(this)
+                .unregisterOnSharedPreferenceChangeListener(this);
+    }
+
+    /**
+     * What to do when preferences changes
+     * @param sharedPreferences
+     * @param s
+     */
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
+        // This flag turn to true when control returns to MainActivity in cse of SharedPreferences changes.
+        //** see TODO in onStart
+        PREFERENCES_HAVE_BEEN_UPDATED = true;
+    }
 
 
 
     // -----------------------------------------[ MENU STUFF ]--------------------------------------
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        /* Use AppCompatActivity's method getMenuInflater to get a handle on the menu inflater */
+        // Inflate menu
         MenuInflater inflater = getMenuInflater();
-        /* Use the inflater's inflate method to inflate our menu layout to this menu */
         inflater.inflate(R.menu.forecast, menu);
-        /* Return true so that the menu is displayed in the Toolbar */
+        // Display on toolbar
         return true;
     }
+
+
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        // Refresh data
+        if (id == R.id.action_refresh) {
+            // delete the data in list
+            invalidateData();
+            // load new data
+            getSupportLoaderManager().restartLoader(FORECAST_LOADER_ID, null, this);
+            return true;
+        }
+
+        // Open location in map
+        if (id == R.id.action_map) {
+            openLocationInMap();
+            return true;
+        }
+
+        // Settings
+        if (id == R.id.action_settings){           
+            openSettings();
+            return true;
+
+        }
+
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    // -------[ MENU FUNCTIONS IMPLEMENTATION ]-----------------------------------------------------
 
     // Open location in map :
     // @see <a"http://developer.android.com/guide/components/intents-common.html#Maps">
     private void openLocationInMap(){
-        //String addressString = "20 via Giotto,chignolo d'isola, IT";
-        String addressString = "1600 Amphitheatre Parkway, CA";
+        // Debug locations
+        // String addressString = "20 via Giotto,chignolo d'isola, IT";
+        // String addressString = "1600 Amphitheatre Parkway, CA";
+
+        // get location from preferences
+        String addressString = UserPreferencesData.getPreferredWeatherLocation(this);
         // build uri
         Uri geoLocation = Uri.parse("geo:0,0?q=" + addressString);
 
@@ -247,29 +325,10 @@ public class MainActivity extends AppCompatActivity implements
 
     }
 
-
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        // Refresh data
-        if (id == R.id.action_refresh) {
-            // delete the data in list
-            invalidateData();
-            getSupportLoaderManager().restartLoader(FORECAST_LOADER_ID, null, this);
-            return true;
-        }
-
-        // Open map
-        if (id == R.id.action_map) {
-            openLocationInMap();
-            return true;
-        }
-
-
-
-        return super.onOptionsItemSelected(item);
+    // Open settings
+    private void openSettings(){
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
     }
 
 

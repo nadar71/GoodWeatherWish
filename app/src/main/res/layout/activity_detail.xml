@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+Detail view.
+TextView showing the detailed data present in list's item in MainActvity
+TODO : get more detailed info and graphics
+-->
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -6,8 +11,9 @@
 
     <TextView
         android:id="@+id/show_today_weather_detail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="22sp"/>
 
 </FrameLayout>
 
