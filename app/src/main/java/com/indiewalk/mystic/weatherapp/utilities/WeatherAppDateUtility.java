@@ -21,9 +21,7 @@ public final class WeatherAppDateUtility {
     /**
      * This method returns the number of days since the epoch (January 01, 1970, 12:00 Midnight UTC)
      * in UTC time from the current date.
-     *
      * @param date A date in milliseconds in local time.
-     *
      * @return The number of days in UTC time from the epoch.
      */
     public static long getDayNumber(long date) {
@@ -35,9 +33,7 @@ public final class WeatherAppDateUtility {
     /**
      * To make it easy to query for the exact date, we normalize all dates that go into
      * the database to the start of the day in UTC time.
-     *
      * @param date The UTC date to normalize
-     *
      * @return The UTC date at 12 midnight
      */
     public static long normalizeDate(long date) {
@@ -45,6 +41,41 @@ public final class WeatherAppDateUtility {
         long retValNew = date / DAY_IN_MILLIS * DAY_IN_MILLIS;
         return retValNew;
     }
+
+
+    /**
+     * In order to ensure consistent inserts into WeatherProvider, we check that dates have been
+     * normalized before they are inserted. If they are not normalized, we don't want to accept
+     * them, and leave it up to the caller to throw an IllegalArgumentException.
+     * @param millisSinceEpoch Milliseconds since January 1, 1970 at midnight
+     * @return    true : date represents the beginning of a day in Unix time. false : otherwise
+     */
+    public static boolean isDateNormalized(long millisSinceEpoch) {
+        boolean isDateNormalized = false;
+        if (millisSinceEpoch % DAY_IN_MILLIS == 0) {
+            isDateNormalized = true;
+        }
+        return isDateNormalized;
+    }
+
+
+
+    /**
+     * This method will return the local time midnight for the provided normalized UTC date.
+     * @param normalizedUtcDate UTC time at midnight for a given date. This number comes from the
+     *                          database
+     * @return The local date corresponding to the given normalized UTC date
+     */
+    private static long getLocalMidnightFromNormalizedUtcDate(long normalizedUtcDate) {
+        /* The timeZone object will provide us the current user's time zone offset */
+        TimeZone timeZone = TimeZone.getDefault();
+        // offset in milliseconds added to a UTC date time to get local  time.
+        long gmtOffset = timeZone.getOffset(normalizedUtcDate);
+        long localMidnightMillis = normalizedUtcDate - gmtOffset;
+        return localMidnightMillis;
+    }
+
+
 
     /**
      * Since all dates from the database are in UTC, we must convert the given date

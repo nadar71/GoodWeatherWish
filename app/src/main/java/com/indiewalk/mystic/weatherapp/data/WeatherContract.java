@@ -1,12 +1,29 @@
 package com.indiewalk.mystic.weatherapp.data;
 
 
+import android.net.Uri;
 import android.provider.BaseColumns;
 
 // Weather data db cache
 // Show the db contract in a separated class
 
 public class WeatherContract {
+
+
+
+    // Name for the entire content provider (domain name <-> its website).
+    // Using app package name,unique on the  Store.
+    public static final String CONTENT_AUTHORITY = "com.indiewalk.mystic.weatherapp";
+
+
+    // Create the base of all URI's which apps will use to contact this content provider
+    public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
+
+    /*
+     * Available paths appendeable to BASE_CONTENT_URI to form valid URI's
+     *     content://com.indiewalk.mystic.weatherapp/weather/
+     */
+    public static final String PATH_WEATHER = "weather";
 
     //Table contents of the daily weather cache table
     public static final class WeatherEntry implements BaseColumns {

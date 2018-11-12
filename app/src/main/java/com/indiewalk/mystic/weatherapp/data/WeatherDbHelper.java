@@ -28,7 +28,7 @@ public class WeatherDbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
 
-        // Cretional string
+        // Creational query string
         final String SQL_CREATE_WEATHER_TABLE =
 
                 "CREATE TABLE " + WeatherEntry.TABLE_NAME + " (" +
