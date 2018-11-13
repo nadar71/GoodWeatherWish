@@ -4,16 +4,68 @@ Detail view.
 TextView showing the detailed data present in list's item in MainActvity
 TODO : get more detailed info and graphics
 -->
-<FrameLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="8dp">
 
     <TextView
-        android:id="@+id/show_today_weather_detail"
+        android:id="@+id/date"
+        style="@style/TextAppearance.AppCompat.Large"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="22sp"/>
+        tools:text="Saturday, September 24"/>
 
-</FrameLayout>
+    <!-- Text that describes weather condition -->
+    <TextView
+        android:id="@+id/weather_description"
+        style="@style/TextAppearance.AppCompat.Large"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Rainy"/>
+
+    <!-- High temperature for today -->
+    <TextView
+        android:id="@+id/high_temperature"
+        style="@style/TextAppearance.AppCompat.Large"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="19\u00b0"/>
+
+    <!-- Low temperature for today -->
+    <TextView
+        android:id="@+id/low_temperature"
+        style="@style/TextAppearance.AppCompat.Large"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="10\u00b0"/>
+
+    <!-- Humidity  -->
+    <TextView
+        android:id="@+id/humidity"
+        style="@style/TextAppearance.AppCompat.Large"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="38%"/>
+
+    <!-- Pressure  -->
+    <TextView
+        android:id="@+id/pressure"
+        style="@style/TextAppearance.AppCompat.Large"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="995 hPa"/>
+
+    <!-- Wind  -->
+    <TextView
+        android:id="@+id/wind"
+        style="@style/TextAppearance.AppCompat.Large"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="4km/h NW"/>
+
+</LinearLayout>
 

@@ -1,6 +1,7 @@
 package com.indiewalk.mystic.weatherapp.ui;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,6 +11,8 @@ import android.widget.TextView;
 import android.view.View.OnClickListener;
 
 import com.indiewalk.mystic.weatherapp.R;
+import com.indiewalk.mystic.weatherapp.utilities.WeatherAppDateUtility;
+import com.indiewalk.mystic.weatherapp.utilities.WeatherAppGenericUtility;
 
 
 /**
@@ -17,16 +20,19 @@ import com.indiewalk.mystic.weatherapp.R;
  */
 public class ForecastAdapter extends  RecyclerView.Adapter<ForecastAdapter.ForecastAdapterViewHolder>{
 
-    private String[] mWeatherData;
     private final ForecastAdapterOnClickHandler mClickHandler;
 
+    private final Context mContext;
+    private Cursor mCursor;
+
     public interface ForecastAdapterOnClickHandler{
-        void onClick(String weatherForDay);
+        void onClick(long date);
     }
 
 
-    public ForecastAdapter(ForecastAdapterOnClickHandler handler) {
-        mClickHandler = handler;
+    public ForecastAdapter(@NonNull Context context, ForecastAdapterOnClickHandler  clickHandler) {
+        mClickHandler = clickHandler;
+        mContext      = context;
     }
 
     // ViewHolder class for single item content
@@ -39,11 +45,17 @@ public class ForecastAdapter extends  RecyclerView.Adapter<ForecastAdapter.Forec
             itemView.setOnClickListener(this);
         }
 
+
+        /**
+         * Get the date from item clicked and handle with adapater onClick
+         * @param v the View that was clicked
+         */
         @Override
         public void onClick(View v) {
             int adapterPosition = getAdapterPosition();
-            String dayForecast  = mWeatherData[adapterPosition];
-            mClickHandler.onClick(dayForecast);
+            String daySelectedForecast  = mWeatherTextView.getText().toString();
+            long dateInMillis = mCursor.getLong(MainActivity.INDEX_WEATHER_DATE);
+            mClickHandler.onClick(dateInMillis);
         }
 
     }
@@ -68,28 +80,55 @@ public class ForecastAdapter extends  RecyclerView.Adapter<ForecastAdapter.Forec
 
     // Connect viewHolder with item position
     @Override
-    public void onBindViewHolder(@NonNull ForecastAdapterViewHolder holder, int position) {
-        String forecastForThisDay = mWeatherData[position];
-        holder.mWeatherTextView.setText(forecastForThisDay);
+    public void onBindViewHolder(@NonNull ForecastAdapterViewHolder forecastAdapterViewHolder, int position) {
+        // go to the right position for get the data
+        mCursor.moveToPosition(position);
+
+        // Weather Summary
+        // Read date from cursor
+        long dateInMillis = mCursor.getLong(MainActivity.INDEX_WEATHER_DATE);
+
+        // Get human readable string
+        String dateString = WeatherAppDateUtility.getFriendlyDateString(mContext, dateInMillis, false);
+
+        // Use the weatherId to link description
+        int weatherId = mCursor.getInt(MainActivity.INDEX_WEATHER_CONDITION_ID);
+        String description = WeatherAppGenericUtility.getStringForWeatherCondition(mContext, weatherId);
+
+        // High temperature from cursor (in celsius)
+        double highInCelsius = mCursor.getDouble(MainActivity.INDEX_WEATHER_MAX_TEMP);
+
+        // Low temperature from cursor (in celsius)
+        double lowInCelsius = mCursor.getDouble(MainActivity.INDEX_WEATHER_MIN_TEMP);
+
+        String highAndLowTemperature =
+                WeatherAppGenericUtility.formatHighLows(mContext, highInCelsius, lowInCelsius);
+
+        String weatherSummary = dateString + " - " + description + " - " + highAndLowTemperature;
+
+        forecastAdapterViewHolder.mWeatherTextView.setText(weatherSummary);
+
 
     }
 
-    // Return the number of item on list
+    // Return the number of item from the cursor
     @Override
     public int getItemCount() {
-        if (mWeatherData != null && mWeatherData.length > 0){
-            return mWeatherData.length;
-        } else {
-            return 0;
-        }
+        if (null == mCursor) return 0;
+        return mCursor.getCount();
     }
 
-    // Update data in the recycle view
-    // Recalled in mainActivity task/loader
-    void setWeatherData(String[] weatherData){
-        mWeatherData = weatherData;
+
+    /**
+     * Swap the cursor for showing new data, and notifying about changes.
+     * Called from MainActivity after finishing loading data, or to reset them.
+     * @param newCursor the new cursor to use as ForecastAdapter's data source
+     */
+    void swapCursor(Cursor newCursor) {
+        mCursor = newCursor;
         notifyDataSetChanged();
     }
+
 
 
 }

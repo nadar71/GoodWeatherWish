@@ -17,7 +17,7 @@ import java.net.URI;
 public class WeatherProvider extends ContentProvider {
 
     // static constant  to identify the URIs this ContentProvider can handles.
-    public static final int CODE_WEATHER = 100;
+    public static final int CODE_WEATHER           = 100;
     public static final int CODE_WEATHER_WITH_DATE = 101;
 
     // Static URI Matcher used by this content provider
@@ -31,7 +31,6 @@ public class WeatherProvider extends ContentProvider {
      * @return A UriMatcher
      */
     public static UriMatcher buildUriMatcher() {
-
         // Init UriMatcher to root URI passing the path code for NO_MATCH as commonly used.
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
         // Set authority=domain here

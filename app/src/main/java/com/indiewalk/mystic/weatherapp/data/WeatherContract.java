@@ -4,6 +4,8 @@ package com.indiewalk.mystic.weatherapp.data;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
+import com.indiewalk.mystic.weatherapp.utilities.WeatherAppDateUtility;
+
 // Weather data db cache
 // Show the db contract in a separated class
 
@@ -27,6 +29,11 @@ public class WeatherContract {
 
     //Table contents of the daily weather cache table
     public static final class WeatherEntry implements BaseColumns {
+
+        // The base CONTENT_URI for querying Weather table from  content provider
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon()
+                .appendPath(PATH_WEATHER)
+                .build();
 
         // weather table.
         public static final String TABLE_NAME = "weather";
@@ -54,6 +61,27 @@ public class WeatherContract {
         // Angle Degrees for meteorological degrees (e.g, 0 is north, 180 is south) (stored float)
         // NOT temperature degrees
         public static final String COLUMN_DEGREES = "degrees";
+
+
+        /**
+         * Return URI To Query details about a single weather entry by date, for DetailsView.
+         * @param date   Normalized date in milliseconds
+         * @return       Uri to query details about a single weather entry
+         */
+        public static Uri buildWeatherUriWithDate(long date) {
+            return CONTENT_URI.buildUpon()
+                    .appendPath(Long.toString(date))
+                    .build();
+        }
+
+        /**
+         * Get a weather forecast from today's date
+         * @return The selection part of the weather query for today onwards
+         */
+        public static String getSqlSelectForTodayOnwards() {
+            long normalizedUtcNow = WeatherAppDateUtility.normalizeDate(System.currentTimeMillis());
+            return WeatherContract.WeatherEntry.COLUMN_DATE + " >= " + normalizedUtcNow;
+        }
     }
 
 }
