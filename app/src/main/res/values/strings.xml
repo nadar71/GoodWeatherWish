@@ -74,6 +74,15 @@
     <!-- Value in SharedPreferences for imperial temperature unit option [CHAR LIMIT=NONE] -->
     <string name="pref_units_imperial" translatable="false">imperial</string>
 
+    <!-- Strings related to Notification Enabled preference -->
+    <string name="pref_enable_notifications_key" translatable="false">enable_notifications</string>
+    <string name="pref_enable_notifications_label">Weather Notifications</string>
+
+    <string name="pref_enable_notifications_true">Enabled</string>
+    <string name="pref_enable_notifications_false">Not Enabled</string>
+
+    <string name="pref_last_notification">last_notification</string>
+
 
     <!-- - - - - - - - - - - - - -->
     <!--Used by WeatherAppDateUtility-->
@@ -189,10 +198,14 @@
 
 
 
-    <!-- - - - - - - - - - - -->
-    <!-- Used by NetworkUtils-->
-    <!-- - - - - - - - - - - -->
-    <!--NONE-->
+    <!-- Used by NotificationUtils -->
+
+    <!-- The format of the notification we show when the weather is updated -->
+    <string name="format_notification">
+        Forecast:<xliff:g id="condition">%1$s</xliff:g> -
+        High:<xliff:g id="high">%2$s</xliff:g>
+        Low:<xliff:g id="low">%3$s</xliff:g>
+    </string>
 
     <!-- - - - - - - - - - - - - - - -->
     <!-- Used by OpenWeatherJsonUtility-->

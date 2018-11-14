@@ -2,6 +2,7 @@ package com.indiewalk.mystic.weatherapp.ui;
 
 
 
+import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.preference.CheckBoxPreference;
@@ -11,6 +12,9 @@ import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.PreferenceScreen;
 
 import com.indiewalk.mystic.weatherapp.R;
+import com.indiewalk.mystic.weatherapp.data.UserPreferencesData;
+import com.indiewalk.mystic.weatherapp.data.WeatherContract;
+import com.indiewalk.mystic.weatherapp.synch.WeatherSyncUtils;
 
 /**
  * The SettingsFragment serves as the display for all of the user's settings.
@@ -75,6 +79,17 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        Activity activity = getActivity();
+
+        if (key.equals(getString(R.string.pref_location_key))) {
+            // location changed
+            // Wipe out any potential PlacePicker latlng values so that we can use this text entry.
+            UserPreferencesData.resetLocationCoordinates(activity);
+            WeatherSyncUtils.startImmediateSync(activity);
+        } else if (key.equals(getString(R.string.pref_units_key))) {
+            // units  changed. update lists of weather entries accordingly
+            activity.getContentResolver().notifyChange(WeatherContract.WeatherEntry.CONTENT_URI, null);
+        }
         Preference preference = findPreference(key);
         if (null != preference) {
             if (!(preference instanceof CheckBoxPreference)) {

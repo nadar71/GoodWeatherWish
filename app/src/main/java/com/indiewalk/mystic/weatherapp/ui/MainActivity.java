@@ -27,7 +27,7 @@ import android.widget.ProgressBar;
 import com.indiewalk.mystic.weatherapp.R;
 import com.indiewalk.mystic.weatherapp.data.UserPreferencesData;
 import com.indiewalk.mystic.weatherapp.data.WeatherContract;
-import com.indiewalk.mystic.weatherapp.utilities.FakeDataUtils;
+import com.indiewalk.mystic.weatherapp.synch.WeatherSyncUtils;
 
 /**
  * MainActivity
@@ -75,9 +75,6 @@ public class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_forecast);
         getSupportActionBar().setElevation(0f);
 
-
-        FakeDataUtils.insertFakeData(this);
-
         // Get the recycle view layout
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerview_forecast);
 
@@ -103,6 +100,9 @@ public class MainActivity extends AppCompatActivity implements
 
         //Init Loader using loader manager
         getSupportLoaderManager().initLoader(FORECAST_LOADER_ID, null, this);
+
+        // Start an immediate remote data synchronize
+        WeatherSyncUtils.initialize(this);
 
     }
 
