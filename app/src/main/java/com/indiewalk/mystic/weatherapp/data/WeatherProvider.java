@@ -13,7 +13,10 @@ import com.indiewalk.mystic.weatherapp.utilities.WeatherAppDateUtility;
 
 import java.net.URI;
 
+
+// -------------------------------------------------------------------------------------------------
 // ContentProvider for app's data. Allows bulkInsert data, query , delete data.
+// -------------------------------------------------------------------------------------------------
 public class WeatherProvider extends ContentProvider {
 
     // static constant  to identify the URIs this ContentProvider can handles.
@@ -26,9 +29,11 @@ public class WeatherProvider extends ContentProvider {
     private WeatherDbHelper mOpenHelper;
 
     /**
+     * ---------------------------------------------------------------------------------------------
      * Creates the UriMatcher.
      * It will matches each URI to the CODE_WEATHER and  CODE_WEATHER_WITH_DATE constants defined above.
      * @return A UriMatcher
+     * ---------------------------------------------------------------------------------------------
      */
     public static UriMatcher buildUriMatcher() {
         // Init UriMatcher to root URI passing the path code for NO_MATCH as commonly used.
@@ -48,8 +53,10 @@ public class WeatherProvider extends ContentProvider {
     }
 
     /**
+     * ---------------------------------------------------------------------------------------------
      * Init content provider on startup (NB : not heavy load here, it starts in main thread)
      * @return true if the provider was successfully loaded, false otherwise
+     * ---------------------------------------------------------------------------------------------
      */
     @Override
     public boolean onCreate() {
@@ -62,10 +69,12 @@ public class WeatherProvider extends ContentProvider {
 
 
     /**
+     * ---------------------------------------------------------------------------------------------
      * Handles requests for inserting a set of new rows use case.
      * @param uri    The content:// URI of the insertion request.
      * @param values Array of column_name/value pairs to add .
      * @return       Rows counts inserted.
+     * ---------------------------------------------------------------------------------------------
      */
     @Override
     public int bulkInsert(@NonNull Uri uri, @NonNull ContentValues[] values) {
@@ -111,13 +120,16 @@ public class WeatherProvider extends ContentProvider {
 
 
     /**
+     * ---------------------------------------------------------------------------------------------
      * Handles query requests from clients.
      * @param uri           The URI to query
      * @param projection    List of columns to put into cursor. If null, all columns included.
      * @param selection     A selection criteria . If null, then all rows.
-     * @param selectionArgs Include ?s in selection, will be replaced by  values from selectionArgs, in order of appeareance
+     * @param selectionArgs Include ?s in selection, will be replaced by  values from selectionArgs,
+     *                      in order of appeareance
      * @param sortOrder     Sorting method.
      * @return              A Cursor with query results
+     * ---------------------------------------------------------------------------------------------
      */
     @Override
     public Cursor query(@NonNull Uri uri, String[] projection, String selection,
@@ -172,6 +184,7 @@ public class WeatherProvider extends ContentProvider {
     }
 
     /**
+     * ---------------------------------------------------------------------------------------------
      * Deletes data at given URI.
      * Optional : arguments for more fine tuned deletions.
      *
@@ -179,6 +192,7 @@ public class WeatherProvider extends ContentProvider {
      * @param selection     An optional restriction to apply to rows when deleting.
      * @param selectionArgs Used in conjunction with the selection statement.
      * @return              Number of rows deleted.
+     * ---------------------------------------------------------------------------------------------
      */
     @Override
     public int delete(@NonNull Uri uri, String selection, String[] selectionArgs) {
@@ -210,24 +224,51 @@ public class WeatherProvider extends ContentProvider {
     }
 
 
+    /**
+     * ---------------------------------------------------------------------------------------------
+     * Get type
+     * @param uri
+     * @return
+     * ---------------------------------------------------------------------------------------------
+     */
     @Override
     public String getType(@NonNull Uri uri) {
         throw new RuntimeException("Not implemented");
     }
 
-
+    /**
+     * ---------------------------------------------------------------------------------------------
+     * Insert
+     * @param uri
+     * @param values
+     * @return
+     * ---------------------------------------------------------------------------------------------
+     */
     @Override
     public Uri insert(@NonNull Uri uri, ContentValues values) {
         throw new RuntimeException(
                 "Not need to implemented. Only bulkInsert necessary");
     }
 
+
+    /**
+     * ---------------------------------------------------------------------------------------------
+     * Update
+     * @param uri
+     * @param values
+     * @param selection
+     * @param selectionArgs
+     * @return
+     * ---------------------------------------------------------------------------------------------
+     */
     @Override
     public int update(@NonNull Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         throw new RuntimeException("We are not implementing update in Sunshine");
     }
 
+    // ---------------------------------------------------------------------------------------------
     // For testing
+    // ---------------------------------------------------------------------------------------------
     @Override
     @TargetApi(11)
     public void shutdown() {

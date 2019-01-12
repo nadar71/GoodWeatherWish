@@ -16,7 +16,9 @@ import com.indiewalk.mystic.weatherapp.data.UserPreferencesData;
 
 
 /**
- * Class for Net communication with remote weather services.
+ * ---------------------------------------------------------------------------------------------
+ * Class for Net communication with restful weather services.
+ * ---------------------------------------------------------------------------------------------
  */
 public final class NetworkUtils {
 
@@ -52,6 +54,7 @@ public final class NetworkUtils {
     private static final String DAYS_PARAM   = "cnt";
 
     /**
+     * ---------------------------------------------------------------------------------------------
      * Retrieves the proper URL to query for the weather data. The reason for both this method as
      * well as {@link #buildUrlWithLocationQuery(String)} is two fold.
      * <p>
@@ -64,6 +67,7 @@ public final class NetworkUtils {
      *
      * @param context used to access other Utility methods
      * @return URL to query weather service
+     * ---------------------------------------------------------------------------------------------
      */
     public static URL getUrl(Context context) {
         if (UserPreferencesData.isLocationLatLonAvailable(context)) {
@@ -78,12 +82,14 @@ public final class NetworkUtils {
     }
 
     /**
+     * ---------------------------------------------------------------------------------------------
      * Builds the URL used to talk to the weather server using latitude and longitude of a
      * location.
      *
      * @param latitude  The latitude of the location
      * @param longitude The longitude of the location
      * @return The Url to use to query the weather server.
+     * ---------------------------------------------------------------------------------------------
      */
     private static URL buildUrlWithLatitudeLongitude(Double latitude, Double longitude) {
         Uri weatherQueryUri = Uri.parse(FORECAST_BASE_URL).buildUpon()
@@ -106,11 +112,13 @@ public final class NetworkUtils {
     }
 
     /**
+     * ---------------------------------------------------------------------------------------------
      * Builds the URL used to talk to the weather server using a location. This location is based
      * on the query capabilities of the weather provider that we are using.
      *
      * @param locationQuery The location that will be queried for.
      * @return The URL to use to query the weather server.
+     * ---------------------------------------------------------------------------------------------
      */
     private static URL buildUrlWithLocationQuery(String locationQuery) {
         Uri weatherQueryUri = Uri.parse(FORECAST_BASE_URL).buildUpon()
@@ -131,10 +139,12 @@ public final class NetworkUtils {
     }
 
     /**
+     * ---------------------------------------------------------------------------------------------
      * This method returns the entire result from the HTTP response.
      * @param url The URL to fetch the HTTP response from.
      * @return The contents of the HTTP response.
      * @throws IOException Related to network and stream reading
+     * ---------------------------------------------------------------------------------------------
      */
     public static String getResponseFromHttpUrl(URL url) throws IOException {
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();

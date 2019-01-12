@@ -11,8 +11,6 @@ import com.indiewalk.mystic.weatherapp.utilities.WeatherAppDateUtility;
 
 public class WeatherContract {
 
-
-
     // Name for the entire content provider (domain name <-> its website).
     // Using app package name,unique on the  Store.
     public static final String CONTENT_AUTHORITY = "com.indiewalk.mystic.weatherapp";
@@ -64,9 +62,11 @@ public class WeatherContract {
 
 
         /**
+         * ---------------------------------------------------------------------------------------------
          * Return URI To Query details about a single weather entry by date, for DetailsView.
          * @param date   Normalized date in milliseconds
          * @return       Uri to query details about a single weather entry
+         * ---------------------------------------------------------------------------------------------
          */
         public static Uri buildWeatherUriWithDate(long date) {
             return CONTENT_URI.buildUpon()
@@ -75,8 +75,10 @@ public class WeatherContract {
         }
 
         /**
+         * ---------------------------------------------------------------------------------------------
          * Get a weather forecast from today's date
          * @return The selection part of the weather query for today onwards
+         * ---------------------------------------------------------------------------------------------
          */
         public static String getSqlSelectForTodayOnwards() {
             long normalizedUtcNow = WeatherAppDateUtility.normalizeDate(System.currentTimeMillis());

@@ -7,14 +7,15 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.indiewalk.mystic.weatherapp.data.WeatherContract.WeatherEntry;
 
 
+// ---------------------------------------------------------------------------------------------
 // Weather data db cache
 // Db helper and data manager
+// ---------------------------------------------------------------------------------------------
 public class WeatherDbHelper extends SQLiteOpenHelper {
 
 
     public static final String DATABASE_NAME = "weather.db";
 
-    // TODO : increment it everytime schema changes
     private static final int DATABASE_VERSION = 4;
 
     public WeatherDbHelper(Context context) {
@@ -22,8 +23,10 @@ public class WeatherDbHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * Called at first time db creation. Init first population
+     * ---------------------------------------------------------------------------------------------
+     * Db creation & Init.
      * @param sqLiteDatabase The database.
+     * ---------------------------------------------------------------------------------------------
      */
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
@@ -59,12 +62,14 @@ public class WeatherDbHelper extends SQLiteOpenHelper {
     }
 
     /**
+     * ---------------------------------------------------------------------------------------------
      * Because database is only a cache for online data, no pb in wiping out data in case of db version changing
      * They are reloaded with next remote service request.
      * so its upgrade policy is simply to discard
      * @param sqLiteDatabase Database that is being upgraded
      * @param oldVersion     The old database version
      * @param newVersion     The new database version
+     * ---------------------------------------------------------------------------------------------
      */
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {

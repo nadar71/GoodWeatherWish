@@ -13,6 +13,9 @@ import java.util.concurrent.TimeUnit;
 
 import static com.indiewalk.mystic.weatherapp.data.WeatherContract.WeatherEntry;
 
+/**
+ * Dummy class for generating content values
+ */
 public class FakeDataUtils {
 
     private static int [] weatherIDs = {200,300,500,711,900,962};
@@ -20,9 +23,11 @@ public class FakeDataUtils {
     private static final String TAG = FakeDataUtils.class.getSimpleName();
 
     /**
+     * ---------------------------------------------------------------------------------------------
      * Creates a single ContentValues object with random weather data for the provided date
      * @param date a normalized date
      * @return ContentValues object filled with random weather data
+     * ---------------------------------------------------------------------------------------------
      */
     private static ContentValues createTestWeatherContentValues(long date) {
         ContentValues testWeatherValues = new ContentValues();
@@ -39,8 +44,10 @@ public class FakeDataUtils {
     }
 
     /**
+     * ---------------------------------------------------------------------------------------------
      * Creates random weather data for 7 days starting today
      * @param context
+     * ---------------------------------------------------------------------------------------------
      */
     public static void insertFakeData(Context context) {
         //Get today's normalized date

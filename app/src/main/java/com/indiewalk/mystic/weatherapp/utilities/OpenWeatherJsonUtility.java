@@ -2,6 +2,7 @@ package com.indiewalk.mystic.weatherapp.utilities;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.location.Location;
 
 import com.indiewalk.mystic.weatherapp.data.UserPreferencesData;
 import com.indiewalk.mystic.weatherapp.data.WeatherContract;
@@ -13,19 +14,21 @@ import org.json.JSONObject;
 import java.net.HttpURLConnection;
 
 /**
+ * ---------------------------------------------------------------------------------------------
  * Utility functions to handle OpenWeatherMap JSON data.
+ * ---------------------------------------------------------------------------------------------
  */
 public final class OpenWeatherJsonUtility {
 
-    /* Location information */
+    // Location information
     private static final String OWM_CITY = "city";
     private static final String OWM_COORD = "coord";
 
-    /* Location coordinate */
+    // Location coordinate
     private static final String OWM_LATITUDE = "lat";
     private static final String OWM_LONGITUDE = "lon";
 
-    /* Weather information. Each day's forecast info is an element of the "list" array */
+    // Weather information. Each day's forecast info is an element of the "list" array
     private static final String OWM_LIST = "list";
 
     private static final String OWM_PRESSURE = "pressure";
@@ -33,10 +36,10 @@ public final class OpenWeatherJsonUtility {
     private static final String OWM_WINDSPEED = "speed";
     private static final String OWM_WIND_DIRECTION = "deg";
 
-    /* All temperatures are children of the "temp" object */
+    // All temperatures are children of the "temp" object
     private static final String OWM_TEMPERATURE = "temp";
 
-    /* Max temperature for the day */
+    // Max temperature for the day
     private static final String OWM_MAX = "max";
     private static final String OWM_MIN = "min";
 
@@ -48,6 +51,7 @@ public final class OpenWeatherJsonUtility {
 
 
     /**
+     * ---------------------------------------------------------------------------------------------
      * This method parses JSON from a web response and returns an array of Strings
      * describing the weather over various days from the forecast.
      * <p/>
@@ -60,6 +64,7 @@ public final class OpenWeatherJsonUtility {
      * @return Array of Strings describing weather data
      *
      * @throws JSONException If JSON data cannot be properly parsed
+     * ---------------------------------------------------------------------------------------------
      */
     public static ContentValues[] getWeatherContentValuesFromJson(Context context, String forecastJsonStr)
             throws JSONException {
@@ -94,12 +99,11 @@ public final class OpenWeatherJsonUtility {
 
         ContentValues[] weatherContentValues = new ContentValues[jsonWeatherArray.length()];
 
-        /*
-         * OWM returns daily forecasts based upon the local time of the city that is being asked
-         * for, which means that we need to know the GMT offset to translate this data properly.
-         * Since this data is also sent in-order and the first day is always the current day, we're
-         * going to take advantage of that to get a nice normalized UTC date for all of our weather.
-         */
+
+        // OWM returns daily forecasts based upon the local time of the city that is being asked
+        // for, which means that we need to know the GMT offset to translate this data properly.
+        // Since this data is also sent in-order and the first day is always the current day, we're
+        // going to take advantage of that to get a nice normalized UTC date for all of our weather.
 //        long now = System.currentTimeMillis();
 //        long normalizedUtcStartDay = SunshineDateUtils.normalizeDate(now);
 
@@ -118,13 +122,11 @@ public final class OpenWeatherJsonUtility {
 
             int weatherId;
 
-            /* Get the JSON object representing the day */
+            // Get the JSON object representing the day */
             JSONObject dayForecast = jsonWeatherArray.getJSONObject(i);
 
-            /*
-             * We ignore all the datetime values embedded in the JSON and assume that
-             * the values are returned in-order by day (which is not guaranteed to be correct).
-             */
+            // We ignore all the datetime values embedded in the JSON and assume that
+            // the values are returned in-order by day (which is not guaranteed to be correct).
             dateTimeMillis = normalizedUtcStartDay + WeatherAppDateUtility.DAY_IN_MILLIS * i;
 
             pressure = dayForecast.getDouble(OWM_PRESSURE);
@@ -132,23 +134,19 @@ public final class OpenWeatherJsonUtility {
             windSpeed = dayForecast.getDouble(OWM_WINDSPEED);
             windDirection = dayForecast.getDouble(OWM_WIND_DIRECTION);
 
-            /*
-             * Description is in a child array called "weather", which is 1 element long.
-             * That element also contains a weather code.
-             */
+            // Description is in a child array called "weather", which is 1 element long.
+            // That element also contains a weather code.
             JSONObject weatherObject =
                     dayForecast.getJSONArray(OWM_WEATHER).getJSONObject(0);
 
             weatherId = weatherObject.getInt(OWM_WEATHER_ID);
 
-            /*
-             * Temperatures are sent by Open Weather Map in a child object called "temp".
-             *
-             * Editor's Note: Try not to name variables "temp" when working with temperature.
-             * It confuses everybody. Temp could easily mean any number of things, including
-             * temperature, temporary variable, temporary folder, temporary employee, or many
-             * others, and is just a bad variable name.
-             */
+            // Temperatures are sent by Open Weather Map in a child object called "temp".
+            //
+            // Editor's Note: Try not to name variables "temp" when working with temperature.
+            // It confuses everybody. Temp could easily mean any number of things, including
+            // temperature, temporary variable, temporary folder, temporary employee, or many
+            // others, and is just a bad variable name.
             JSONObject temperatureObject = dayForecast.getJSONObject(OWM_TEMPERATURE);
             high = temperatureObject.getDouble(OWM_MAX);
             low = temperatureObject.getDouble(OWM_MIN);
@@ -283,10 +281,12 @@ public final class OpenWeatherJsonUtility {
     */
 
     /**
+     * ---------------------------------------------------------------------------------------------
      * Parse the JSON and convert it into ContentValues that can be inserted into our database.
      * @param context         An application context, such as a service or activity context.
      * @param forecastJsonStr The JSON to parse into ContentValues.
      * @return An array of ContentValues parsed from the JSON.
+     * ---------------------------------------------------------------------------------------------
      */
     public static ContentValues[] getFullWeatherDataFromJson(Context context, String forecastJsonStr) {
         /** This will be implemented in a future lesson **/

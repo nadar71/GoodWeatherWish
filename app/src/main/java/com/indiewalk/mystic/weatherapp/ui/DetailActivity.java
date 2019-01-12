@@ -2,6 +2,7 @@ package com.indiewalk.mystic.weatherapp.ui;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.app.ShareCompat;
@@ -17,9 +18,17 @@ import android.widget.TextView;
 
 import com.indiewalk.mystic.weatherapp.R;
 import com.indiewalk.mystic.weatherapp.data.WeatherContract;
+import com.indiewalk.mystic.weatherapp.databinding.ActivityDetailBinding;
 import com.indiewalk.mystic.weatherapp.utilities.WeatherAppDateUtility;
 import com.indiewalk.mystic.weatherapp.utilities.WeatherAppGenericUtility;
 
+
+/**
+ * -------------------------------------------------------------------------------------------------
+ * Activity for showing each forecast detail, with main part above with main info, and below
+ * the detailed ones.
+ * -------------------------------------------------------------------------------------------------
+ */
 public class DetailActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
     private static  final  String TAG = DetailActivity.class.getSimpleName();
 
@@ -53,32 +62,21 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
 
     private String   choosenDayWeatherParam;
 
-    private TextView mDateView;
-    private TextView mDescriptionView;
-    private TextView mHighTemperatureView;
-    private TextView mLowTemperatureView;
-    private TextView mHumidityView;
-    private TextView mWindView;
-    private TextView mPressureView;
-
     // URI for accessing chosen day's weather details
     private Uri mUri;
+
+
+    // Data binding to activity_detail layout declaration
+    private ActivityDetailBinding mDetailBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail);
 
-        // TextViews for detailed weather informations
-        mDateView = (TextView) findViewById(R.id.date);
-        mDescriptionView = (TextView) findViewById(R.id.weather_description);
-        mHighTemperatureView = (TextView) findViewById(R.id.high_temperature);
-        mLowTemperatureView = (TextView) findViewById(R.id.low_temperature);
-        mHumidityView = (TextView) findViewById(R.id.humidity);
-        mWindView = (TextView) findViewById(R.id.wind);
-        mPressureView = (TextView) findViewById(R.id.pressure);
+        // instantiate data binding object
+        mDetailBinding = DataBindingUtil.setContentView(this, R.layout.activity_detail);
 
-        // Get refernce to content providers URI
+        // Get reference to content providers URI
         mUri = getIntent().getData();
         if (mUri == null) throw new NullPointerException("URI for DetailActivity cannot be null");
 
@@ -87,11 +85,15 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
 
     }
 
+
+
     /**
+     * ---------------------------------------------------------------------------------------------
      * Creates and returns a CursorLoader that loads  data for our URI stored  in Cursor.
      * @param loaderId   
      * @param loaderArgs arguments 
-     * @return          Loader instance to start loading.
+     * @return           Loader instance to start loading.
+     * ---------------------------------------------------------------------------------------------
      */
     @Override
     public Loader<Cursor> onCreateLoader(int loaderId, Bundle loaderArgs) {
@@ -111,9 +113,11 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
 
 
     /**
+     * ---------------------------------------------------------------------------------------------
      * Runs on the main thread when a load is complete. 
      * @param loader The cursor loader ended.
      * @param data   The cursor returned.
+     * ---------------------------------------------------------------------------------------------
      */
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
@@ -130,67 +134,134 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
             return;
         }
 
-        /**
-         * Weather Date 
-         * Read the date from the cursor. 
-         * Date that is stored is a GMT representation at midnight of the date 
-         * when the weather information was loaded for.
-         *
-         * Before displaying it, getFriendlyDateString add the GMT offset (in milliseconds) to acquire
-         * the date representation for the local date in local time.
-         */
+
+
+        // -----------------------
+        //    Weather Icon
+        // -----------------------
+        //Read weather condition ID from the cursor (ID provided by Open Weather Map)
+        int weatherId = data.getInt(INDEX_WEATHER_CONDITION_ID);
+        int weatherImageId = WeatherAppGenericUtility.getLargeArtResourceIdForWeatherCondition(weatherId);
+
+        mDetailBinding.primaryInfo.weatherIcon.setImageResource(weatherImageId);
+
+
+
+        // -----------------------
+        // Weather Date
+        // -----------------------
+        // Read the date from the cursor.
+        // Date that is stored is a GMT representation at midnight of the date
+        // when the weather information was loaded for.
+        //
+        // Before displaying it, getFriendlyDateString add the GMT offset (in milliseconds) to acquire
+        // the date representation for the local date in local time.
         long localDateMidnightGmt = data.getLong(INDEX_WEATHER_DATE);
         String dateText = WeatherAppDateUtility.getFriendlyDateString(this, localDateMidnightGmt, true);
 
-        mDateView.setText(dateText);
+        mDetailBinding.primaryInfo.date.setText(dateText);
 
-        // WEATHER FORECAST DESCRIPTION IN DETAILS
-        // Read weather condition ID from the cursor (ID provided by Open Weather Map) 
-        int weatherId = data.getInt(INDEX_WEATHER_CONDITION_ID);
+
+
+        // -----------------------
+        // Weather Description
+        // -----------------------
         // Use the weatherId to get the proper description and set in the view
         String description = WeatherAppGenericUtility.getStringForWeatherCondition(this, weatherId);
-        mDescriptionView.setText(description);
+        // accessibility for weather description
+        String descriptionAccessibility = getString(R.string.acc_forecast, description);
 
-        // High (max) temperature 
+        mDetailBinding.primaryInfo.weatherDescription.setText(description);
+        mDetailBinding.primaryInfo.weatherDescription.setContentDescription(descriptionAccessibility);
+
+        // Content description of the icon the same as the weather description
+        mDetailBinding.primaryInfo.weatherIcon.setContentDescription(descriptionAccessibility);
+
+
+
+        // -----------------------
+        // High (max) temperature
+        // -----------------------
         double highInCelsius = data.getDouble(INDEX_WEATHER_MAX_TEMP);
-        // Convert measure if prefferred
+        // Convert measure if preferred by users
         String highString = WeatherAppGenericUtility.formatTemperature(this, highInCelsius);
-        mHighTemperatureView.setText(highString);
+        String highAccessibility = getString(R.string.acc_high_temp, highString);
 
-        // Low (min) temperature 
+        mDetailBinding.primaryInfo.highTemperature.setText(highString);
+        mDetailBinding.primaryInfo.highTemperature.setContentDescription(highAccessibility);
+
+
+
+        // -----------------------
+        // Low (min) temperature
+        // -----------------------
         double lowInCelsius = data.getDouble(INDEX_WEATHER_MIN_TEMP);
         String lowString = WeatherAppGenericUtility.formatTemperature(this, lowInCelsius);
-        mLowTemperatureView.setText(lowString);
+        String lowAccessibility = getString(R.string.acc_low_temp, lowString);
 
-        // Humidity 
+        mDetailBinding.primaryInfo.lowTemperature.setText(lowString);
+        mDetailBinding.primaryInfo.lowTemperature.setContentDescription(lowAccessibility);
+
+        // -----------------------
+        // Humidity
+        // -----------------------
         float humidity = data.getFloat(INDEX_WEATHER_HUMIDITY);
         String humidityString = getString(R.string.format_humidity, humidity);
-        mHumidityView.setText(humidityString);
+        String humidityAccessibility = getString(R.string.acc_humidity, humidityString);
 
+        mDetailBinding.extraDetails.humidity.setText(humidityString);
+        mDetailBinding.extraDetails.humidity.setContentDescription(humidityAccessibility);
+
+        mDetailBinding.extraDetails.humidityLabel.setContentDescription(humidityAccessibility);
+
+
+        // -------------------------------------------------------
         //  Wind speed and direction (in MPH) (in compass degrees)
+        // -------------------------------------------------------
         float windSpeed = data.getFloat(INDEX_WEATHER_WIND_SPEED);
         float windDirection = data.getFloat(INDEX_WEATHER_DEGREES);
         String windString = WeatherAppGenericUtility.getFormattedWind(this, windSpeed, windDirection);
+        String windAccessibility = getString(R.string.acc_wind, windString);
 
-        mWindView.setText(windString);
+        mDetailBinding.extraDetails.windMeasurement.setText(windString);
+        mDetailBinding.extraDetails.windMeasurement.setContentDescription(windAccessibility);
 
+        mDetailBinding.extraDetails.windLabel.setContentDescription(windAccessibility);
+
+        // -----------------------
         // Pressure
+        // -----------------------
         float pressure = data.getFloat(INDEX_WEATHER_PRESSURE);
         String pressureString = getString(R.string.format_pressure, pressure);
+        String pressureAccessibility = getString(R.string.acc_pressure, pressureString);
 
-        mPressureView.setText(pressureString);
+
+        mDetailBinding.extraDetails.pressure.setText(pressureString);
+        mDetailBinding.extraDetails.pressure.setContentDescription(pressureAccessibility);
+
+        mDetailBinding.extraDetails.pressureLabel.setContentDescription(pressureAccessibility);
 
         //  Store the forecast summary String in our forecast summary field to share later */
         choosenDayWeatherParam = String.format("%s - %s - %s/%s",
                 dateText, description, highString, lowString);
     }
 
+
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
     }
 
 
-    // -----------------------------------------[ MENU STUFF ]--------------------------------------
+    // ---------------------------------------------------------------------------------------------
+    //                                           MENU STUFF
+    // ---------------------------------------------------------------------------------------------
+
+    /**
+     * ---------------------------------------------------------------------------------------------
+     * @param menu
+     * @return
+     * ---------------------------------------------------------------------------------------------
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -200,8 +271,13 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
 
 
 
-    // -------[ MENU FUNCTIONS IMPLEMENTATION ]-----------------------------------------------------
-
+    /**
+     * ---------------------------------------------------------------------------------------------
+     * Menu item behaviours
+     * @param item
+     * @return
+     * ---------------------------------------------------------------------------------------------
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -223,6 +299,12 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
     }
 
 
+    /**
+     * ---------------------------------------------------------------------------------------------
+     * Sharing forecast details through chooser
+     * @param choosenDayWeatherParam
+     * ---------------------------------------------------------------------------------------------
+     */
     private void forecastSharing(String choosenDayWeatherParam){
         Log.d(TAG, "forecastSharing Press ");
         String mimeType = "text/plain";
@@ -236,7 +318,12 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
                 .startChooser();
     }
 
-    // Open settings
+
+    /**
+     * ---------------------------------------------------------------------------------------------
+     * Open settings
+     * ---------------------------------------------------------------------------------------------
+     */
     private void openSettings(){
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);

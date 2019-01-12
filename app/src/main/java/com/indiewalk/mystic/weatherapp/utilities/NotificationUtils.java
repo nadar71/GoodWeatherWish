@@ -18,6 +18,7 @@ import com.indiewalk.mystic.weatherapp.data.UserPreferencesData;
 import com.indiewalk.mystic.weatherapp.data.WeatherContract;
 import com.indiewalk.mystic.weatherapp.ui.DetailActivity;
 
+
 public class NotificationUtils {
 
     // The columns of data displayed within notification for short forecast
@@ -36,8 +37,10 @@ public class NotificationUtils {
     private static final int WEATHER_NOTIFICATION_ID = 1536;
 
     /**
+     * ---------------------------------------------------------------------------------------------
      * Build and displays new notification for today updated forecast
      * @param context Context used to query our ContentProvider and use various Utility methods
+     * ---------------------------------------------------------------------------------------------
      */
     public static void notifyUserOfNewWeather(Context context) {
 
@@ -76,13 +79,11 @@ public class NotificationUtils {
             // small icos
             int smallArtResourceId = WeatherAppGenericUtility.getSmallArtResourceIdForWeatherCondition(weatherId);
 
-            /*
-             * NotificationCompat Builder is a very convenient way to build backward-compatible
-             * notifications. In order to use it, we provide a context and specify a color for the
-             * notification, a couple of different icons, the title for the notification, and
-             * finally the text of the notification, which in our case in a summary of today's
-             * forecast.
-             */
+            // NotificationCompat Builder is a very convenient way to build backward-compatible
+            // notifications. In order to use it, we provide a context and specify a color for the
+            // notification, a couple of different icons, the title for the notification, and
+            // finally the text of the notification, which in our case in a summary of today's
+            // forecast.
             NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
                     .setColor(ContextCompat.getColor(context,R.color.colorPrimary))
                     .setSmallIcon(smallArtResourceId)
@@ -111,8 +112,7 @@ public class NotificationUtils {
             // Notify user withWEATHER_NOTIFICATION_ID allows you to update or cancel the notification later on 
             notificationManager.notify(WEATHER_NOTIFICATION_ID, notificationBuilder.build());
 
-//          TODO (8) Save the time at which the notification occurred using SunshinePreferences
-            // Save the current time after notification showed. 
+            // Save the current time after notification showed.
             // Useful at the next forecast update if we must show another notfication or not
             UserPreferencesData.saveLastNotificationTime(context, System.currentTimeMillis());
         }
@@ -121,9 +121,11 @@ public class NotificationUtils {
     }
 
     /**
+     * ---------------------------------------------------------------------------------------------
      * Create notification text at weather refresh
      * The String model:
      * Forecast: Sunny - High: 14°C Low 7°C
+     * ---------------------------------------------------------------------------------------------
      *
      * @param context   
      * @param weatherId ID as determined by Open Weather Map

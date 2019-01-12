@@ -17,13 +17,22 @@ import com.indiewalk.mystic.weatherapp.data.WeatherContract;
 import com.indiewalk.mystic.weatherapp.synch.WeatherSyncUtils;
 
 /**
+ * -------------------------------------------------------------------------------------------------
  * The SettingsFragment serves as the display for all of the user's settings.
+ * Used in activity_settings layout
+ * -------------------------------------------------------------------------------------------------
  */
 public class SettingsFragment extends PreferenceFragmentCompat implements
         SharedPreferences.OnSharedPreferenceChangeListener {
 
 
-    // Set preferences summary for each kind of preferences' item
+    /**
+     * ---------------------------------------------------------------------------------------------
+     * Set preferences summary for each kind of preferences' item
+     * @param preference
+     * @param value
+     * ---------------------------------------------------------------------------------------------
+     */
     private void setPreferenceSummary(Preference preference, Object value) {
         String stringValue = value.toString();
         String key = preference.getKey();
@@ -41,8 +50,11 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
         }
     }
 
+
+
     @Override
     public void onCreatePreferences(Bundle bundle, String s) {
+
         // Add generic preferences defined in the XML file
         addPreferencesFromResource(R.xml.setting_pref);
 
@@ -77,6 +89,14 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
                 .registerOnSharedPreferenceChangeListener(this);
     }
 
+
+    /**
+     * ---------------------------------------------------------------------------------------------
+     * Callback for shard preferences changes
+     * @param sharedPreferences
+     * @param key
+     * ---------------------------------------------------------------------------------------------
+     */
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         Activity activity = getActivity();

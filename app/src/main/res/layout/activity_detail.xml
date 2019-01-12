@@ -1,71 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-Detail view.
-TextView showing the detailed data present in list's item in MainActvity
-TODO : get more detailed info and graphics
--->
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="8dp">
 
-    <TextView
-        android:id="@+id/date"
-        style="@style/TextAppearance.AppCompat.Large"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="Saturday, September 24"/>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  - Using data binding ( <layout></layout> ) (PORTRAIT  version )                                -
+  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
-    <!-- Text that describes weather condition -->
-    <TextView
-        android:id="@+id/weather_description"
-        style="@style/TextAppearance.AppCompat.Large"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="Rainy"/>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- High temperature for today -->
-    <TextView
-        android:id="@+id/high_temperature"
-        style="@style/TextAppearance.AppCompat.Large"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="19\u00b0"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <!-- Low temperature for today -->
-    <TextView
-        android:id="@+id/low_temperature"
-        style="@style/TextAppearance.AppCompat.Large"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="10\u00b0"/>
+        <include
+            android:id="@+id/primary_info"
+            layout="@layout/primary_weather_info"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
 
-    <!-- Humidity  -->
-    <TextView
-        android:id="@+id/humidity"
-        style="@style/TextAppearance.AppCompat.Large"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="38%"/>
+        <include
+            android:id="@+id/extra_details"
+            layout="@layout/extra_weather_details"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
 
-    <!-- Pressure  -->
-    <TextView
-        android:id="@+id/pressure"
-        style="@style/TextAppearance.AppCompat.Large"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="995 hPa"/>
-
-    <!-- Wind  -->
-    <TextView
-        android:id="@+id/wind"
-        style="@style/TextAppearance.AppCompat.Large"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="4km/h NW"/>
-
-</LinearLayout>
-
+    </LinearLayout>
+</layout>

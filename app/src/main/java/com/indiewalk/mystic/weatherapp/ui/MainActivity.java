@@ -30,11 +30,13 @@ import com.indiewalk.mystic.weatherapp.data.WeatherContract;
 import com.indiewalk.mystic.weatherapp.synch.WeatherSyncUtils;
 
 /**
+ * -------------------------------------------------------------------------------------------------
  * MainActivity
  * Implements :
  * - ForecastAdapter.ForecastAdapterOnClickHandler : for clicking on an list item
  * - LoaderCallbacks<Cursor[]> : for processing list of data loaded through cursor loader
  * loading/changing data displayed
+ * -------------------------------------------------------------------------------------------------
  */
 public class MainActivity extends AppCompatActivity implements
         ForecastAdapter.ForecastAdapterOnClickHandler,
@@ -107,7 +109,17 @@ public class MainActivity extends AppCompatActivity implements
     }
 
 
-    // Create the Loader, override it's callback functions, return a Loader<Cursor>
+    //
+
+    /**
+     * -------------------------------------------------------------------------------------------------
+     * Loader for weather forecast update.
+     * Return a Loader<Cursor>
+     * @param loaderId
+     * @param loaderArgs
+     * @return
+     * -------------------------------------------------------------------------------------------------
+     */
     @NonNull
     @Override
     public Loader<Cursor> onCreateLoader(int loaderId, @Nullable Bundle loaderArgs) {
@@ -132,7 +144,14 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
-    // Called when loader finishes
+
+    /**
+     * -------------------------------------------------------------------------------------------------
+     * Weather forecast retrieving ended
+     * @param loader
+     * @param data
+     * -------------------------------------------------------------------------------------------------
+     */
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         // swap cursor with new data
@@ -144,14 +163,19 @@ public class MainActivity extends AppCompatActivity implements
         if (data.getCount() != 0) showWeatherDataView();
     }
 
+
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         // clear the Adapter to show no data
         mForecastAdapter.swapCursor(null);
     }
 
-
-    // Touch item action
+    /**
+     * -------------------------------------------------------------------------------------------------
+     * Touch item
+     * @param weatherForDay
+     * -------------------------------------------------------------------------------------------------
+     */
     @Override
     public void onClick(long weatherForDay) {
         Context context = this;
@@ -162,7 +186,11 @@ public class MainActivity extends AppCompatActivity implements
     }
 
 
-    // Make the View for the weather data visible and hide the error message.
+    /**
+     * -------------------------------------------------------------------------------------------------
+     * Make the View for the weather data visible and hide the error message.
+     * -------------------------------------------------------------------------------------------------
+     */
     private void showWeatherDataView() {
         // Progress bar invisible and show data
         mLoadingIndicator.setVisibility(View.INVISIBLE);
@@ -170,7 +198,12 @@ public class MainActivity extends AppCompatActivity implements
     }
 
 
-    // Show progress bar loader of data; hide weather data view
+
+    /**
+     * -------------------------------------------------------------------------------------------------
+     * Show progress bar loader of data; hide weather data view
+     * -------------------------------------------------------------------------------------------------
+     */
     private void showLoading() {
         mRecyclerView.setVisibility(View.INVISIBLE);
         mLoadingIndicator.setVisibility(View.VISIBLE);
@@ -179,7 +212,9 @@ public class MainActivity extends AppCompatActivity implements
 
 
 
-    // -----------------------------------------[ MENU STUFF ]--------------------------------------
+    // ---------------------------------------------------------------------------------------------
+    //                                           MENU STUFF
+    // ---------------------------------------------------------------------------------------------
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate menu
@@ -220,10 +255,15 @@ public class MainActivity extends AppCompatActivity implements
         return super.onOptionsItemSelected(item);
     }
 
-    // -------[ MENU FUNCTIONS IMPLEMENTATION ]-----------------------------------------------------
 
-    // Open location in map :
-    // @see <a"http://developer.android.com/guide/components/intents-common.html#Maps">
+
+
+    /**
+     * -------------------------------------------------------------------------------------------------
+     * Open location in google map app :
+     * @see <a"http://developer.android.com/guide/components/intents-common.html#Maps">
+     * -------------------------------------------------------------------------------------------------
+     */
     private void openLocationInMap() {
         // Debug locations
         // String addressString = "20 via Giotto,chignolo d'isola, IT";
@@ -247,7 +287,12 @@ public class MainActivity extends AppCompatActivity implements
 
     }
 
-    // Open settings
+
+    /**
+     * -------------------------------------------------------------------------------------------------
+     * Open settings
+     * -------------------------------------------------------------------------------------------------
+     */
     private void openSettings() {
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);

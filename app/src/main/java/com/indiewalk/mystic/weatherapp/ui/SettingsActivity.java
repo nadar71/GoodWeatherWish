@@ -8,6 +8,12 @@ import android.view.MenuItem;
 
 import com.indiewalk.mystic.weatherapp.R;
 
+
+/**
+ * -------------------------------------------------------------------------------------------------
+ * Where all the setting are summarized and defined
+ * -------------------------------------------------------------------------------------------------
+ */
 public class SettingsActivity extends AppCompatActivity {
 
     @Override
@@ -17,13 +23,20 @@ public class SettingsActivity extends AppCompatActivity {
 
         ActionBar actionBar = this.getSupportActionBar();
 
-        // Set the action bar back button to look like an up button
+        // Set the action bar back button as up button
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
     }
 
 
+    /**
+     * ---------------------------------------------------------------------------------------------
+     * Back to home with back btn pressed
+     * @param item
+     * @return
+     * ---------------------------------------------------------------------------------------------
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
