@@ -4,14 +4,13 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.util.Log;
 
-import com.indiewalk.mystic.weatherapp.data.WeatherContract;
-import com.indiewalk.mystic.weatherapp.ui.MainActivity;
+import com.indiewalk.mystic.weatherapp.data.provider.WeatherContract;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static com.indiewalk.mystic.weatherapp.data.WeatherContract.WeatherEntry;
+import static com.indiewalk.mystic.weatherapp.data.provider.WeatherContract.WeatherEntry;
 
 /**
  * Dummy class for generating content values

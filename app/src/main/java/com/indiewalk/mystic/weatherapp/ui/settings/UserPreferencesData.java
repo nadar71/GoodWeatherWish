@@ -1,4 +1,4 @@
-package com.indiewalk.mystic.weatherapp.data;
+package com.indiewalk.mystic.weatherapp.ui.settings;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -8,11 +8,8 @@ import com.indiewalk.mystic.weatherapp.R;
 
 public final class UserPreferencesData {
 
-    /*
-     * In order to uniquely pinpoint the location on the map when we launch the map intent, we
-     * store the latitude and longitude. We will also use the latitude and longitude to create
-     * queries for the weather.
-     */
+    // Store the latitude and longitude to pinpoint location on map in map intent launched,
+    // Use them in queries for the weather.
     public static final String PREF_COORD_LAT = "coord_lat";
     public static final String PREF_COORD_LONG = "coord_long";
 
@@ -157,22 +154,18 @@ public final class UserPreferencesData {
      * ---------------------------------------------------------------------------------------------
      */
     public static boolean areNotificationsEnabled(Context context) {
-        /* Key for accessing the preference for showing notifications */
+        // Key for accessing the preference for showing notifications
         String displayNotificationsKey = context.getString(R.string.pref_enable_notifications_key);
 
-        /*
-         * In Sunshine, the user has the ability to say whether she would like notifications
-         * enabled or not. If no preference has been chosen, we want to be able to determine
-         * whether or not to show them. To do this, we reference a bool stored in bools.xml.
-         */
+        // define if the notifications must be shown by defaut from bool.xml key content
         boolean shouldDisplayNotificationsByDefault = context
                 .getResources()
                 .getBoolean(R.bool.show_notifications_by_default);
 
-        /* As usual, we use the default SharedPreferences to access the user's preferences */
+        // As usual, we use the default SharedPreferences to access the user's preferences
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
 
-        /* If a value is stored with the key, we extract it here. If not, use a default. */
+        // If a value is stored with the key, we extract it here. If not, use a default.
         boolean shouldDisplayNotifications = sp
                 .getBoolean(displayNotificationsKey, shouldDisplayNotificationsByDefault);
 
@@ -187,10 +180,10 @@ public final class UserPreferencesData {
      * ---------------------------------------------------------------------------------------------
      */
     public static long getLastNotificationTimeInMillis(Context context) {
-        /* Key for accessing the time at which Sunshine last displayed a notification */
+        // Key for accessing the time at which Sunshine last displayed a notification
         String lastNotificationKey = context.getString(R.string.pref_last_notification);
 
-        /* As usual, we use the default SharedPreferences to access the user's preferences */
+        // As usual, we use the default SharedPreferences to access the user's preferences
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
 
         /*

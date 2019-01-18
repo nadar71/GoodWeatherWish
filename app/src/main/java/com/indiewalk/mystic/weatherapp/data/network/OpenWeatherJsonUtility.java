@@ -1,11 +1,11 @@
-package com.indiewalk.mystic.weatherapp.utilities;
+package com.indiewalk.mystic.weatherapp.data.network;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.location.Location;
 
-import com.indiewalk.mystic.weatherapp.data.UserPreferencesData;
-import com.indiewalk.mystic.weatherapp.data.WeatherContract;
+import com.indiewalk.mystic.weatherapp.ui.settings.UserPreferencesData;
+import com.indiewalk.mystic.weatherapp.data.provider.WeatherContract;
+import com.indiewalk.mystic.weatherapp.utilities.WeatherAppDateUtility;
 
 import org.json.JSONArray;
 import org.json.JSONException;

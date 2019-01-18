@@ -1,4 +1,4 @@
-package com.indiewalk.mystic.weatherapp.ui;
+package com.indiewalk.mystic.weatherapp.ui.list;
 
 import android.content.Context;
 import android.content.Intent;
@@ -25,9 +25,11 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 import com.indiewalk.mystic.weatherapp.R;
-import com.indiewalk.mystic.weatherapp.data.UserPreferencesData;
-import com.indiewalk.mystic.weatherapp.data.WeatherContract;
-import com.indiewalk.mystic.weatherapp.synch.WeatherSyncUtils;
+import com.indiewalk.mystic.weatherapp.ui.settings.UserPreferencesData;
+import com.indiewalk.mystic.weatherapp.data.provider.WeatherContract;
+import com.indiewalk.mystic.weatherapp.data.network.WeatherSyncUtils;
+import com.indiewalk.mystic.weatherapp.ui.settings.SettingsActivity;
+import com.indiewalk.mystic.weatherapp.ui.detail.DetailActivity;
 
 /**
  * -------------------------------------------------------------------------------------------------

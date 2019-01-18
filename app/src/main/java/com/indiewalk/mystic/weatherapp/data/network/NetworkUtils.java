@@ -1,4 +1,4 @@
-package com.indiewalk.mystic.weatherapp.utilities;
+package com.indiewalk.mystic.weatherapp.data.network;
 
 import android.content.Context;
 import android.net.Uri;
@@ -12,7 +12,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Scanner;
 
-import com.indiewalk.mystic.weatherapp.data.UserPreferencesData;
+import com.indiewalk.mystic.weatherapp.ui.settings.UserPreferencesData;
 
 
 /**

@@ -1,4 +1,4 @@
-package com.indiewalk.mystic.weatherapp.ui;
+package com.indiewalk.mystic.weatherapp.ui.list;
 
 import android.content.Context;
 import android.database.Cursor;

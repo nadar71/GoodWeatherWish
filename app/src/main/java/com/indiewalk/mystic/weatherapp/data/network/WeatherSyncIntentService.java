@@ -1,4 +1,4 @@
-package com.indiewalk.mystic.weatherapp.synch;
+package com.indiewalk.mystic.weatherapp.data.network;
 
 import android.app.IntentService;
 import android.content.Intent;

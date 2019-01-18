@@ -1,4 +1,4 @@
-package com.indiewalk.mystic.weatherapp.ui;
+package com.indiewalk.mystic.weatherapp.ui.settings;
 
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;

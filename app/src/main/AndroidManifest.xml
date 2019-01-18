@@ -26,7 +26,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".ui.list.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.Forecast"
             android:launchMode="singleTop">
@@ -38,28 +38,28 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.DetailActivity"
-            android:parentActivityName=".ui.MainActivity">
+            android:name=".ui.detail.DetailActivity"
+            android:parentActivityName=".ui.list.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.MainActivity" />
+                android:value=".ui.list.MainActivity" />
         </activity>
-        <activity android:name=".ui.SettingsActivity" />
+        <activity android:name=".ui.settings.SettingsActivity" />
 
         <!-- ContentProvider Definition -->
         <provider
-            android:name=".data.WeatherProvider"
+            android:name=".data.provider.WeatherProvider"
             android:authorities="@string/content_authority"
             android:exported="false"/>
 
         <!-- Remote syncs -->
         <service
-            android:name=".synch.WeatherSyncIntentService"
+            android:name=".data.network.WeatherSyncIntentService"
             android:exported="false" />
 
         <!-- Synch Scheduling with FirebaseJobDispatcher -->
         <service
-            android:name=".synch.WeatherFirebaseJobService"
+            android:name=".data.network.WeatherFirebaseJobService"
             android:exported="false">
             <!-- TODO (9) Declare an intent filter with the action ACTION_EXECUTE -->
             <intent-filter>

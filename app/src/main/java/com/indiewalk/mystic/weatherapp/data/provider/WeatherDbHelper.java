@@ -1,10 +1,10 @@
-package com.indiewalk.mystic.weatherapp.data;
+package com.indiewalk.mystic.weatherapp.data.provider;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.indiewalk.mystic.weatherapp.data.WeatherContract.WeatherEntry;
+import com.indiewalk.mystic.weatherapp.data.provider.WeatherContract.WeatherEntry;
 
 
 // ---------------------------------------------------------------------------------------------

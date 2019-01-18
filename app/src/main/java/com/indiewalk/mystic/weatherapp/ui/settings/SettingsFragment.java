@@ -1,4 +1,4 @@
-package com.indiewalk.mystic.weatherapp.ui;
+package com.indiewalk.mystic.weatherapp.ui.settings;
 
 
 
@@ -12,9 +12,8 @@ import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.PreferenceScreen;
 
 import com.indiewalk.mystic.weatherapp.R;
-import com.indiewalk.mystic.weatherapp.data.UserPreferencesData;
-import com.indiewalk.mystic.weatherapp.data.WeatherContract;
-import com.indiewalk.mystic.weatherapp.synch.WeatherSyncUtils;
+import com.indiewalk.mystic.weatherapp.data.provider.WeatherContract;
+import com.indiewalk.mystic.weatherapp.data.network.WeatherSyncUtils;
 
 /**
  * -------------------------------------------------------------------------------------------------

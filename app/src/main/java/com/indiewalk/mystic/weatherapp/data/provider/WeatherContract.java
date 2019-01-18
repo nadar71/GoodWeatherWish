@@ -1,4 +1,4 @@
-package com.indiewalk.mystic.weatherapp.data;
+package com.indiewalk.mystic.weatherapp.data.provider;
 
 
 import android.net.Uri;

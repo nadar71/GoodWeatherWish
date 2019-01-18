@@ -4,9 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.indiewalk.mystic.weatherapp.R;
-import com.indiewalk.mystic.weatherapp.data.UserPreferencesData;
-
-import java.util.Map;
+import com.indiewalk.mystic.weatherapp.ui.settings.UserPreferencesData;
 
 /**
  * -------------------------------------------------------------------------------------------------

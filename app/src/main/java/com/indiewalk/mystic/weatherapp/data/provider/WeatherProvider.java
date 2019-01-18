@@ -1,4 +1,4 @@
-package com.indiewalk.mystic.weatherapp.data;
+package com.indiewalk.mystic.weatherapp.data.provider;
 
 import android.annotation.TargetApi;
 import android.content.ContentProvider;
@@ -10,8 +10,6 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 
 import com.indiewalk.mystic.weatherapp.utilities.WeatherAppDateUtility;
-
-import java.net.URI;
 
 
 // -------------------------------------------------------------------------------------------------
@@ -38,6 +36,7 @@ public class WeatherProvider extends ContentProvider {
     public static UriMatcher buildUriMatcher() {
         // Init UriMatcher to root URI passing the path code for NO_MATCH as commonly used.
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
+
         // Set authority=domain here
         final String authority = WeatherContract.CONTENT_AUTHORITY;
 

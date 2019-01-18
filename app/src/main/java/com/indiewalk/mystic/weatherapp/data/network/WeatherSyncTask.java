@@ -1,15 +1,13 @@
-package com.indiewalk.mystic.weatherapp.synch;
+package com.indiewalk.mystic.weatherapp.data.network;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.text.format.DateUtils;
 
-import com.indiewalk.mystic.weatherapp.data.UserPreferencesData;
-import com.indiewalk.mystic.weatherapp.data.WeatherContract;
-import com.indiewalk.mystic.weatherapp.utilities.NetworkUtils;
+import com.indiewalk.mystic.weatherapp.ui.settings.UserPreferencesData;
+import com.indiewalk.mystic.weatherapp.data.provider.WeatherContract;
 import com.indiewalk.mystic.weatherapp.utilities.NotificationUtils;
-import com.indiewalk.mystic.weatherapp.utilities.OpenWeatherJsonUtility;
 
 import java.net.URL;
 

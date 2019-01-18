@@ -1,4 +1,4 @@
-package com.indiewalk.mystic.weatherapp.ui;
+package com.indiewalk.mystic.weatherapp.ui.detail;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -14,11 +14,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 import com.indiewalk.mystic.weatherapp.R;
-import com.indiewalk.mystic.weatherapp.data.WeatherContract;
+import com.indiewalk.mystic.weatherapp.data.provider.WeatherContract;
 import com.indiewalk.mystic.weatherapp.databinding.ActivityDetailBinding;
+import com.indiewalk.mystic.weatherapp.ui.settings.SettingsActivity;
 import com.indiewalk.mystic.weatherapp.utilities.WeatherAppDateUtility;
 import com.indiewalk.mystic.weatherapp.utilities.WeatherAppGenericUtility;
 

@@ -14,9 +14,9 @@ import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
 
 import com.indiewalk.mystic.weatherapp.R;
-import com.indiewalk.mystic.weatherapp.data.UserPreferencesData;
-import com.indiewalk.mystic.weatherapp.data.WeatherContract;
-import com.indiewalk.mystic.weatherapp.ui.DetailActivity;
+import com.indiewalk.mystic.weatherapp.ui.settings.UserPreferencesData;
+import com.indiewalk.mystic.weatherapp.data.provider.WeatherContract;
+import com.indiewalk.mystic.weatherapp.ui.detail.DetailActivity;
 
 
 public class NotificationUtils {
