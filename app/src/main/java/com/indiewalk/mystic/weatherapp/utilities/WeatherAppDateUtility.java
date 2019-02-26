@@ -6,6 +6,7 @@ import android.text.format.DateUtils;
 import com.indiewalk.mystic.weatherapp.R;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
@@ -42,7 +43,7 @@ public final class WeatherAppDateUtility {
     // @return The number of milliseconds (UTC / GMT) for today's date at midnight in the local
     // time zone
     // ---------------------------------------------------------------------------------------------
-    public static long getNormalizedUtcDateForToday() {
+    public static long getNormalizedUtcMsForToday() {
 
         // This number represents the number of milliseconds that have elapsed since January
         // 1st, 1970 at midnight in the GMT time zone.
@@ -72,6 +73,11 @@ public final class WeatherAppDateUtility {
         long normalizedUtcMidnightMillis = TimeUnit.DAYS.toMillis(daysSinceEpochLocal);
 
         return normalizedUtcMidnightMillis;
+    }
+
+    public static Date getNormalizedUtcDateForToday() {
+        long normalizedMilli = getNormalizedUtcMsForToday();
+        return new Date(normalizedMilli);
     }
 
     /**

@@ -1,4 +1,4 @@
-package com.indiewalk.mystic.weatherapp.data.network;
+package com.indiewalk.mystic.weatherapp.old;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +14,8 @@ import com.firebase.jobdispatcher.GooglePlayDriver;
 import com.firebase.jobdispatcher.Job;
 import com.firebase.jobdispatcher.Lifetime;
 import com.firebase.jobdispatcher.Trigger;
+import com.indiewalk.mystic.weatherapp.data.network.WeatherFirebaseJobService;
+import com.indiewalk.mystic.weatherapp.data.network.WeatherSyncIntentService;
 import com.indiewalk.mystic.weatherapp.data.provider.WeatherContract;
 
 import java.util.concurrent.TimeUnit;
@@ -131,5 +133,7 @@ public class WeatherSyncUtils {
         Intent intentToSyncImmediately = new Intent(context, WeatherSyncIntentService.class);
         context.startService(intentToSyncImmediately);
     }
+
+
 
 }

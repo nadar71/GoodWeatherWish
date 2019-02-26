@@ -1,4 +1,4 @@
-package com.indiewalk.mystic.weatherapp.data.network;
+package com.indiewalk.mystic.weatherapp.old;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -66,12 +66,14 @@ public final class OpenWeatherJsonUtility {
      * @throws JSONException If JSON data cannot be properly parsed
      * ---------------------------------------------------------------------------------------------
      */
+
+    /*
     public static ContentValues[] getWeatherContentValuesFromJson(Context context, String forecastJsonStr)
             throws JSONException {
 
         JSONObject forecastJson = new JSONObject(forecastJsonStr);
 
-        /* Is there an error? */
+        // Is there an error?
         if (forecastJson.has(OWM_MESSAGE_CODE)) {
             int errorCode = forecastJson.getInt(OWM_MESSAGE_CODE);
 
@@ -79,10 +81,10 @@ public final class OpenWeatherJsonUtility {
                 case HttpURLConnection.HTTP_OK:
                     break;
                 case HttpURLConnection.HTTP_NOT_FOUND:
-                    /* Location invalid */
+                    // Location invalid
                     return null;
                 default:
-                    /* Server probably down */
+                    // Server probably down
                     return null;
             }
         }
@@ -122,7 +124,7 @@ public final class OpenWeatherJsonUtility {
 
             int weatherId;
 
-            // Get the JSON object representing the day */
+            // Get the JSON object representing the day
             JSONObject dayForecast = jsonWeatherArray.getJSONObject(i);
 
             // We ignore all the datetime values embedded in the JSON and assume that
@@ -166,7 +168,7 @@ public final class OpenWeatherJsonUtility {
 
         return weatherContentValues;
     }
-
+   */
 
 
     /** OLD

@@ -3,6 +3,7 @@ package com.indiewalk.mystic.weatherapp.ui.settings;
 
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.preference.CheckBoxPreference;
@@ -12,8 +13,10 @@ import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.PreferenceScreen;
 
 import com.indiewalk.mystic.weatherapp.R;
+import com.indiewalk.mystic.weatherapp.data.network.WeatherNetworkDataSource;
 import com.indiewalk.mystic.weatherapp.data.provider.WeatherContract;
-import com.indiewalk.mystic.weatherapp.data.network.WeatherSyncUtils;
+import com.indiewalk.mystic.weatherapp.old.WeatherSyncUtils;
+import com.indiewalk.mystic.weatherapp.utilities.InjectorUtils;
 
 /**
  * -------------------------------------------------------------------------------------------------
@@ -104,7 +107,17 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
             // location changed
             // Wipe out any potential PlacePicker latlng values so that we can use this text entry.
             UserPreferencesData.resetLocationCoordinates(activity);
-            WeatherSyncUtils.startImmediateSync(activity);
+
+            // TODO  : TEST resync weather data; data on screen must be updated too
+            //
+            // WeatherSyncUtils.startImmediateSync(activity);
+
+            // resynch with remote data
+            WeatherNetworkDataSource networkDataSource =
+                    InjectorUtils.provideNetworkDataSource(activity.getApplicationContext());
+            networkDataSource.fetchWeather();
+
+
         } else if (key.equals(getString(R.string.pref_units_key))) {
             // units  changed. update lists of weather entries accordingly
             activity.getContentResolver().notifyChange(WeatherContract.WeatherEntry.CONTENT_URI, null);

@@ -1,5 +1,6 @@
 package com.indiewalk.mystic.weatherapp.ui.list;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -25,11 +26,13 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 import com.indiewalk.mystic.weatherapp.R;
+import com.indiewalk.mystic.weatherapp.data.network.WeatherNetworkDataSource;
 import com.indiewalk.mystic.weatherapp.ui.settings.UserPreferencesData;
 import com.indiewalk.mystic.weatherapp.data.provider.WeatherContract;
-import com.indiewalk.mystic.weatherapp.data.network.WeatherSyncUtils;
+import com.indiewalk.mystic.weatherapp.old.WeatherSyncUtils;
 import com.indiewalk.mystic.weatherapp.ui.settings.SettingsActivity;
 import com.indiewalk.mystic.weatherapp.ui.detail.DetailActivity;
+import com.indiewalk.mystic.weatherapp.utilities.InjectorUtils;
 
 /**
  * -------------------------------------------------------------------------------------------------
@@ -41,8 +44,7 @@ import com.indiewalk.mystic.weatherapp.ui.detail.DetailActivity;
  * -------------------------------------------------------------------------------------------------
  */
 public class MainActivity extends AppCompatActivity implements
-        ForecastAdapter.ForecastAdapterOnClickHandler,
-        LoaderManager.LoaderCallbacks<Cursor> {
+        ForecastAdapter.ForecastAdapterOnClickHandler {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -70,6 +72,9 @@ public class MainActivity extends AppCompatActivity implements
 
     // position in RecyclerView, init with no position
     private int mPosition = RecyclerView.NO_POSITION;
+
+    // MainActivity associted ViewModel
+    private MainActivityViewModel mViewModel;
 
 
 
@@ -102,75 +107,43 @@ public class MainActivity extends AppCompatActivity implements
         showLoading();
 
 
+        MainViewModelFactory factory = InjectorUtils.provideMainActivityViewModelFactory(this.getApplicationContext());
+        mViewModel = ViewModelProviders.of(this, factory).get(MainActivityViewModel.class);
+
+        // observe the weather entries, update if new ones received and loaded
+        mViewModel.getWeatherList().observe(this,weatherEntries -> {
+            mForecastAdapter.swapForecast(weatherEntries);
+            if(mPosition == RecyclerView.NO_POSITION){
+                mPosition = 0;
+            }
+            mRecyclerView.smoothScrollToPosition(mPosition);
+
+            // show the weather forecast list if loaded otherwise the loading screen
+            if (weatherEntries != null &&  weatherEntries.size() > 0) {
+                showWeatherDataView();
+            }else{
+                showLoading();
+            }
+
+        });
+
+
+
+        // ************ OLD STUFF USING LOADER ******************************
+        /*
         //Init Loader using loader manager
         getSupportLoaderManager().initLoader(FORECAST_LOADER_ID, null, this);
 
         // Start an immediate remote data synchronize
         WeatherSyncUtils.initialize(this);
+        */
 
     }
 
 
-    //
-
-    /**
-     * -------------------------------------------------------------------------------------------------
-     * Loader for weather forecast update.
-     * Return a Loader<Cursor>
-     * @param loaderId
-     * @param loaderArgs
-     * @return
-     * -------------------------------------------------------------------------------------------------
-     */
-    @NonNull
-    @Override
-    public Loader<Cursor> onCreateLoader(int loaderId, @Nullable Bundle loaderArgs) {
-        switch (loaderId) {
-            // return CursorLoader in case of FORECAST_LOADER_ID request
-            case FORECAST_LOADER_ID:
-                // URI for all rows of weather data in weather table
-                Uri forecastQueryUri = WeatherContract.WeatherEntry.CONTENT_URI;
-                String sortOrder = WeatherContract.WeatherEntry.COLUMN_DATE + " ASC";
-                // Get all weather data from today onwards that is stored in our weather table.
-                String selection = WeatherContract.WeatherEntry.getSqlSelectForTodayOnwards();
-
-                return new CursorLoader(this,
-                        forecastQueryUri,
-                        MAIN_FORECAST_PROJECTION,
-                        selection,
-                        null,
-                        sortOrder);
-
-            default:
-                throw new RuntimeException("Loader Not Implemented: " + loaderId);
-        }
-    }
 
 
-    /**
-     * -------------------------------------------------------------------------------------------------
-     * Weather forecast retrieving ended
-     * @param loader
-     * @param data
-     * -------------------------------------------------------------------------------------------------
-     */
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        // swap cursor with new data
-        mForecastAdapter.swapCursor(data);
-        // go to position
-        if (mPosition == RecyclerView.NO_POSITION) mPosition = 0;
-        mRecyclerView.smoothScrollToPosition(mPosition);
-        // if data not empty, show them
-        if (data.getCount() != 0) showWeatherDataView();
-    }
 
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-        // clear the Adapter to show no data
-        mForecastAdapter.swapCursor(null);
-    }
 
     /**
      * -------------------------------------------------------------------------------------------------
@@ -233,10 +206,24 @@ public class MainActivity extends AppCompatActivity implements
 
         // Refresh data
         if (id == R.id.action_refresh) {
+
+
+
+            /*
             // delete and reload the data in RecyclerView
             mForecastAdapter.swapCursor(null);
+
             // load new data
             getSupportLoaderManager().restartLoader(FORECAST_LOADER_ID, null, this);
+            */
+
+
+            // TODO : TEST resynch with remote data; data on screen must be updated too
+            // resynch with remote data
+            WeatherNetworkDataSource networkDataSource =
+                    InjectorUtils.provideNetworkDataSource(this.getApplicationContext());
+            networkDataSource.fetchWeather();
+
             return true;
         }
 
@@ -299,6 +286,76 @@ public class MainActivity extends AppCompatActivity implements
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
     }
+
+
+
+
+
+    // ---------------------------------------------------------------------------------------------
+    // ********************************** Using loader : OLD CODE **********************************
+    // ---------------------------------------------------------------------------------------------
+
+
+    /*
+    // ---------------------------------------------------------------------------------------------
+    // Loader for weather forecast update.
+    // Return a Loader<Cursor>
+    // @param loaderId
+    // @param loaderArgs
+    // @return
+    // ---------------------------------------------------------------------------------------------
+
+    @NonNull
+    @Override
+    public Loader<Cursor> onCreateLoader(int loaderId, @Nullable Bundle loaderArgs) {
+        switch (loaderId) {
+            // return CursorLoader in case of FORECAST_LOADER_ID request
+            case FORECAST_LOADER_ID:
+                // URI for all rows of weather data in weather table
+                Uri forecastQueryUri = WeatherContract.WeatherEntry.CONTENT_URI;
+                String sortOrder = WeatherContract.WeatherEntry.COLUMN_DATE + " ASC";
+                // Get all weather data from today onwards that is stored in our weather table.
+                String selection = WeatherContract.WeatherEntry.getSqlSelectForTodayOnwards();
+
+                return new CursorLoader(this,
+                        forecastQueryUri,
+                        MAIN_FORECAST_PROJECTION,
+                        selection,
+                        null,
+                        sortOrder);
+
+            default:
+                throw new RuntimeException("Loader Not Implemented: " + loaderId);
+        }
+    }
+
+
+
+    // ---------------------------------------------------------------------------------------------
+    // Weather forecast retrieving ended
+    // @param loader
+    // @param data
+    // ---------------------------------------------------------------------------------------------
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        // swap cursor with new data
+        mForecastAdapter.swapCursor(data);
+        // go to position
+        if (mPosition == RecyclerView.NO_POSITION) mPosition = 0;
+        mRecyclerView.smoothScrollToPosition(mPosition);
+        // if data not empty, show them
+        if (data.getCount() != 0) showWeatherDataView();
+    }
+
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        // clear the Adapter to show no data
+        mForecastAdapter.swapCursor(null);
+    }
+
+    */
 
 
 }

@@ -21,7 +21,9 @@ android {
 
     dataBinding.enabled = true
 
-    productFlavors {
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
@@ -36,8 +38,17 @@ dependencies {
     implementation "com.android.support.constraint:constraint-layout:1.1.0-beta1"
     implementation 'com.firebase:firebase-jobdispatcher:0.5.0'
 
-    // Instrumentation dependencies use androidTestCompile
-    // (as opposed to testCompile for local unit tests run in the JVM)
+
+    // Room components
+    implementation "android.arch.persistence.room:runtime:1.1.1"
+    annotationProcessor "android.arch.persistence.room:compiler:1.1.1"
+
+    // LifeCycle components
+    implementation "android.arch.lifecycle:runtime:1.1.1"
+    implementation "android.arch.lifecycle:extensions:1.1.1"
+    annotationProcessor "android.arch.lifecycle:compiler:1.1.1"
+
+    // test
     androidTestImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support:support-annotations:27.1.1'
     androidTestImplementation 'com.android.support.test:runner:0.5'

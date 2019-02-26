@@ -61,7 +61,6 @@
         <service
             android:name=".data.network.WeatherFirebaseJobService"
             android:exported="false">
-            <!-- TODO (9) Declare an intent filter with the action ACTION_EXECUTE -->
             <intent-filter>
                 <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE"/>
             </intent-filter>

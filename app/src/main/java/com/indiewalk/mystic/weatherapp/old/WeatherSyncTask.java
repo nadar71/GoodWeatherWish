@@ -1,10 +1,11 @@
-package com.indiewalk.mystic.weatherapp.data.network;
+package com.indiewalk.mystic.weatherapp.old;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.text.format.DateUtils;
 
+import com.indiewalk.mystic.weatherapp.data.network.NetworkUtils;
 import com.indiewalk.mystic.weatherapp.ui.settings.UserPreferencesData;
 import com.indiewalk.mystic.weatherapp.data.provider.WeatherContract;
 import com.indiewalk.mystic.weatherapp.utilities.NotificationUtils;
@@ -31,7 +32,7 @@ public class WeatherSyncTask {
             String jsonWeatherResponse = NetworkUtils.getResponseFromHttpUrl(weatherRequestUrl);
 
             // Parse the JSON into a list of weather values
-            ContentValues[] weatherValues = OpenWeatherJsonUtility.getWeatherContentValuesFromJson(context, jsonWeatherResponse);
+            ContentValues[] weatherValues = null; // OpenWeatherJsonUtility.getWeatherContentValuesFromJson(context, jsonWeatherResponse);
 
             // In cases JSON contained an error code, return null.
             if (weatherValues != null && weatherValues.length != 0) {
