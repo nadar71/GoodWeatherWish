@@ -3,11 +3,9 @@ package com.indiewalk.mystic.weatherapp.ui.list;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
 
-import com.indiewalk.mystic.weatherapp.data.SunshineRepository;
+import com.indiewalk.mystic.weatherapp.data.WeatherAppRepository;
 import com.indiewalk.mystic.weatherapp.data.database.ListWeatherEntry;
-import com.indiewalk.mystic.weatherapp.data.database.WeatherEntry;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -21,9 +19,9 @@ public class MainActivityViewModel extends ViewModel {
 
     // Data for weather forecasts
     // private final Date mDate;
-    private final SunshineRepository mRepository;
+    private final WeatherAppRepository mRepository;
 
-    public MainActivityViewModel(SunshineRepository repository){ //, Date date) {
+    public MainActivityViewModel(WeatherAppRepository repository){ //, Date date) {
         mRepository  = repository;
         // mDate        = date;
         mListWeather = mRepository.getCurrentWeatherForecasts();

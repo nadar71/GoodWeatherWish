@@ -164,7 +164,7 @@ public class WeatherNetworkDataSource {
 
                 // As long as there are weather forecasts, update the LiveData storing the most recent
                 // weather forecasts. This will trigger observers of that LiveData, such as the
-                // SunshineRepository.
+                // WeatherAppRepository.
                 if (response != null && response.getWeatherForecast().length != 0) {
                     Log.d(LOG_TAG, "JSON not null and has " + response.getWeatherForecast().length
                             + " values");

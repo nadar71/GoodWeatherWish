@@ -17,11 +17,10 @@
 package com.indiewalk.mystic.weatherapp.ui.detail;
 
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
 
 import android.arch.lifecycle.ViewModel;
 
-import com.indiewalk.mystic.weatherapp.data.SunshineRepository;
+import com.indiewalk.mystic.weatherapp.data.WeatherAppRepository;
 import com.indiewalk.mystic.weatherapp.data.database.WeatherEntry;
 
 import java.util.Date;
@@ -37,9 +36,9 @@ class DetailActivityViewModel extends ViewModel {
 
     // Data for weather forecasts
     private final Date mDate;
-    private final SunshineRepository mRepository;
+    private final WeatherAppRepository mRepository;
 
-    public DetailActivityViewModel(SunshineRepository repository, Date date) {
+    public DetailActivityViewModel(WeatherAppRepository repository, Date date) {
         mRepository = repository;
         mDate       = date;
         mWeather    = mRepository.getWeatherByDate(mDate);

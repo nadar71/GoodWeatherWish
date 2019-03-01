@@ -14,23 +14,26 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Handles data operations in Sunshine. Acts as a mediator between {@link WeatherNetworkDataSource}
+ * -------------------------------------------------------------------------------------------------
+ * Handles data operations in WeatherApp.
+ * Acts as a mediator between {@link WeatherNetworkDataSource}
  * and {@link WeatherDao}
+ * -------------------------------------------------------------------------------------------------
  */
-public class SunshineRepository {
-    private static final String LOG_TAG = SunshineRepository.class.getSimpleName();
+public class WeatherAppRepository {
+    private static final String LOG_TAG = WeatherAppRepository.class.getSimpleName();
 
     // For Singleton instantiation
     private static final Object LOCK = new Object();
-    private static SunshineRepository sInstance;
+    private static WeatherAppRepository sInstance;
     private final WeatherDao mWeatherDao;
     private final WeatherNetworkDataSource mWeatherNetworkDataSource;
     private final AppExecutors mExecutors;
     private boolean mInitialized = false;
 
-    private SunshineRepository(WeatherDao weatherDao,
-                               WeatherNetworkDataSource weatherNetworkDataSource,
-                               AppExecutors executors) {
+    private WeatherAppRepository(WeatherDao weatherDao,
+                                 WeatherNetworkDataSource weatherNetworkDataSource,
+                                 AppExecutors executors) {
         mWeatherDao = weatherDao;
         mWeatherNetworkDataSource = weatherNetworkDataSource;
         mExecutors = executors;
@@ -56,7 +59,8 @@ public class SunshineRepository {
 
     }
 
-    public synchronized static SunshineRepository getInstance(
+    // get repository's singleton instance
+    public synchronized static WeatherAppRepository getInstance(
             WeatherDao weatherDao,
             WeatherNetworkDataSource weatherNetworkDataSource,
             AppExecutors executors) {
@@ -64,7 +68,7 @@ public class SunshineRepository {
         Log.d(LOG_TAG, "Getting the repository");
         if (sInstance == null) {
             synchronized (LOCK) {
-                sInstance = new SunshineRepository(weatherDao,
+                sInstance = new WeatherAppRepository(weatherDao,
                         weatherNetworkDataSource,
                         executors);
                 Log.d(LOG_TAG, "Made new repository");
@@ -74,8 +78,10 @@ public class SunshineRepository {
     }
 
     /**
+     * ---------------------------------------------------------------------------------------------
      * Creates periodic sync tasks and checks to see if an immediate sync is required. If an
      * immediate sync is required, this method will take care of making sure that sync occurs.
+     * ---------------------------------------------------------------------------------------------
      */
     private synchronized void initializeData() {
 
@@ -97,7 +103,9 @@ public class SunshineRepository {
     }
 
     /**
+     * ---------------------------------------------------------------------------------------------
      *  Retrieve forecast on a single date
+     * ---------------------------------------------------------------------------------------------
      **/
     public LiveData<WeatherEntry> getWeatherByDate(Date date){
         initializeData();
@@ -106,7 +114,9 @@ public class SunshineRepository {
 
 
     /**
+     * ---------------------------------------------------------------------------------------------
      *  Retrieve a list of forecast starting from current date
+     * ---------------------------------------------------------------------------------------------
      **/
     public LiveData<List<ListWeatherEntry>> getCurrentWeatherForecasts(){
         initializeData();
@@ -117,7 +127,9 @@ public class SunshineRepository {
 
 
     /**
+     * ---------------------------------------------------------------------------------------------
      * Deletes old weather data because we don't need to keep multiple days' data
+     * ---------------------------------------------------------------------------------------------
      */
     private void deleteOldData() {
         Date today = WeatherAppDateUtility.getNormalizedUtcDateForToday();
@@ -125,7 +137,9 @@ public class SunshineRepository {
     }
 
     /**
+     * ---------------------------------------------------------------------------------------------
      * Checks if there are enough days of future weather for the app to display all the needed data.
+     * ---------------------------------------------------------------------------------------------
      *
      * @return Whether a fetch is needed
      */
@@ -136,7 +150,9 @@ public class SunshineRepository {
     }
 
     /**
+     * ---------------------------------------------------------------------------------------------
      * Network related operation : start IntentService present in  WeatherNetworkDataSource
+     * ---------------------------------------------------------------------------------------------
      */
     private void startFetchWeatherService() {
         mWeatherNetworkDataSource.startFetchWeatherService();

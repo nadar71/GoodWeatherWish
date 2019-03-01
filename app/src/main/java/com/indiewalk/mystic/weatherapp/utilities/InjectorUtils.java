@@ -3,11 +3,10 @@ package com.indiewalk.mystic.weatherapp.utilities;
 import android.content.Context;
 
 import com.indiewalk.mystic.weatherapp.AppExecutors;
-import com.indiewalk.mystic.weatherapp.data.SunshineRepository;
+import com.indiewalk.mystic.weatherapp.data.WeatherAppRepository;
 import com.indiewalk.mystic.weatherapp.data.database.SunshineDatabase;
 import com.indiewalk.mystic.weatherapp.data.network.WeatherNetworkDataSource;
 import com.indiewalk.mystic.weatherapp.ui.detail.DetailViewModelFactory;
-import com.indiewalk.mystic.weatherapp.ui.list.MainActivityViewModel;
 import com.indiewalk.mystic.weatherapp.ui.list.MainViewModelFactory;
 
 import java.util.Date;
@@ -16,8 +15,8 @@ import java.util.Date;
  */
 public class InjectorUtils {
 
-    // Inject the component SunshineRepository
-   public static SunshineRepository provideRepository(Context context) {
+    // Inject the component WeatherAppRepository
+   public static WeatherAppRepository provideRepository(Context context) {
        SunshineDatabase database = SunshineDatabase.getInstance(context.getApplicationContext());
 
        AppExecutors executors = AppExecutors.getInstance();
@@ -25,7 +24,7 @@ public class InjectorUtils {
        WeatherNetworkDataSource networkDataSource =
                WeatherNetworkDataSource.getInstance(context.getApplicationContext(), executors);
 
-       return SunshineRepository.getInstance(database.weatherDao(), networkDataSource, executors);
+       return WeatherAppRepository.getInstance(database.weatherDao(), networkDataSource, executors);
    }
 
    // Inject the component WeatherNetworkDataSource (used for example in SunshineSyncIntentService)
@@ -40,12 +39,12 @@ public class InjectorUtils {
    }
 
     public static DetailViewModelFactory provideDetailViewModelFactory(Context context, Date date) {
-        SunshineRepository repository = provideRepository(context.getApplicationContext());
+        WeatherAppRepository repository = provideRepository(context.getApplicationContext());
         return new DetailViewModelFactory(repository, date);
     }
 
     public static MainViewModelFactory provideMainActivityViewModelFactory(Context context) {
-        SunshineRepository repository = provideRepository(context.getApplicationContext());
+        WeatherAppRepository repository = provideRepository(context.getApplicationContext());
         return new MainViewModelFactory(repository);
     }
 

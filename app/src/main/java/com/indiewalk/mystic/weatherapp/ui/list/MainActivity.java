@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements
 
         // observe the weather entries, update if new ones received and loaded
         mViewModel.getWeatherList().observe(this,weatherEntries -> {
-            mForecastAdapter.swapForecast(weatherEntries);
+            mForecastAdapter.swapForecast(weatherEntries);  // TODO check problem here
             if(mPosition == RecyclerView.NO_POSITION){
                 mPosition = 0;
             }
