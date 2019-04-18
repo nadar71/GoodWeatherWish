@@ -8,10 +8,12 @@ import com.indiewalk.mystic.weatherapp.utilities.InjectorUtils;
 
 
 /**
+ * -------------------------------------------------------------------------------------------------
  * An {@link IntentService} subclass for immediately scheduling a sync with the server off of the
  * main thread. This is necessary because {@link com.firebase.jobdispatcher.FirebaseJobDispatcher}
  * will not trigger a job immediately. This should only be called when the application is on the
  * screen.
+ * -------------------------------------------------------------------------------------------------
  */
 public class WeatherSyncIntentService extends IntentService {
 

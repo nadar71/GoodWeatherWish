@@ -26,7 +26,9 @@ import com.indiewalk.mystic.weatherapp.data.database.WeatherEntry;
 import java.util.Date;
 
 /**
+ * -------------------------------------------------------------------------------------------------
  * {@link ViewModel} for {@link DetailActivity}
+ * -------------------------------------------------------------------------------------------------
  */
 class DetailActivityViewModel extends ViewModel {
 

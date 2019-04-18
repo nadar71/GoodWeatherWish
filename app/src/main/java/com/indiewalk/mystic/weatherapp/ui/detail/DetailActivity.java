@@ -26,7 +26,7 @@ import java.util.Date;
 
 /**
  * -------------------------------------------------------------------------------------------------
- * Activity for showing each forecast detail, with main part above with main info, and below
+ * Activity for showing each forecast in detail, with main part above with main info, and below
  * the detailed ones.
  * -------------------------------------------------------------------------------------------------
  */
@@ -239,7 +239,6 @@ public class DetailActivity extends AppCompatActivity{
 
         mDetailBinding.extraDetails.windMeasurement.setText(windString);
         mDetailBinding.extraDetails.windMeasurement.setContentDescription(windAccessibility);
-
         mDetailBinding.extraDetails.windLabel.setContentDescription(windAccessibility);
 
 
@@ -255,10 +254,7 @@ public class DetailActivity extends AppCompatActivity{
 
         mDetailBinding.extraDetails.pressure.setText(pressureString);
         mDetailBinding.extraDetails.pressure.setContentDescription(pressureAccessibility);
-
         mDetailBinding.extraDetails.pressureLabel.setContentDescription(pressureAccessibility);
-
-
 
 
         //  Store the forecast summary String in our forecast summary field to share later

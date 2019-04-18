@@ -26,14 +26,19 @@ public final class NetworkUtils {
 
     // TODO : CHANGE TO REAL OWM ws
     private static final String DYNAMIC_WEATHER_URL =
-            "https://andfun-weather.udacity.com/weather";
+            // "https://andfun-weather.udacity.com/weather";
+            "https://api.openweathermap.org/data/2.5/weather";
 
     // TODO : CHANGE TO REAL OWM ws
     private static final String STATIC_WEATHER_URL =
-            "https://andfun-weather.udacity.com/staticweather";
+            // "https://andfun-weather.udacity.com/staticweather"; // dummy server
+            "http://api.openweathermap.org/data/2.5/forecast";
+
+
+    public static final String MY_OPENWEATHER_APPID = "736a5abc6c0957977e0e75002fbdca8e";
 
     private static final String FORECAST_BASE_URL = STATIC_WEATHER_URL;
-
+    // private static final String FORECAST_BASE_URL = DYNAMIC_WEATHER_URL;
     /*
      * NOTE: These values only effect responses from OpenWeatherMap, NOT from the fake weather
      * server. They are simply here to allow us to teach you how to build a URL if you were to use
@@ -46,7 +51,7 @@ public final class NetworkUtils {
     // The units we want our API to return
     private static final String units = "metric";
     // The number of days we want our API to return
-    private static final int numDays = 14;
+    private static final int numDays = 4; //14; : need another kind of subscription
 
     private static final String QUERY_PARAM  = "q";
     private static final String LAT_PARAM    = "lat";
@@ -54,6 +59,7 @@ public final class NetworkUtils {
     private static final String FORMAT_PARAM = "mode";
     private static final String UNITS_PARAM  = "units";
     private static final String DAYS_PARAM   = "cnt";
+    private static final String APPID        = "APPID";
 
     /**
      * ---------------------------------------------------------------------------------------------
@@ -72,6 +78,7 @@ public final class NetworkUtils {
      * ---------------------------------------------------------------------------------------------
      */
     public static URL getUrl(Context context) {
+/*
         if (UserPreferencesData.isLocationLatLonAvailable(context)) {
             double[] preferredCoordinates = UserPreferencesData.getLocationCoordinates(context);
             double latitude = preferredCoordinates[0];
@@ -81,6 +88,12 @@ public final class NetworkUtils {
             String locationQuery = UserPreferencesData.getPreferredWeatherLocation(context);
             return buildUrlWithLocationQuery(locationQuery);
         }
+        */
+
+        String locationQuery = "Mountain View, CA";
+        // String locationQuery = "Sidney, US";
+        return buildUrlWithLocationQuery(locationQuery);
+
     }
 
     /**
@@ -99,7 +112,8 @@ public final class NetworkUtils {
                 .appendQueryParameter(LON_PARAM, String.valueOf(longitude))
                 .appendQueryParameter(FORMAT_PARAM, format)
                 .appendQueryParameter(UNITS_PARAM, units)
-                .appendQueryParameter(DAYS_PARAM, Integer.toString(numDays))
+                // .appendQueryParameter(DAYS_PARAM, Integer.toString(numDays))
+                .appendQueryParameter(APPID, MY_OPENWEATHER_APPID)
                 .build();
 
         try {
@@ -127,7 +141,8 @@ public final class NetworkUtils {
                 .appendQueryParameter(QUERY_PARAM, locationQuery)
                 .appendQueryParameter(FORMAT_PARAM, format)
                 .appendQueryParameter(UNITS_PARAM, units)
-                .appendQueryParameter(DAYS_PARAM, Integer.toString(numDays))
+                // .appendQueryParameter(DAYS_PARAM, Integer.toString(numDays))
+                .appendQueryParameter(APPID, MY_OPENWEATHER_APPID)
                 .build();
 
         try {

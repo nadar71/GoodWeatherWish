@@ -21,7 +21,7 @@ import java.util.List;
  * -------------------------------------------------------------------------------------------------
  */
 public class WeatherAppRepository {
-    private static final String LOG_TAG = WeatherAppRepository.class.getSimpleName();
+    private static final String TAG = WeatherAppRepository.class.getSimpleName();
 
     // For Singleton instantiation
     private static final Object LOCK = new Object();
@@ -50,7 +50,7 @@ public class WeatherAppRepository {
 
                 // Insert new weather data into db
                 mWeatherDao.bulkInsert(newForecastsFromNetwork);
-                Log.d(LOG_TAG, "New values inserted: ");
+                Log.d(TAG, "New values inserted: ");
                     }
 
             );
@@ -65,13 +65,13 @@ public class WeatherAppRepository {
             WeatherNetworkDataSource weatherNetworkDataSource,
             AppExecutors executors) {
 
-        Log.d(LOG_TAG, "Getting the repository");
+        Log.d(TAG, "Getting the repository");
         if (sInstance == null) {
             synchronized (LOCK) {
                 sInstance = new WeatherAppRepository(weatherDao,
                         weatherNetworkDataSource,
                         executors);
-                Log.d(LOG_TAG, "Made new repository");
+                Log.d(TAG, "Made new repository");
             }
         }
         return sInstance;
@@ -95,6 +95,7 @@ public class WeatherAppRepository {
         mWeatherNetworkDataSource.scheduleRecurringFetchWeatherSync();
 
 
+        // launches bg service for network data retrieving
         mExecutors.diskIO().execute(()->{
             if(isFetchNeeded()){
                 startFetchWeatherService();
@@ -108,6 +109,7 @@ public class WeatherAppRepository {
      * ---------------------------------------------------------------------------------------------
      **/
     public LiveData<WeatherEntry> getWeatherByDate(Date date){
+        // check data from network and put in db
         initializeData();
         return mWeatherDao.getWeatherByDate(date);
     }
@@ -119,6 +121,7 @@ public class WeatherAppRepository {
      * ---------------------------------------------------------------------------------------------
      **/
     public LiveData<List<ListWeatherEntry>> getCurrentWeatherForecasts(){
+        // check data from network and put in db
         initializeData();
         Date today = WeatherAppDateUtility.getNormalizedUtcDateForToday();
         return mWeatherDao.getCurrentWeatherForecasts(today);
@@ -138,7 +141,7 @@ public class WeatherAppRepository {
 
     /**
      * ---------------------------------------------------------------------------------------------
-     * Checks if there are enough days of future weather for the app to display all the needed data.
+     * Checks if there are enough days of future weather forecasts are requested by app
      * ---------------------------------------------------------------------------------------------
      *
      * @return Whether a fetch is needed
@@ -155,6 +158,7 @@ public class WeatherAppRepository {
      * ---------------------------------------------------------------------------------------------
      */
     private void startFetchWeatherService() {
+        // call the intent service for retrieving network data daemon
         mWeatherNetworkDataSource.startFetchWeatherService();
     }
 

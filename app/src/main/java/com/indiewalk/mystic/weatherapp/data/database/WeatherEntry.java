@@ -8,6 +8,7 @@ import android.arch.persistence.room.PrimaryKey;
 import java.util.Date;
 
 /**
+ *  TODO :
  *  The date must be unique because we load the weather for one location only.
  *  Remember in case of reporting weather to more locations
  */

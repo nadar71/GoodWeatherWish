@@ -9,6 +9,7 @@ import com.indiewalk.mystic.weatherapp.data.database.ListWeatherEntry;
 import java.util.List;
 
 /**
+ *
  * {@link ViewModel} for {@link MainActivity}
  */
 public class MainActivityViewModel extends ViewModel {
@@ -24,6 +25,7 @@ public class MainActivityViewModel extends ViewModel {
     public MainActivityViewModel(WeatherAppRepository repository){ //, Date date) {
         mRepository  = repository;
         // mDate        = date;
+        // keep ListWeatherEntry updated retrieving data from network/db
         mListWeather = mRepository.getCurrentWeatherForecasts();
 
     }

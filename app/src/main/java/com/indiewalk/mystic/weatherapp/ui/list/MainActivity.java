@@ -34,6 +34,8 @@ import com.indiewalk.mystic.weatherapp.ui.settings.SettingsActivity;
 import com.indiewalk.mystic.weatherapp.ui.detail.DetailActivity;
 import com.indiewalk.mystic.weatherapp.utilities.InjectorUtils;
 
+import java.util.Date;
+
 /**
  * -------------------------------------------------------------------------------------------------
  * MainActivity
@@ -49,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements
     private static final String TAG = MainActivity.class.getSimpleName();
 
     // Data columns from contentprovider displayed in  weather data.
+    /*
     public static final String[] MAIN_FORECAST_PROJECTION = {
             WeatherContract.WeatherEntry.COLUMN_DATE,
             WeatherContract.WeatherEntry.COLUMN_MAX_TEMP,
@@ -61,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements
     public static final int INDEX_WEATHER_MAX_TEMP = 1;
     public static final int INDEX_WEATHER_MIN_TEMP = 2;
     public static final int INDEX_WEATHER_CONDITION_ID = 3;
+    */
 
     private RecyclerView    mRecyclerView;
     private ForecastAdapter mForecastAdapter;
@@ -73,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements
     // position in RecyclerView, init with no position
     private int mPosition = RecyclerView.NO_POSITION;
 
-    // MainActivity associted ViewModel
+    // MainActivity associated ViewModel
     private MainActivityViewModel mViewModel;
 
 
@@ -90,29 +94,29 @@ public class MainActivity extends AppCompatActivity implements
         // Create a LayoutManager for the recyclerView
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
 
+        // Progressive Loader
+        mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_loading_indicator);
+
         // Set the layoutManager in mRecyclerView
         mRecyclerView.setLayoutManager(layoutManager);
 
+        // child do not change in size, improve performances
         mRecyclerView.setHasFixedSize(true);
 
         // set mRecyclerView's Adapter
         mForecastAdapter = new ForecastAdapter(this, this);
         mRecyclerView.setAdapter(mForecastAdapter);
 
-        // The ProgressBar that will indicate to the user that we are loading data.
-        // Invisible when data woud have been loaded
-        mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_loading_indicator);
 
-        // Show load in progress
-        showLoading();
-
-
+        // Define and associate a ViewModel object (throught the injected ViewModel factory)
+        // keep ui safe from config changes, init/schedule/retrieves data from network/db
         MainViewModelFactory factory = InjectorUtils.provideMainActivityViewModelFactory(this.getApplicationContext());
         mViewModel = ViewModelProviders.of(this, factory).get(MainActivityViewModel.class);
 
-        // observe the weather entries, update if new ones received and loaded
+        // Observe data through Livedata to keep main activity (5 days weather forecasts) of data changes
+        // Observe the weather entries, update adpater/list if new ones received and loaded
         mViewModel.getWeatherList().observe(this,weatherEntries -> {
-            mForecastAdapter.swapForecast(weatherEntries);  // TODO check problem here
+            mForecastAdapter.swapForecast(weatherEntries);
             if(mPosition == RecyclerView.NO_POSITION){
                 mPosition = 0;
             }
@@ -122,6 +126,7 @@ public class MainActivity extends AppCompatActivity implements
             if (weatherEntries != null &&  weatherEntries.size() > 0) {
                 showWeatherDataView();
             }else{
+                // Show load in progress
                 showLoading();
             }
 
@@ -148,15 +153,18 @@ public class MainActivity extends AppCompatActivity implements
     /**
      * -------------------------------------------------------------------------------------------------
      * Touch item
-     * @param weatherForDay
+     * @param date
      * -------------------------------------------------------------------------------------------------
      */
     @Override
-    public void onClick(long weatherForDay) {
-        Context context = this;
-        Intent showDetailActivity = new Intent(context, DetailActivity.class);
-        Uri uriForDateClicked = WeatherContract.WeatherEntry.buildWeatherUriWithDate(weatherForDay);
-        showDetailActivity.setData(uriForDateClicked);
+    public void onItemClick(Date date) {
+        // Context context = this;
+        // Uri uriForDateClicked = WeatherContract.WeatherEntry.buildWeatherUriWithDate(weatherForDay);
+        // showDetailActivity.setData(uriForDateClicked);
+        // startActivity(weatherDetailIntent);
+        Intent showDetailActivity = new Intent(MainActivity.this, DetailActivity.class);
+        long timestamp = date.getTime();
+        showDetailActivity.putExtra(DetailActivity.WEATHER_ID_EXTRA, timestamp);
         startActivity(showDetailActivity);
     }
 

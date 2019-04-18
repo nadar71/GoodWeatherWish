@@ -17,6 +17,7 @@ import com.indiewalk.mystic.weatherapp.data.database.ListWeatherEntry;
 import com.indiewalk.mystic.weatherapp.utilities.WeatherAppDateUtility;
 import com.indiewalk.mystic.weatherapp.utilities.WeatherAppGenericUtility;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -41,9 +42,6 @@ public class ForecastAdapter extends  RecyclerView.Adapter<ForecastAdapter.Forec
 
 
 
-    public interface ForecastAdapterOnClickHandler{
-        void onClick(long date);
-    }
 
 
     public ForecastAdapter(@NonNull Context context, ForecastAdapterOnClickHandler  clickHandler) {
@@ -53,43 +51,7 @@ public class ForecastAdapter extends  RecyclerView.Adapter<ForecastAdapter.Forec
         mUseTodayLayout = mContext.getResources().getBoolean(R.bool.use_today_layout);
     }
 
-    // Single item content holder
-    class ForecastAdapterViewHolder extends RecyclerView.ViewHolder implements OnClickListener {
-        final TextView dateView;
-        final TextView descriptionView;
-        final TextView highTempView;
-        final TextView lowTempView;
 
-        final ImageView iconView;
-
-        public ForecastAdapterViewHolder(View view) {
-            super(view);
-
-            iconView        = (ImageView) view.findViewById(R.id.weather_icon);
-            dateView        = (TextView) view.findViewById(R.id.date);
-            descriptionView = (TextView) view.findViewById(R.id.weather_description);
-            highTempView    = (TextView) view.findViewById(R.id.high_temperature);
-            lowTempView     = (TextView) view.findViewById(R.id.low_temperature);
-
-            itemView.setOnClickListener(this);
-        }
-
-
-        /**
-         * -----------------------------------------------------------------------------------------
-         * Get the date from item clicked and handle with adapater onClick
-         * @param v the View that was clicked
-         * -----------------------------------------------------------------------------------------
-         */
-        @Override
-        public void onClick(View v) {
-            int adapterPosition = getAdapterPosition();
-            mCursor.moveToPosition(adapterPosition);
-            long dateInMillis = mCursor.getLong(MainActivity.INDEX_WEATHER_DATE);
-            mClickHandler.onClick(dateInMillis);
-        }
-
-    }
 
 
 
@@ -101,19 +63,18 @@ public class ForecastAdapter extends  RecyclerView.Adapter<ForecastAdapter.Forec
      * @return
      * ---------------------------------------------------------------------------------------------
      */
-    @NonNull
     @Override
-    public ForecastAdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ForecastAdapterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        // set layout based n view type, toady or future day
+        // set layout based n view type, today or next day in future
         int layoutId = getLayoutIdByType(viewType);
 
         // Item view
         View view = LayoutInflater.from(mContext).inflate(layoutId, parent, false);
 
         // return new viewHolder with the item view inside
-        ForecastAdapterViewHolder forecastAdapterViewHolder = new ForecastAdapterViewHolder(view);
-        return forecastAdapterViewHolder;
+        view.setFocusable(true);
+        return new ForecastAdapterViewHolder(view);
     }
 
 
@@ -147,21 +108,21 @@ public class ForecastAdapter extends  RecyclerView.Adapter<ForecastAdapter.Forec
      * ---------------------------------------------------------------------------------------------
      */
     @Override
-    public void onBindViewHolder(@NonNull ForecastAdapterViewHolder forecastAdapterViewHolder, int position) {
+    public void onBindViewHolder(ForecastAdapterViewHolder forecastAdapterViewHolder, int position) {
         // go to the right position for get the data
-        mCursor.moveToPosition(position);
+        // mCursor.moveToPosition(position);
+        ListWeatherEntry currentWeather = mForecast.get(position);
 
         // Weather Icon
-        int weatherId = mCursor.getInt(MainActivity.INDEX_WEATHER_CONDITION_ID);
-        int weatherImageId;
-
-        weatherImageId = getWeatherImageId(position, weatherId);
+        // int weatherId = mCursor.getInt(MainActivity.INDEX_WEATHER_CONDITION_ID);
+        int weatherId = currentWeather.getWeatherIconId();
+        int weatherImageId = getWeatherImageId(position, weatherId);
         forecastAdapterViewHolder.iconView.setImageResource(weatherImageId);
 
 
         // Weather Date
         // Get date from cursor
-        long dateInMillis = mCursor.getLong(MainActivity.INDEX_WEATHER_DATE);
+        long dateInMillis = currentWeather.getDate().getTime(); // mCursor.getLong(MainActivity.INDEX_WEATHER_DATE);
         // Date human readable format
         String dateString = WeatherAppDateUtility.getFriendlyDateString(mContext, dateInMillis, false);
         forecastAdapterViewHolder.dateView.setText(dateString);
@@ -174,7 +135,7 @@ public class ForecastAdapter extends  RecyclerView.Adapter<ForecastAdapter.Forec
         forecastAdapterViewHolder.descriptionView.setContentDescription(descriptionAcc);
 
         // High (max) temperature
-        double highInCelsius = mCursor.getDouble(MainActivity.INDEX_WEATHER_MAX_TEMP);
+        double highInCelsius = currentWeather.getMax(); // mCursor.getDouble(MainActivity.INDEX_WEATHER_MAX_TEMP);
         // Conversion if needed
         String highString = WeatherAppGenericUtility.formatTemperature(mContext, highInCelsius);
         String highAcc = mContext.getString(R.string.acc_max_temp, highString);
@@ -182,7 +143,7 @@ public class ForecastAdapter extends  RecyclerView.Adapter<ForecastAdapter.Forec
         forecastAdapterViewHolder.highTempView.setContentDescription(highAcc);
 
         // Low (min) temperature
-        double lowInCelsius = mCursor.getDouble(MainActivity.INDEX_WEATHER_MIN_TEMP);
+        double lowInCelsius = currentWeather.getMin(); // mCursor.getDouble(MainActivity.INDEX_WEATHER_MIN_TEMP);
         // Conversion if needed
         String lowString = WeatherAppGenericUtility.formatTemperature(mContext, lowInCelsius);
         String lowAcc = mContext.getString(R.string.acc_min_temp, lowString);
@@ -233,8 +194,8 @@ public class ForecastAdapter extends  RecyclerView.Adapter<ForecastAdapter.Forec
      */
     @Override
     public int getItemCount() {
-        if (null == mCursor) return 0;
-        return mCursor.getCount();
+        if (null == mForecast) return 0;
+        return mForecast.size();
     }
 
 
@@ -272,13 +233,10 @@ public class ForecastAdapter extends  RecyclerView.Adapter<ForecastAdapter.Forec
             mForecast = newForecast;
             notifyDataSetChanged();
         } else {
-            /*
-             * Otherwise we use DiffUtil to calculate the changes and update accordingly. This
-             * shows the four methods you need to override to return a DiffUtil callback. The
-             * old list is the current list stored in mForecast, where the new list is the new
-             * values passed in from the observing the database.
-             */
-
+            // Check differences between :
+            // - old forecast list (current list in mForecast)
+            // - new forecast list (values in db)
+            // dispatch result fo comparison to recycleview adapater view with dispatchUpdatesTo
             DiffUtil.DiffResult result = DiffUtil.calculateDiff(new DiffUtil.Callback() {
                 @Override
                 public int getOldListSize() {
@@ -326,6 +284,55 @@ public class ForecastAdapter extends  RecyclerView.Adapter<ForecastAdapter.Forec
         notifyDataSetChanged();
     }
     */
+
+
+
+    // TODO : CHECK it's different from the other version, use long instaed of date, why millesec ?
+    // OK
+    public interface ForecastAdapterOnClickHandler{
+        // void onItemClick(long date);
+        // void onItemClick(Date date);
+        void onItemClick(Date date);
+    }
+
+    // Single item content holder
+    class ForecastAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        final TextView dateView;
+        final TextView descriptionView;
+        final TextView highTempView;
+        final TextView lowTempView;
+
+        final ImageView iconView;
+
+        public ForecastAdapterViewHolder(View view) {
+            super(view);
+
+            iconView        = (ImageView) view.findViewById(R.id.weather_icon);
+            dateView        = (TextView) view.findViewById(R.id.date);
+            descriptionView = (TextView) view.findViewById(R.id.weather_description);
+            highTempView    = (TextView) view.findViewById(R.id.high_temperature);
+            lowTempView     = (TextView) view.findViewById(R.id.low_temperature);
+
+            view.setOnClickListener(this);
+        }
+
+
+        /**
+         * -----------------------------------------------------------------------------------------
+         * Get the date from item clicked and handle with adapater onItemClick
+         * @param v the View that was clicked
+         * -----------------------------------------------------------------------------------------
+         */
+        @Override
+        public void onClick(View v) {
+            int adapterPosition = getAdapterPosition();
+            // mCursor.moveToPosition(adapterPosition);
+            // long dateInMillis = mCursor.getLong(MainActivity.INDEX_WEATHER_DATE);
+            Date date = mForecast.get(adapterPosition).getDate();
+            mClickHandler.onItemClick(date);
+        }
+
+    }
 
 
 
