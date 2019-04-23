@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -                                                                                           -
+  - Throughout this file, you will see <xliff:g> tags. These help any potential translators    -
+  - properly translate your strings and also give developers that are looking at your strings  -
+  - an idea of exactly how they are used.                                                      -
+  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <resources xmlns:xliff="http://schemas.android.com/apk/res-auto">
 
-
-
-    <!--Used in Action Bar, and in AndroidManifest to tell the device the name of this app.-->
-    <!--It's good to keep this short, so your launcher icon isn't displayed with "The greatest Wea"-->
-    <!--or something similar.-->
     <string name="app_name">                WeatherGood Wish</string>
 
     <!--Used in menu to refresh weather data-->
@@ -25,7 +27,8 @@
 
     <string name="content_authority">       com.indiewalk.mystic.weatherapp</string>
 
-
+    <!-- Title of the DetailActivity -->
+    <string name="title_activity_detail">Details</string>
 
 
 
@@ -71,6 +74,8 @@
     <string name="pref_last_notification">last_notification</string>
 
 
+
+
     <!-- - - - - - - - - - - - - - -   -->
     <!--Used by WeatherAppDateUtility  -->
     <!-- - - - - - - - - - - - - - - - -->
@@ -85,6 +90,7 @@
     <string name="format_full_friendly_date">
         <xliff:g id="month">%1$s</xliff:g>, <xliff:g id="day">%2$s</xliff:g>
     </string>
+
 
 
     <!-- - - - - - - - - - - - - - - - -  -->
@@ -106,12 +112,14 @@
     <string name="wind_label">Wind</string>
     <!-- Wind in kph [CHAR LIMIT=25] -->
     <string name="format_wind_kmh">
-        <xliff:g id="speed">%1$1.0f</xliff:g> km/h <xliff:g id="direction">%2$s</xliff:g>
+        <xliff:g id="speed">%1$1.0f</xliff:g> km/h
+        <xliff:g id="direction">%2$s</xliff:g>
     </string>
 
     <!-- Wind in mph [CHAR LIMIT=25] -->
     <string name="format_wind_mph">
-        <xliff:g id="speed">%1$1.0f</xliff:g> mph <xliff:g id="direction">%2$s</xliff:g>
+        <xliff:g id="speed">%1$1.0f</xliff:g> mph
+        <xliff:g id="direction">%2$s</xliff:g>
     </string>
 
     <string name="pressure_label">Pressure</string>

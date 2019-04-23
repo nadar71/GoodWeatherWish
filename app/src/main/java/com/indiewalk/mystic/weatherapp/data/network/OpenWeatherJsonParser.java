@@ -14,26 +14,28 @@ import java.net.HttpURLConnection;
 import java.util.Date;
 
 /**
+ * -------------------------------------------------------------------------------------------------
  * Parser for OpenWeatherMap JSON data.
+ * -------------------------------------------------------------------------------------------------
  */
 final class OpenWeatherJsonParser {
 
     // Weather information. Each day's forecast info is an element of the "list" array
-    private static final String OWM_LIST = "list";
+    private static final String OWM_LIST           = "list";
 
-    private static final String OWM_PRESSURE = "pressure";
-    private static final String OWM_HUMIDITY = "humidity";
-    private static final String OWM_WINDSPEED = "speed";
+    private static final String OWM_PRESSURE       = "pressure";
+    private static final String OWM_HUMIDITY       = "humidity";
+    private static final String OWM_WINDSPEED      = "speed";
     private static final String OWM_WIND_DIRECTION = "deg";
 
     // All temperatures are children of the "temp" object
-    private static final String OWM_TEMPERATURE = "temp";
+    private static final String OWM_TEMPERATURE    = "temp";
 
     // Max temperature for the day
     private static final String OWM_MAX = "max";
     private static final String OWM_MIN = "min";
 
-    private static final String OWM_WEATHER = "weather";
+    private static final String OWM_WEATHER    = "weather";
     private static final String OWM_WEATHER_ID = "id";
 
     private static final String OWM_MESSAGE_CODE = "cod";
@@ -54,6 +56,9 @@ final class OpenWeatherJsonParser {
         }
         return false;
     }
+
+
+
 
     private static WeatherEntry[] fromJson(final JSONObject forecastJson) throws JSONException {
         JSONArray jsonWeatherArray = forecastJson.getJSONArray(OWM_LIST);
@@ -80,6 +85,10 @@ final class OpenWeatherJsonParser {
         }
         return weatherEntries;
     }
+
+
+
+
 
     private static WeatherEntry fromJson(final JSONObject dayForecast,
                                          long dateTimeMillis) throws JSONException {
@@ -110,13 +119,17 @@ final class OpenWeatherJsonParser {
                 humidity, pressure, windSpeed, windDirection);
     }
 
+
+
     /**
+     * ---------------------------------------------------------------------------------------------
      * This method parses JSON from a web response and returns an array of Strings
      * describing the weather over various days from the forecast.
      *
      * @param forecastJsonStr JSON response from server
      * @return Array of Strings describing weather data
      * @throws JSONException If JSON data cannot be properly parsed
+     * ---------------------------------------------------------------------------------------------
      */
     @Nullable
     WeatherResponse parse(final String forecastJsonStr) throws JSONException {

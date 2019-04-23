@@ -1,23 +1,14 @@
+
 package com.indiewalk.mystic.weatherapp.ui.list;
 
+// import mystic.arch.lifecycle.LifecycleActivity;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
-
-
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
- 
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -27,14 +18,13 @@ import android.widget.ProgressBar;
 
 import com.indiewalk.mystic.weatherapp.R;
 import com.indiewalk.mystic.weatherapp.data.network.WeatherNetworkDataSource;
-import com.indiewalk.mystic.weatherapp.ui.settings.UserPreferencesData;
-import com.indiewalk.mystic.weatherapp.data.provider.WeatherContract;
-import com.indiewalk.mystic.weatherapp.old.WeatherSyncUtils;
-import com.indiewalk.mystic.weatherapp.ui.settings.SettingsActivity;
 import com.indiewalk.mystic.weatherapp.ui.detail.DetailActivity;
+// import com.indiewalk.mystic.weatherapp.ui.settings.SettingsActivity;
+// import com.indiewalk.mystic.weatherapp.ui.settings.UserPreferencesData;
 import com.indiewalk.mystic.weatherapp.utilities.InjectorUtils;
 
 import java.util.Date;
+
 
 /**
  * -------------------------------------------------------------------------------------------------
@@ -45,8 +35,10 @@ import java.util.Date;
  * loading/changing data displayed
  * -------------------------------------------------------------------------------------------------
  */
+
+// public class MainActivity extends LifecycleActivity implements
 public class MainActivity extends AppCompatActivity implements
-        ForecastAdapter.ForecastAdapterOnClickHandler {
+        ForecastAdapter.ForecastAdapterOnItemClickHandler {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -66,47 +58,40 @@ public class MainActivity extends AppCompatActivity implements
     public static final int INDEX_WEATHER_CONDITION_ID = 3;
     */
 
-    private RecyclerView    mRecyclerView;
-    private ForecastAdapter mForecastAdapter;
-
-    private ProgressBar mLoadingIndicator;
-
     // id for the loader
     private static final int FORECAST_LOADER_ID = 10;
 
-    // position in RecyclerView, init with no position
+    private ForecastAdapter mForecastAdapter;
+    private RecyclerView    mRecyclerView;
     private int mPosition = RecyclerView.NO_POSITION;
-
-    // MainActivity associated ViewModel
+    private ProgressBar     mLoadingIndicator;
     private MainActivityViewModel mViewModel;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forecast);
-        getSupportActionBar().setElevation(0f);
 
         // Get the recycle view layout
-        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerview_forecast);
+        mRecyclerView = findViewById(R.id.recyclerview_forecast);
 
-        // Create a LayoutManager for the recyclerView
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        // ProgressBar Loader
+        mLoadingIndicator = findViewById(R.id.pb_loading_indicator);
 
-        // Progressive Loader
-        mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_loading_indicator);
-
-        // Set the layoutManager in mRecyclerView
+        // Create a LayoutManager for RecyclerView, vertical list
+        LinearLayoutManager layoutManager =
+                new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(layoutManager);
 
-        // child do not change in size, improve performances
+        /*
+         * Use this setting to improve performance if you know that changes in content do not
+         * change the child layout size in the RecyclerView
+         */
         mRecyclerView.setHasFixedSize(true);
 
         // set mRecyclerView's Adapter
         mForecastAdapter = new ForecastAdapter(this, this);
         mRecyclerView.setAdapter(mForecastAdapter);
-
 
         // Define and associate a ViewModel object (throught the injected ViewModel factory)
         // keep ui safe from config changes, init/schedule/retrieves data from network/db
@@ -133,7 +118,6 @@ public class MainActivity extends AppCompatActivity implements
         });
 
 
-
         // ************ OLD STUFF USING LOADER ******************************
         /*
         //Init Loader using loader manager
@@ -148,25 +132,20 @@ public class MainActivity extends AppCompatActivity implements
 
 
 
-
-
     /**
      * -------------------------------------------------------------------------------------------------
-     * Touch item
+     * Touch item method
      * @param date
      * -------------------------------------------------------------------------------------------------
      */
     @Override
     public void onItemClick(Date date) {
-        // Context context = this;
-        // Uri uriForDateClicked = WeatherContract.WeatherEntry.buildWeatherUriWithDate(weatherForDay);
-        // showDetailActivity.setData(uriForDateClicked);
-        // startActivity(weatherDetailIntent);
-        Intent showDetailActivity = new Intent(MainActivity.this, DetailActivity.class);
+        Intent weatherDetailIntent = new Intent(MainActivity.this, DetailActivity.class);
         long timestamp = date.getTime();
-        showDetailActivity.putExtra(DetailActivity.WEATHER_ID_EXTRA, timestamp);
-        startActivity(showDetailActivity);
+        weatherDetailIntent.putExtra(DetailActivity.WEATHER_ID_EXTRA, timestamp);
+        startActivity(weatherDetailIntent);
     }
+
 
 
     /**
@@ -175,12 +154,9 @@ public class MainActivity extends AppCompatActivity implements
      * -------------------------------------------------------------------------------------------------
      */
     private void showWeatherDataView() {
-        // Progress bar invisible and show data
         mLoadingIndicator.setVisibility(View.INVISIBLE);
         mRecyclerView.setVisibility(View.VISIBLE);
     }
-
-
 
     /**
      * -------------------------------------------------------------------------------------------------
@@ -191,7 +167,6 @@ public class MainActivity extends AppCompatActivity implements
         mRecyclerView.setVisibility(View.INVISIBLE);
         mLoadingIndicator.setVisibility(View.VISIBLE);
     }
-
 
 
 
@@ -262,6 +237,8 @@ public class MainActivity extends AppCompatActivity implements
      * -------------------------------------------------------------------------------------------------
      */
     private void openLocationInMap() {
+
+        /*
         // Debug locations
         // String addressString = "20 via Giotto,chignolo d'isola, IT";
         // String addressString = "1600 Amphitheatre Parkway, CA";
@@ -282,6 +259,8 @@ public class MainActivity extends AppCompatActivity implements
                     + ", no receiving apps installed!");
         }
 
+        */
+
     }
 
 
@@ -291,8 +270,8 @@ public class MainActivity extends AppCompatActivity implements
      * -------------------------------------------------------------------------------------------------
      */
     private void openSettings() {
-        Intent intent = new Intent(this, SettingsActivity.class);
-        startActivity(intent);
+        // Intent intent = new Intent(this, SettingsActivity.class);
+        // startActivity(intent);
     }
 
 
@@ -364,6 +343,4 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     */
-
-
 }

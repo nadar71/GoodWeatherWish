@@ -116,7 +116,7 @@ public final class UserPreferencesData {
          * into the double itself.
          */
         preferredCoordinates[0] = Double
-                 .longBitsToDouble(sp.getLong(PREF_COORD_LAT, Double.doubleToRawLongBits(0.0)));
+                .longBitsToDouble(sp.getLong(PREF_COORD_LAT, Double.doubleToRawLongBits(0.0)));
         preferredCoordinates[1] = Double
                 .longBitsToDouble(sp.getLong(PREF_COORD_LONG, Double.doubleToRawLongBits(0.0)));
 

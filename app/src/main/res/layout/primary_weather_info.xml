@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
+
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  - Given day's PRIMARY weather information details
+  - Given day's primary weather information (date, icon, description, high/low temperature.
+  - Wrapped in <layout></layout> tag for data binding.
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-
-
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">

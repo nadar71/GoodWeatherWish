@@ -1,3 +1,5 @@
+
+
 package com.indiewalk.mystic.weatherapp.data.database;
 
 import android.arch.persistence.room.TypeConverter;

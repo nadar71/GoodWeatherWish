@@ -1,3 +1,4 @@
+
 package com.indiewalk.mystic.weatherapp.utilities;
 
 import android.content.Context;
@@ -17,7 +18,7 @@ import java.util.concurrent.TimeUnit;
  */
 public final class WeatherAppDateUtility {
 
-    // Milliseconds in a day
+    /// Milliseconds in a day
     public static final long DAY_IN_MILLIS = TimeUnit.DAYS.toMillis(1);
 
     // ---------------------------------------------------------------------------------------------
@@ -77,30 +78,19 @@ public final class WeatherAppDateUtility {
 
 
 
+
+
     public static Date getNormalizedUtcDateForToday() {
         long normalizedMilli = getNormalizedUtcMsForToday();
         return new Date(normalizedMilli);
     }
 
-    /**
-     * ---------------------------------------------------------------------------------------------
-     * This method returns the number of days since the epoch (January 01, 1970, 12:00 Midnight UTC)
-     * in UTC time from the current date.
-     *
-     * @param utcDate A date in milliseconds in UTC time.
-     *
-     * @return The number of days from the epoch to the date argument.
-     * ---------------------------------------------------------------------------------------------
-     */
-    private static long elapsedDaysSinceEpoch(long utcDate) {
-        return TimeUnit.MILLISECONDS.toDays(utcDate);
-    }
 
     /**
      * ---------------------------------------------------------------------------------------------
      * Normalizes a date (in milliseconds).
      *
-     * Normalize, in our usage within Sunshine means to convert a given date in milliseconds to
+     * Normalize, in our usage within app means to convert a given date in milliseconds to
      * the very beginning of the date in UTC time.
      *
      *   For example, given the time representing
@@ -157,6 +147,23 @@ public final class WeatherAppDateUtility {
 
     /**
      * ---------------------------------------------------------------------------------------------
+     * This method returns the number of days since the epoch (January 01, 1970, 12:00 Midnight UTC)
+     * in UTC time from the current date.
+     *
+     * @param utcDate A date in milliseconds in UTC time.
+     *
+     * @return The number of days from the epoch to the date argument.
+     * ---------------------------------------------------------------------------------------------
+     */
+    private static long elapsedDaysSinceEpoch(long utcDate) {
+        return TimeUnit.MILLISECONDS.toDays(utcDate);
+    }
+
+
+
+
+    /**
+     * ---------------------------------------------------------------------------------------------
      * This method will return the local time midnight for the provided normalized UTC date.
      *
      * @param normalizedUtcDate UTC time at midnight for a given date. This number comes from the
@@ -166,14 +173,13 @@ public final class WeatherAppDateUtility {
      * ---------------------------------------------------------------------------------------------
      */
     private static long getLocalMidnightFromNormalizedUtcDate(long normalizedUtcDate) {
-        // The timeZone object will provide us the current user's time zone offset */
+        // The timeZone object will provide us the current user's time zone offset
         TimeZone timeZone = TimeZone.getDefault();
 
         // This offset, in milliseconds, when added to a UTC date time, will produce the local
         // time.
         long gmtOffset = timeZone.getOffset(normalizedUtcDate);
-        long localMidnightMillis = normalizedUtcDate - gmtOffset;
-        return localMidnightMillis;
+        return normalizedUtcDate - gmtOffset;
     }
 
 
@@ -200,7 +206,6 @@ public final class WeatherAppDateUtility {
      * ---------------------------------------------------------------------------------------------
      */
     public static String getFriendlyDateString(Context context, long normalizedUtcMidnight, boolean showFullDate) {
-
 
         // NOTE: localDate should be localDateMidnightMillis and should be straight from the
         // database
@@ -249,6 +254,8 @@ public final class WeatherAppDateUtility {
             return DateUtils.formatDateTime(context, localDate, flags);
         }
     }
+
+
 
     /**
      * ---------------------------------------------------------------------------------------------

@@ -1,10 +1,11 @@
+
 package com.indiewalk.mystic.weatherapp.utilities;
 
 import android.content.Context;
 import android.util.Log;
 
 import com.indiewalk.mystic.weatherapp.R;
-import com.indiewalk.mystic.weatherapp.ui.settings.UserPreferencesData;
+// import com.indiewalk.mystic.weatherapp.ui.settings.UserPreferencesData;
 
 /**
  * -------------------------------------------------------------------------------------------------
@@ -20,7 +21,6 @@ public final class WeatherAppGenericUtility {
     private static final String LOG_TAG = WeatherAppGenericUtility.class.getSimpleName();
 
 
-
     /**
      * ---------------------------------------------------------------------------------------------
      * This method will convert a temperature from Celsius to Fahrenheit.
@@ -32,9 +32,6 @@ public final class WeatherAppGenericUtility {
         double temperatureInFahrenheit = (temperatureInCelsius * 1.8) + 32;
         return temperatureInFahrenheit;
     }
-
-
-
 
 
     /**
@@ -52,15 +49,16 @@ public final class WeatherAppGenericUtility {
     public static String formatTemperature(Context context, double temperature) {
         int temperatureFormatResourceId = R.string.format_temperature_celsius;
 
+        /*
         if (!UserPreferencesData.isMetric(context)) {
             temperature = celsiusToFahrenheit(temperature);
             temperatureFormatResourceId = R.string.format_temperature_fahrenheit;
         }
+        */
 
         // For presentation, assume the user doesn't care about tenths of a degree
         return String.format(context.getString(temperatureFormatResourceId), temperature);
     }
-
 
 
     /**
@@ -101,11 +99,12 @@ public final class WeatherAppGenericUtility {
 
         int windFormat = R.string.format_wind_kmh;
 
+        /*
         if (!UserPreferencesData.isMetric(context)) {
             windFormat = R.string.format_wind_mph;
             windSpeed = .621371192237334f * windSpeed;
         }
-
+        */
 
         String direction = "Unknown";
         if (degrees >= 337.5 || degrees < 22.5) {
@@ -125,8 +124,10 @@ public final class WeatherAppGenericUtility {
         } else if (degrees >= 292.5 && degrees < 337.5) {
             direction = "NW";
         }
+
         return String.format(context.getString(windFormat), windSpeed, direction);
     }
+
 
 
 
@@ -306,6 +307,7 @@ public final class WeatherAppGenericUtility {
             default:
                 return context.getString(R.string.condition_unknown, weatherId);
         }
+
         return context.getString(stringId);
     }
 
@@ -328,7 +330,6 @@ public final class WeatherAppGenericUtility {
      * ---------------------------------------------------------------------------------------------
      */
     public static int getSmallArtResourceIdForWeatherCondition(int weatherId) {
-
 
         // Based on weather code data for Open Weather Map.
 
@@ -379,10 +380,9 @@ public final class WeatherAppGenericUtility {
      */
     public static int getLargeArtResourceIdForWeatherCondition(int weatherId) {
 
-
-         // TODO : CHANGE TO REAL OWM ws
-         // Based on weather code data found at:
-         // http://bugs.openweathermap.org/projects/api/wiki/Weather_Condition_Codes
+        // TODO : CHANGE TO REAL OWM ws
+        // Based on weather code data found at:
+        // http://bugs.openweathermap.org/projects/api/wiki/Weather_Condition_Codes
 
         if (weatherId >= 200 && weatherId <= 232) {
             return R.drawable.art_storm;
@@ -413,9 +413,8 @@ public final class WeatherAppGenericUtility {
         } else if (weatherId >= 951 && weatherId <= 957) {
             return R.drawable.art_clear;
         }
+
         Log.e(LOG_TAG, "Unknown Weather: " + weatherId);
         return R.drawable.art_storm;
     }
-
-
 }

@@ -1,53 +1,58 @@
+
 package com.indiewalk.mystic.weatherapp.ui.detail;
 
-import android.arch.lifecycle.ViewModelProviders;
+// import mystic.arch.lifecycle.LifecycleActivity;
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
-import android.net.Uri;
 import android.support.v4.app.ShareCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.arch.lifecycle.ViewModelProviders;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import com.indiewalk.mystic.weatherapp.R;
-import com.indiewalk.mystic.weatherapp.data.provider.WeatherContract;
 import com.indiewalk.mystic.weatherapp.databinding.ActivityDetailBinding;
-import com.indiewalk.mystic.weatherapp.ui.settings.SettingsActivity;
+import com.indiewalk.mystic.weatherapp.R;
+import com.indiewalk.mystic.weatherapp.data.database.WeatherEntry;
 import com.indiewalk.mystic.weatherapp.utilities.InjectorUtils;
 import com.indiewalk.mystic.weatherapp.utilities.WeatherAppDateUtility;
 import com.indiewalk.mystic.weatherapp.utilities.WeatherAppGenericUtility;
-import com.indiewalk.mystic.weatherapp.data.database.WeatherEntry;
+
 
 import java.util.Date;
 
 
+
 /**
  * -------------------------------------------------------------------------------------------------
- * Activity for showing each forecast in detail, with main part above with main info, and below
- * the detailed ones.
+ * Activity for showing each day forecast from main list in detail,
+ * with main part  with main info above, and below the detailed ones.
  * -------------------------------------------------------------------------------------------------
  */
-public class DetailActivity extends AppCompatActivity{
+
+
+// public class DetailActivity extends LifecycleActivity
+public class DetailActivity extends AppCompatActivity {
+
     private static  final  String TAG = DetailActivity.class.getSimpleName();
 
     private static final   String FORECAST_SHARE_HASHTAG = " #GoodWeatherApp";
 
-    public static final    String WEATHER_ID_EXTRA = "WEATHER_ID_EXTRA";
+    public static final String WEATHER_ID_EXTRA = "WEATHER_ID_EXTRA";
 
-
+    /*
     // columns of data displayed in particular day detailed weather forecast
     public static final String[] WEATHER_DETAIL_PROJECTION = {
-            WeatherContract.WeatherEntry.COLUMN_DATE,
-            WeatherContract.WeatherEntry.COLUMN_MAX_TEMP,
-            WeatherContract.WeatherEntry.COLUMN_MIN_TEMP,
-            WeatherContract.WeatherEntry.COLUMN_HUMIDITY,
-            WeatherContract.WeatherEntry.COLUMN_PRESSURE,
-            WeatherContract.WeatherEntry.COLUMN_WIND_SPEED,
-            WeatherContract.WeatherEntry.COLUMN_DEGREES,
-            WeatherContract.WeatherEntry.COLUMN_WEATHER_ID
+            com.indiewalk.mystic.weatherapp.data.provider.WeatherContract.WeatherEntry.COLUMN_DATE,
+            com.indiewalk.mystic.weatherapp.data.provider.WeatherContract.WeatherEntry.COLUMN_MAX_TEMP,
+            com.indiewalk.mystic.weatherapp.data.provider.WeatherContract.WeatherEntry.COLUMN_MIN_TEMP,
+            com.indiewalk.mystic.weatherapp.data.provider.WeatherContract.WeatherEntry.COLUMN_HUMIDITY,
+            com.indiewalk.mystic.weatherapp.data.provider.WeatherContract.WeatherEntry.COLUMN_PRESSURE,
+            com.indiewalk.mystic.weatherapp.data.provider.WeatherContract.WeatherEntry.COLUMN_WIND_SPEED,
+            com.indiewalk.mystic.weatherapp.data.provider.WeatherContract.WeatherEntry.COLUMN_DEGREES,
+            com.indiewalk.mystic.weatherapp.data.provider.WeatherContract.WeatherEntry.COLUMN_WEATHER_ID
     };
 
 
@@ -60,6 +65,7 @@ public class DetailActivity extends AppCompatActivity{
     public static final int INDEX_WEATHER_WIND_SPEED = 5;
     public static final int INDEX_WEATHER_DEGREES = 6;
     public static final int INDEX_WEATHER_CONDITION_ID = 7;
+    */
 
 
     // Loader id, to load weather details
@@ -68,30 +74,29 @@ public class DetailActivity extends AppCompatActivity{
 
     private String   choosenDayWeatherParam;
 
-
-    // URI for accessing chosen day's weather details
-    private Uri mUri;
-
     // ViewModel reference
     DetailActivityViewModel mViewModel;
 
-    // Data binding to activity_detail layout declaration
+    /*
+     * This field is used for data binding. Normally, we would have to call findViewById many
+     * times to get references to the Views in this Activity. With data binding however, we only
+     * need to call DataBindingUtil.setContentView and pass in a Context and a layout, as we do
+     * in onCreate of this class. Then, we can access all of the Views in our layout
+     * programmatically without cluttering up the code with findViewById.
+     */
     private ActivityDetailBinding mDetailBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
         // instantiate data binding object
         mDetailBinding = DataBindingUtil.setContentView(this, R.layout.activity_detail);
         long timestamp = getIntent().getLongExtra(WEATHER_ID_EXTRA, -1);
 
-
-        // Get reference to content providers URI
-        /*
-        mUri = getIntent().getData();
-        if (mUri == null) throw new NullPointerException("URI for DetailActivity cannot be null");
-        */
+        // Make date for today
+        // Date date = WeatherAppDateUtility.getNormalizedUtcDateForToday();
 
         // Make date for date clicked in main activity converting from timestamp
         Date date = new Date(timestamp);
@@ -99,7 +104,7 @@ public class DetailActivity extends AppCompatActivity{
         // init ViewModel providers
         // mViewModel = ViewModelProviders.of(this).get(DetailActivityViewModel.class);
         DetailViewModelFactory factory = InjectorUtils.provideDetailViewModelFactory(this.getApplicationContext(),date);
-        mViewModel                     = ViewModelProviders.of(this,factory).get(DetailActivityViewModel.class);
+        mViewModel = ViewModelProviders.of(this,factory).get(DetailActivityViewModel.class);
 
         // observe live data WeatherEntry, provided from repository above, if have been changed
         mViewModel.getWeather().observe(this, weatherEntry -> {
@@ -116,7 +121,7 @@ public class DetailActivity extends AppCompatActivity{
 
                 // Pretend this is the network loading data
                 Thread.sleep(4000);
-                Date today = SunshineDateUtils.getNormalizedUtcDateForToday();
+                Date today = WeatherAppDateUtility.getNormalizedUtcDateForToday();
                 WeatherEntry pretendWeatherFromDatabase = new WeatherEntry(1, 210, today,88.0,99.0,71,1030, 74, 5);
                 mViewModel.setWeather(pretendWeatherFromDatabase);
 
@@ -152,10 +157,11 @@ public class DetailActivity extends AppCompatActivity{
         //    Weather Icon
         // -----------------------
         // Read weather condition ID from the cursor (ID provided by Open Weather Map)
-        int weatherId      = weatherEntry.getWeatherIconId();
+        int weatherId = weatherEntry.getWeatherIconId();
         int weatherImageId = WeatherAppGenericUtility.getLargeArtResourceIdForWeatherCondition(weatherId);
 
         mDetailBinding.primaryInfo.weatherIcon.setImageResource(weatherImageId);
+
 
         // -----------------------
         // Weather Date
@@ -167,14 +173,16 @@ public class DetailActivity extends AppCompatActivity{
         // Before displaying it, getFriendlyDateString add the GMT offset (in milliseconds) to acquire
         // the date representation for the local date in local time.
         long localDateMidnightGmt = weatherEntry.getDate().getTime();
-        String dateText           = WeatherAppDateUtility.getFriendlyDateString(DetailActivity.this, localDateMidnightGmt, true);
+        String dateText = WeatherAppDateUtility.getFriendlyDateString(DetailActivity.this, localDateMidnightGmt, true);
         mDetailBinding.primaryInfo.date.setText(dateText);
+
 
         // -----------------------
         // Weather Description
         // -----------------------
         // Use the weatherId to get the proper description and set in the view
         String description = WeatherAppGenericUtility.getStringForWeatherCondition(DetailActivity.this, weatherId);
+
         // accessibility for weather description
         String descriptionAccessibility = getString(R.string.acc_forecast, description);
 
@@ -186,14 +194,13 @@ public class DetailActivity extends AppCompatActivity{
 
 
 
-
         // -----------------------
         // High (max) temperature
         // -----------------------
         double maxInCelsius = weatherEntry.getMax();
 
         // Convert measure if preferred by users
-        String maxString = WeatherAppGenericUtility.formatTemperature(this, maxInCelsius);
+        String maxString = WeatherAppGenericUtility.formatTemperature(DetailActivity.this, maxInCelsius);
         String maxAccessibility = getString(R.string.acc_max_temp, maxString);
 
         mDetailBinding.primaryInfo.highTemperature.setText(maxString);
@@ -207,7 +214,7 @@ public class DetailActivity extends AppCompatActivity{
         // -----------------------
         double minInCelsius = weatherEntry.getMin();
 
-        String minString = WeatherAppGenericUtility.formatTemperature(this, minInCelsius);
+        String minString = WeatherAppGenericUtility.formatTemperature(DetailActivity.this, minInCelsius);
         String minAccessibility = getString(R.string.acc_min_temp, minString);
 
         mDetailBinding.primaryInfo.lowTemperature.setText(minString);
@@ -234,12 +241,13 @@ public class DetailActivity extends AppCompatActivity{
         // -------------------------------------------------------
         double windSpeed = weatherEntry.getWind();
         double windDirection = weatherEntry.getDegrees();
-        String windString = WeatherAppGenericUtility.getFormattedWind(this, windSpeed, windDirection);
+        String windString = WeatherAppGenericUtility.getFormattedWind(DetailActivity.this, windSpeed, windDirection);
         String windAccessibility = getString(R.string.acc_wind, windString);
 
         mDetailBinding.extraDetails.windMeasurement.setText(windString);
         mDetailBinding.extraDetails.windMeasurement.setContentDescription(windAccessibility);
         mDetailBinding.extraDetails.windLabel.setContentDescription(windAccessibility);
+
 
 
 
@@ -249,19 +257,18 @@ public class DetailActivity extends AppCompatActivity{
         double pressure = weatherEntry.getPressure();
 
         String pressureString = getString(R.string.format_pressure, pressure);
+
         String pressureAccessibility = getString(R.string.acc_pressure, pressureString);
 
-
+        /* Set the text and content description (for accessibility purposes) */
         mDetailBinding.extraDetails.pressure.setText(pressureString);
         mDetailBinding.extraDetails.pressure.setContentDescription(pressureAccessibility);
         mDetailBinding.extraDetails.pressureLabel.setContentDescription(pressureAccessibility);
-
 
         //  Store the forecast summary String in our forecast summary field to share later
         choosenDayWeatherParam = String.format("%s - %s - %s/%s",
                 dateText, description, maxString, minString);
     }
-
 
 
 
@@ -275,6 +282,7 @@ public class DetailActivity extends AppCompatActivity{
      * @return
      * ---------------------------------------------------------------------------------------------
      */
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -338,8 +346,8 @@ public class DetailActivity extends AppCompatActivity{
      * ---------------------------------------------------------------------------------------------
      */
     private void openSettings(){
-        Intent intent = new Intent(this, SettingsActivity.class);
-        startActivity(intent);
+        // Intent intent = new Intent(this, SettingsActivity.class);
+        // startActivity(intent);
     }
 
 
@@ -514,5 +522,6 @@ public class DetailActivity extends AppCompatActivity{
     }
 
     */
+
 
 }

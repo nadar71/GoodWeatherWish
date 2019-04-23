@@ -15,12 +15,15 @@ import android.support.v4.content.ContextCompat;
 
 import com.indiewalk.mystic.weatherapp.R;
 import com.indiewalk.mystic.weatherapp.ui.settings.UserPreferencesData;
-import com.indiewalk.mystic.weatherapp.data.provider.WeatherContract;
+// import com.indiewalk.mystic.weatherapp.data.provider.WeatherContract;
 import com.indiewalk.mystic.weatherapp.ui.detail.DetailActivity;
 
 
 public class NotificationUtils {
 
+
+// TODO : must use livedata/viewmodel/room for notifications, no more provider
+/*
     // The columns of data displayed within notification for short forecast
     public static final String[] WEATHER_NOTIFICATION_PROJECTION = {
             WeatherContract.WeatherEntry.COLUMN_WEATHER_ID,
@@ -33,8 +36,12 @@ public class NotificationUtils {
     public static final int INDEX_MAX_TEMP = 1;
     public static final int INDEX_MIN_TEMP = 2;
 
+
     // Notification ID to refer to notification displayed.
     private static final int WEATHER_NOTIFICATION_ID = 1536;
+
+
+    */
 
     /**
      * ---------------------------------------------------------------------------------------------
@@ -42,6 +49,8 @@ public class NotificationUtils {
      * @param context Context used to query our ContentProvider and use various Utility methods
      * ---------------------------------------------------------------------------------------------
      */
+
+    /*
     public static void notifyUserOfNewWeather(Context context) {
 
         // Build the URI for today request
@@ -59,7 +68,7 @@ public class NotificationUtils {
         // Move cursor to first
         if (todayWeatherCursor.moveToFirst()) {
 
-            /* Weather ID as returned by API, used to identify the icon to be used */
+            // Weather ID as returned by API, used to identify the icon to be used
             int weatherId = todayWeatherCursor.getInt(INDEX_WEATHER_ID);
             double high = todayWeatherCursor.getDouble(INDEX_MAX_TEMP);
             double low = todayWeatherCursor.getDouble(INDEX_MIN_TEMP);
@@ -92,7 +101,7 @@ public class NotificationUtils {
                     .setContentText(notificationText)
                     .setAutoCancel(true);
 
-            // Start the DetailActivity by Intent clicking on notification. 
+            // Start the DetailActivity by Intent clicking on notification.
             Intent detailIntentForToday = new Intent(context, DetailActivity.class);
             detailIntentForToday.setData(todaysWeatherUri);
 
@@ -109,7 +118,7 @@ public class NotificationUtils {
             NotificationManager notificationManager = (NotificationManager)
                     context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-            // Notify user withWEATHER_NOTIFICATION_ID allows you to update or cancel the notification later on 
+            // Notify user withWEATHER_NOTIFICATION_ID allows you to update or cancel the notification later on
             notificationManager.notify(WEATHER_NOTIFICATION_ID, notificationBuilder.build());
 
             // Save the current time after notification showed.
@@ -120,6 +129,8 @@ public class NotificationUtils {
         todayWeatherCursor.close();
     }
 
+    */
+
     /**
      * ---------------------------------------------------------------------------------------------
      * Create notification text at weather refresh
@@ -127,12 +138,14 @@ public class NotificationUtils {
      * Forecast: Sunny - High: 14°C Low 7°C
      * ---------------------------------------------------------------------------------------------
      *
-     * @param context   
+     * @param context
      * @param weatherId ID as determined by Open Weather Map
-     * @param high      High temperature 
-     * @param low       Low temperature 
+     * @param high      High temperature
+     * @param low       Low temperature
      * @return          Summary of a particular day's forecast
      */
+
+    /*
     private static String getNotificationText(Context context, int weatherId, double high, double low) {
 
         // Short description of the weather, as provided by the API. e.g "clear" vs "sky is clear".
@@ -149,5 +162,9 @@ public class NotificationUtils {
 
         return notificationText;
     }
+
+    */
+
+
 
 }

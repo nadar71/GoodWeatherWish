@@ -9,8 +9,9 @@ import com.indiewalk.mystic.weatherapp.data.database.ListWeatherEntry;
 import java.util.List;
 
 /**
- *
+ * -------------------------------------------------------------------------------------------------
  * {@link ViewModel} for {@link MainActivity}
+ * -------------------------------------------------------------------------------------------------
  */
 public class MainActivityViewModel extends ViewModel {
 

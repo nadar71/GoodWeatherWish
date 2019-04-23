@@ -9,13 +9,13 @@ import android.content.Context;
 
 @Database(entities = {WeatherEntry.class}, version = 1)
 @TypeConverters(DateConverter.class)
-public abstract class SunshineDatabase extends RoomDatabase {
+public abstract class WeatherAppDatabase extends RoomDatabase {
 
     private static final String DATABASE_NAME = "weather";
 
     // for singleton init
     private static final    Object LOCK = new Object();
-    private static volatile SunshineDatabase singleInstance;
+    private static volatile WeatherAppDatabase singleInstance;
 
 
     // getters for the dao
@@ -23,14 +23,14 @@ public abstract class SunshineDatabase extends RoomDatabase {
 
 
     // must have only a database instance : singleton creation
-    public static SunshineDatabase getInstance(Context context){
+    public static WeatherAppDatabase getInstance(Context context){
         if (singleInstance == null){
             synchronized (LOCK){
                 if (singleInstance == null){
                     singleInstance = Room.databaseBuilder(
                             context.getApplicationContext(),
-                            SunshineDatabase.class,
-                            SunshineDatabase.DATABASE_NAME).build();
+                            WeatherAppDatabase.class,
+                            WeatherAppDatabase.DATABASE_NAME).build();
                 }
             }
         }

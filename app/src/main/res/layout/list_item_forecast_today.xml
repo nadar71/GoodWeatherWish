@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  - Today's primary weather information (date,icon, description, high/low temperature)                                               -
+  - Similar to primary_weather_info.xml
+  - add additional padding top/bottom of the root layout
+  - background changes color depending on whether or not it is being touched.
+  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -11,9 +18,7 @@
     android:paddingBottom="@dimen/today_forecast_list_item_vertical_padding"
     android:paddingTop="@dimen/today_forecast_list_item_vertical_padding">
 
-    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-     - Guideline for middle screen : reference to anchor the views to it                         -
-     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
     <android.support.constraint.Guideline
         android:id="@+id/horizontal_middle"
         android:layout_width="wrap_content"
@@ -23,13 +28,14 @@
         tools:layout_editor_absoluteX="192dp"
         tools:layout_editor_absoluteY="0dp"/>
 
+
     <TextView
         android:id="@+id/date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Title"
         android:fontFamily="sans-serif"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
         android:textColor="@color/white"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/weather_icon"
@@ -37,7 +43,6 @@
         app:layout_constraintRight_toRightOf="parent"
         tools:text="Today, April 03"/>
 
-    <!-- Weather condition icon -->
     <ImageView
         android:id="@+id/weather_icon"
         android:layout_width="96dp"
@@ -49,14 +54,13 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@drawable/art_clouds"/>
 
-    <!-- Each weather condition  description -->
     <TextView
         android:id="@+id/weather_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:textSize="20sp"
         android:textColor="@color/white"
+        android:textSize="20sp"
         app:layout_constraintHorizontal_bias="0.52"
         app:layout_constraintLeft_toLeftOf="@+id/weather_icon"
         app:layout_constraintRight_toRightOf="@+id/weather_icon"

@@ -5,7 +5,9 @@ import android.support.annotation.NonNull;
 import com.indiewalk.mystic.weatherapp.data.database.WeatherEntry;
 
 /**
+ * -------------------------------------------------------------------------------------------------
  * Weather response from the backend. Contains the weather forecasts.
+ * -------------------------------------------------------------------------------------------------
  */
 class WeatherResponse {
 

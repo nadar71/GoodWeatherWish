@@ -15,9 +15,9 @@ import java.util.Date;
 public class ListWeatherEntry {
 
     @PrimaryKey(autoGenerate = true)
-    private int    id;
-    private int    weatherIconId;
-    private Date   date;
+    private int id;
+    private int weatherIconId;
+    private Date date;
     private double min;
     private double max;
 
@@ -34,10 +34,10 @@ public class ListWeatherEntry {
      */
     @Ignore
     public ListWeatherEntry(int weatherIconId, Date date, double min, double max) {
-        this.weatherIconId =  weatherIconId;
-        this.date =           date;
-        this.min =            min;
-        this.max =            max;
+        this.weatherIconId = weatherIconId;
+        this.date = date;
+        this.min = min;
+        this.max = max;
     }
 
 
@@ -52,11 +52,11 @@ public class ListWeatherEntry {
      * ---------------------------------------------------------------------------------------------
      */
     public ListWeatherEntry(int id, int weatherIconId, Date date, double min, double max) {
-        this.id =             id;
-        this.weatherIconId =  weatherIconId;
-        this.date =           date;
-        this.min =            min;
-        this.max =            max;
+        this.id = id;
+        this.weatherIconId = weatherIconId;
+        this.date = date;
+        this.min = min;
+        this.max = max;
     }
 
     public int getId() {

@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.indiewalk.mystic.weatherapp">
 
     <!-- This permission is necessary in order for Sunshine to perform network access. -->
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="true"
@@ -11,48 +13,47 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity
-            android:name=".ui.list.MainActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.Forecast"
-            android:launchMode="singleTop">
-            <!-- "single top" : when open MainActivity using notification, reuse one opened avoid generating new one -->
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <!--The manifest entry for our MainActivity. Each Activity requires a manifest entry-->
         <activity
-            android:name=".ui.detail.DetailActivity"
-            android:parentActivityName=".ui.list.MainActivity">
+            android:name="com.indiewalk.mystic.weatherapp.ui.list.MainActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleTop"
+            android:theme="@style/AppTheme.Forecast">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+
+        </activity>
+
+        <!--The manifest entry for our DetailActivity. Each Activity requires a manifest entry-->
+        <activity
+            android:name="com.indiewalk.mystic.weatherapp.ui.detail.DetailActivity"
+            android:label="@string/title_activity_detail"
+            android:parentActivityName="com.indiewalk.mystic.weatherapp.ui.list.MainActivity"
+            android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.list.MainActivity" />
+                android:value="com.indiewalk.mystic.weatherapp.ui.list.MainActivity"/>
+
         </activity>
-        <activity android:name=".ui.settings.SettingsActivity" />
 
-        <!-- ContentProvider Definition
-        <provider
-            android:name=".data.provider.WeatherProvider"
-            android:authorities="@string/content_authority"
-            android:exported="false"/>
-         -->
 
-        <!-- Remote syncs -->
+        <!--This is required for immediate syncs -->
         <service
-            android:name=".data.network.WeatherSyncIntentService"
+            android:name="com.indiewalk.mystic.weatherapp.data.network.WeatherSyncIntentService"
             android:exported="false" />
 
-        <!-- Synch Scheduling with FirebaseJobDispatcher -->
+        <!-- This is the Service declaration used in conjunction with FirebaseJobDispatcher -->
         <service
-            android:name=".data.network.WeatherFirebaseJobService"
+            android:name="com.indiewalk.mystic.weatherapp.data.network.WeatherFirebaseJobService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE"/>
             </intent-filter>
         </service>
-        
-    </application>
 
+    </application>
 </manifest>

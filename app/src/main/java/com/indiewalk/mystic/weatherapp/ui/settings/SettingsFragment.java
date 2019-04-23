@@ -14,8 +14,8 @@ import android.support.v7.preference.PreferenceScreen;
 
 import com.indiewalk.mystic.weatherapp.R;
 import com.indiewalk.mystic.weatherapp.data.network.WeatherNetworkDataSource;
-import com.indiewalk.mystic.weatherapp.data.provider.WeatherContract;
-import com.indiewalk.mystic.weatherapp.old.WeatherSyncUtils;
+// import com.indiewalk.mystic.weatherapp.data.provider.WeatherContract;
+// import com.indiewalk.mystic.weatherapp.old.WeatherSyncUtils;
 import com.indiewalk.mystic.weatherapp.utilities.InjectorUtils;
 
 /**
@@ -120,7 +120,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
 
         } else if (key.equals(getString(R.string.pref_units_key))) {
             // units  changed. update lists of weather entries accordingly
-            activity.getContentResolver().notifyChange(WeatherContract.WeatherEntry.CONTENT_URI, null);
+            // TODO : fix in db & c. not using provider
+            // activity.getContentResolver().notifyChange(WeatherContract.WeatherEntry.CONTENT_URI, null);
         }
         Preference preference = findPreference(key);
         if (null != preference) {

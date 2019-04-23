@@ -1,3 +1,5 @@
+
+
 package com.indiewalk.mystic.weatherapp.data;
 
 import android.arch.lifecycle.LiveData;
@@ -21,7 +23,7 @@ import java.util.List;
  * -------------------------------------------------------------------------------------------------
  */
 public class WeatherAppRepository {
-    private static final String TAG = WeatherAppRepository.class.getSimpleName();
+    private static final String LOG_TAG = WeatherAppRepository.class.getSimpleName();
 
     // For Singleton instantiation
     private static final Object LOCK = new Object();
@@ -45,12 +47,12 @@ public class WeatherAppRepository {
         networkData.observeForever(newForecastsFromNetwork ->{
             mExecutors.diskIO().execute( () ->{
 
-                // Delete old data
-                deleteOldData();
+                        // Delete old data
+                        deleteOldData();
 
-                // Insert new weather data into db
-                mWeatherDao.bulkInsert(newForecastsFromNetwork);
-                Log.d(TAG, "New values inserted: ");
+                        // Insert new weather data into db
+                        mWeatherDao.bulkInsert(newForecastsFromNetwork);
+                        Log.d(LOG_TAG, "New values inserted: ");
                     }
 
             );
@@ -59,19 +61,20 @@ public class WeatherAppRepository {
 
     }
 
+
     // get repository's singleton instance
     public synchronized static WeatherAppRepository getInstance(
             WeatherDao weatherDao,
             WeatherNetworkDataSource weatherNetworkDataSource,
             AppExecutors executors) {
 
-        Log.d(TAG, "Getting the repository");
+        Log.d(LOG_TAG, "Getting the repository");
         if (sInstance == null) {
             synchronized (LOCK) {
                 sInstance = new WeatherAppRepository(weatherDao,
                         weatherNetworkDataSource,
                         executors);
-                Log.d(TAG, "Made new repository");
+                Log.d(LOG_TAG, "Made new repository");
             }
         }
         return sInstance;
@@ -85,17 +88,16 @@ public class WeatherAppRepository {
      */
     private synchronized void initializeData() {
 
-        // Only perform initialization once per app lifetime. If initialization has already been
-        // performed, we have nothing to do in this method.
+        // Only perform initialization once per app lifetime.
         if (mInitialized) return;
+
         mInitialized = true;
 
-        // This method call triggers Sunshine to create its task to synchronize weather data
-        // periodically.
+        // Synchronize weather data periodically (every SYNC_INTERVAL_HOURS)
         mWeatherNetworkDataSource.scheduleRecurringFetchWeatherSync();
 
 
-        // launches bg service for network data retrieving
+        // fetch weather data from restful service as bg service
         mExecutors.diskIO().execute(()->{
             if(isFetchNeeded()){
                 startFetchWeatherService();
@@ -103,13 +105,14 @@ public class WeatherAppRepository {
         });
     }
 
+
+
     /**
      * ---------------------------------------------------------------------------------------------
      *  Retrieve forecast on a single date
      * ---------------------------------------------------------------------------------------------
      **/
     public LiveData<WeatherEntry> getWeatherByDate(Date date){
-        // check data from network and put in db
         initializeData();
         return mWeatherDao.getWeatherByDate(date);
     }
@@ -121,7 +124,6 @@ public class WeatherAppRepository {
      * ---------------------------------------------------------------------------------------------
      **/
     public LiveData<List<ListWeatherEntry>> getCurrentWeatherForecasts(){
-        // check data from network and put in db
         initializeData();
         Date today = WeatherAppDateUtility.getNormalizedUtcDateForToday();
         return mWeatherDao.getCurrentWeatherForecasts(today);
@@ -142,10 +144,12 @@ public class WeatherAppRepository {
     /**
      * ---------------------------------------------------------------------------------------------
      * Checks if there are enough days of future weather forecasts are requested by app
+     * in WeatherNetworkDataSource.NUM_DAYS
      * ---------------------------------------------------------------------------------------------
      *
      * @return Whether a fetch is needed
      */
+    // TODO : must make a check in date and not on rec numbers
     private boolean isFetchNeeded() {
         Date today = WeatherAppDateUtility.getNormalizedUtcDateForToday();
         int count  = mWeatherDao.countAllFutureWeather(today);

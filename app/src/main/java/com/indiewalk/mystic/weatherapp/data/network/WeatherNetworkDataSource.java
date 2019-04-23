@@ -1,3 +1,4 @@
+
 package com.indiewalk.mystic.weatherapp.data.network;
 
 import android.arch.lifecycle.LiveData;
@@ -25,20 +26,16 @@ import java.util.concurrent.TimeUnit;
  * -------------------------------------------------------------------------------------------------
  */
 public class WeatherNetworkDataSource {
-
-    private static final String LOG_TAG = WeatherNetworkDataSource.class.getSimpleName();
-
     // The number of days we want our API to return, set to 14 days or two weeks
-    public static final int NUM_DAYS = 14;
+    public static final int NUM_DAYS = 5; // 14;
+    private static final String LOG_TAG = WeatherNetworkDataSource.class.getSimpleName();
 
     // Interval at which to sync with the weather. Use TimeUnit for convenience, rather than
     // writing out a bunch of multiplication ourselves and risk making a silly mistake.
-    private static final int SYNC_INTERVAL_HOURS   = 3;
+    private static final int SYNC_INTERVAL_HOURS = 3;
     private static final int SYNC_INTERVAL_SECONDS = (int) TimeUnit.HOURS.toSeconds(SYNC_INTERVAL_HOURS);
     private static final int SYNC_FLEXTIME_SECONDS = SYNC_INTERVAL_SECONDS / 3;
-
-    // Sync tag to identify sync job
-    private static final String SUNSHINE_SYNC_TAG  = "sunshine-sync";
+    private static final String WEATHERAPP_SYNC_TAG = "weatherapp-sync";
 
     // For Singleton instantiation
     private static final Object LOCK = new Object();
@@ -88,7 +85,17 @@ public class WeatherNetworkDataSource {
 
 
 
-
+    /**
+     * ---------------------------------------------------------------------------------------------
+     * Immediate sync using an IntentService for asynchronous execution.
+     * Used by repository, of course.
+     * ---------------------------------------------------------------------------------------------
+     */
+    public void startFetchWeatherService() {
+        Intent intentToFetch = new Intent(mContext, WeatherSyncIntentService.class);
+        mContext.startService(intentToFetch);
+        Log.d(LOG_TAG, "Service created");
+    }
 
     /**
      * ---------------------------------------------------------------------------------------------
@@ -106,7 +113,7 @@ public class WeatherNetworkDataSource {
                 .setService(WeatherFirebaseJobService.class)
 
                 // set the UNIQUE tag used to identify this Job
-                .setTag(SUNSHINE_SYNC_TAG)
+                .setTag(WEATHERAPP_SYNC_TAG)
 
                 // Network constraints on which this Job should run.
                 // Run on any network
@@ -118,6 +125,7 @@ public class WeatherNetworkDataSource {
 
                 // Tell the Job that must recur.
                 .setRecurring(true)
+
                 /*
                  * Weather data must be synced every 3 to 4 hours. The first argument for
                  * Trigger's static executionWindow method is the start of the time frame when the
@@ -137,6 +145,7 @@ public class WeatherNetworkDataSource {
         dispatcher.schedule(syncSunshineJob);
         Log.d(LOG_TAG, "Job scheduled");
     }
+
 
     /**
      * ---------------------------------------------------------------------------------------------
@@ -183,17 +192,4 @@ public class WeatherNetworkDataSource {
 
     }
 
-
-
-    /**
-     * ---------------------------------------------------------------------------------------------
-     * Immediate sync using an IntentService for asynchronous execution.
-     * Used by repository, of course.
-     * ---------------------------------------------------------------------------------------------
-     */
-    public void startFetchWeatherService() {
-        Intent intentToFetch = new Intent(mContext, WeatherSyncIntentService.class);
-        mContext.startService(intentToFetch);
-        Log.d(LOG_TAG, "Service created");
-    }
 }
