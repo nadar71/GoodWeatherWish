@@ -27,6 +27,10 @@ public class InjectorUtils {
        return WeatherAppRepository.getInstance(database.weatherDao(), networkDataSource, executors);
    }
 
+
+
+
+
    // Inject the component WeatherNetworkDataSource (used for example in SunshineSyncIntentService)
    public static WeatherNetworkDataSource provideNetworkDataSource(Context context) {
        // This call to provide repository is necessary if the app starts from a service - in this
@@ -38,6 +42,8 @@ public class InjectorUtils {
        return WeatherNetworkDataSource.getInstance(context.getApplicationContext(), executors);
    }
 
+
+
     public static DetailViewModelFactory provideDetailViewModelFactory(Context context, Date date) {
         WeatherAppRepository repository = provideRepository(context.getApplicationContext());
         return new DetailViewModelFactory(repository, date);
@@ -47,5 +53,7 @@ public class InjectorUtils {
         WeatherAppRepository repository = provideRepository(context.getApplicationContext());
         return new MainViewModelFactory(repository);
     }
+
+
 
 }

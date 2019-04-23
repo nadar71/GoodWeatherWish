@@ -75,6 +75,8 @@ public final class WeatherAppDateUtility {
         return normalizedUtcMidnightMillis;
     }
 
+
+
     public static Date getNormalizedUtcDateForToday() {
         long normalizedMilli = getNormalizedUtcMsForToday();
         return new Date(normalizedMilli);
@@ -149,6 +151,7 @@ public final class WeatherAppDateUtility {
 
         return isDateNormalized;
     }
+
 
 
 
