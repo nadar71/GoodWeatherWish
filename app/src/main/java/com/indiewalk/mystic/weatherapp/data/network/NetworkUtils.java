@@ -31,16 +31,18 @@ public final class NetworkUtils {
      *
      */
     private static final String DYNAMIC_WEATHER_URL =
-            // "https://andfun-weather.udacity.com/weather";
-            "https://api.openweathermap.org/data/2.5/weather";
+            "https://andfun-weather.udacity.com/weather";
+            // "https://api.openweathermap.org/data/2.5/weather";
 
     private static final String STATIC_WEATHER_URL =
-            // "https://andfun-weather.udacity.com/staticweather";
-            "http://api.openweathermap.org/data/2.5/forecast";
+            "https://andfun-weather.udacity.com/staticweather";
+            // "https://api.openweathermap.org/data/2.5/forecast";
 
     public static final String MY_OPENWEATHER_APPID = "736a5abc6c0957977e0e75002fbdca8e";
 
-    private static final String FORECAST_BASE_URL   = DYNAMIC_WEATHER_URL;
+    // private static final String FORECAST_BASE_URL   = DYNAMIC_WEATHER_URL;
+
+    private static final String FORECAST_BASE_URL   = STATIC_WEATHER_URL;
 
     /*
      * NOTE: These values only effect responses from OpenWeatherMap, NOT from the fake weather
@@ -100,10 +102,10 @@ public final class NetworkUtils {
         }
        */
 
-        // String locationQuery = "Mountain View, CA";
-        // String locationQuery = "Sidney, US";
-        // String locationQuery = "Mountain View, CA 94043";
-        String locationQuery = "Chignolo d'isola, IT";
+        String locationQuery = "Mountain View,CA";
+        // String locationQuery = "Sidney,US";
+        // String locationQuery = "Mountain View,CA 94043";
+        // String locationQuery = "Chignolo d'isola,IT";
 
 
         return buildUrlWithLocationQuery(locationQuery);
@@ -126,7 +128,7 @@ public final class NetworkUtils {
                 .appendQueryParameter(LON_PARAM, String.valueOf(longitude))
                 .appendQueryParameter(FORMAT_PARAM, format)
                 .appendQueryParameter(UNITS_PARAM, units)
-                // .appendQueryParameter(DAYS_PARAM, Integer.toString(numDays))
+                //.appendQueryParameter(DAYS_PARAM, Integer.toString(WeatherNetworkDataSource.NUM_DAYS))
                 .appendQueryParameter(APPID, MY_OPENWEATHER_APPID)
                 .build();
 

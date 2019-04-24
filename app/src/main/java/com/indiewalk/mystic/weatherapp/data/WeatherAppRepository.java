@@ -23,7 +23,7 @@ import java.util.List;
  * -------------------------------------------------------------------------------------------------
  */
 public class WeatherAppRepository {
-    private static final String LOG_TAG = WeatherAppRepository.class.getSimpleName();
+    private static final String TAG = WeatherAppRepository.class.getSimpleName();
 
     // For Singleton instantiation
     private static final Object LOCK = new Object();
@@ -43,16 +43,18 @@ public class WeatherAppRepository {
         // get the data from data source, WeatherNetworkDataSource
         LiveData<WeatherEntry[]> networkData = mWeatherNetworkDataSource.getCurrentWeatherForecast();
 
+
         // observe the data source in case of change
         networkData.observeForever(newForecastsFromNetwork ->{
             mExecutors.diskIO().execute( () ->{
+                        Log.d(TAG, "WeatherAppRepository observer : New values found, deletes previous and insert new ones: ");
 
                         // Delete old data
                         deleteOldData();
 
                         // Insert new weather data into db
                         mWeatherDao.bulkInsert(newForecastsFromNetwork);
-                        Log.d(LOG_TAG, "New values inserted: ");
+                        Log.d(TAG, "WeatherAppRepository observer : New values inserted: ");
                     }
 
             );
@@ -68,13 +70,13 @@ public class WeatherAppRepository {
             WeatherNetworkDataSource weatherNetworkDataSource,
             AppExecutors executors) {
 
-        Log.d(LOG_TAG, "Getting the repository");
+        Log.d(TAG, "Getting the repository");
         if (sInstance == null) {
             synchronized (LOCK) {
                 sInstance = new WeatherAppRepository(weatherDao,
                         weatherNetworkDataSource,
                         executors);
-                Log.d(LOG_TAG, "Made new repository");
+                Log.d(TAG, "Made new repository");
             }
         }
         return sInstance;
@@ -89,7 +91,10 @@ public class WeatherAppRepository {
     private synchronized void initializeData() {
 
         // Only perform initialization once per app lifetime.
-        if (mInitialized) return;
+        if (mInitialized) {
+            Log.d(TAG, "initializeData: data already initialized, return");
+            return;
+        }
 
         mInitialized = true;
 
@@ -97,9 +102,10 @@ public class WeatherAppRepository {
         mWeatherNetworkDataSource.scheduleRecurringFetchWeatherSync();
 
 
-        // fetch weather data from restful service as bg service
+        // fetch weather data from restful service as bg service if db are empty or old
         mExecutors.diskIO().execute(()->{
             if(isFetchNeeded()){
+                Log.d(TAG, "initializeData: isFetchNeeded == true, run the intent from fetching data from remote");
                 startFetchWeatherService();
             }
         });
@@ -153,6 +159,7 @@ public class WeatherAppRepository {
     private boolean isFetchNeeded() {
         Date today = WeatherAppDateUtility.getNormalizedUtcDateForToday();
         int count  = mWeatherDao.countAllFutureWeather(today);
+        Log.d(TAG, "isFetchNeeded: date : "+ today.toString() + " mWeatherDao.countAllFutureWeather(today) : " + count );
         return (count < WeatherNetworkDataSource.NUM_DAYS);
     }
 

@@ -33,9 +33,10 @@ public class WeatherSyncIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        Log.d(LOG_TAG, "Intent service started");
+        Log.d(LOG_TAG, "WeatherSyncIntentService : fetch remote data service started");
         // inject the data source property to recover data from owm through fetch
         WeatherNetworkDataSource networkDataSource = InjectorUtils.provideNetworkDataSource(this.getApplicationContext());
+        Log.d(LOG_TAG, "WeatherSyncIntentService : property networkDataSource injected, with which calling : fetchWeather()");
         networkDataSource.fetchWeather();
     }
 }

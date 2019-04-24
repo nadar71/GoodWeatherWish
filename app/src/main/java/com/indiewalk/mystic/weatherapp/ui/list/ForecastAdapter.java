@@ -18,6 +18,7 @@ import com.indiewalk.mystic.weatherapp.utilities.WeatherAppGenericUtility;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * -------------------------------------------------------------------------------------------------
@@ -130,7 +131,7 @@ class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapt
         String lowString = WeatherAppGenericUtility.formatTemperature(mContext, lowInCelsius);
         String lowAcc = mContext.getString(R.string.acc_min_temp, lowString);
 
-        /* Set the text and content description (for accessibility purposes) */
+        // Set the text and content description (for accessibility purposes)
         forecastAdapterViewHolder.lowTempView.setText(lowString);
         forecastAdapterViewHolder.lowTempView.setContentDescription(lowAcc);
     }
@@ -215,7 +216,7 @@ class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapt
             // Check differences between :
             // - old forecast list (current list in mForecast)
             // - new forecast list (values in db)
-            // dispatch result fo comparison to recycleview adapater view with dispatchUpdatesTo
+            // dispatch result fo comparison to recycleview adapter view with dispatchUpdatesTo
             DiffUtil.DiffResult result = DiffUtil.calculateDiff(new DiffUtil.Callback() {
                 @Override
                 public int getOldListSize() {

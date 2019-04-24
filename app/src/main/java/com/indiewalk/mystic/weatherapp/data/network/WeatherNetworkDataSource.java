@@ -27,8 +27,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class WeatherNetworkDataSource {
     // The number of days we want our API to return, set to 14 days or two weeks
-    public static final int NUM_DAYS = 5; // 14;
-    private static final String LOG_TAG = WeatherNetworkDataSource.class.getSimpleName();
+    public static final int NUM_DAYS = 15;
+    private static final String TAG = WeatherNetworkDataSource.class.getSimpleName();
 
     // Interval at which to sync with the weather. Use TimeUnit for convenience, rather than
     // writing out a bunch of multiplication ourselves and risk making a silly mistake.
@@ -61,11 +61,11 @@ public class WeatherNetworkDataSource {
      * ---------------------------------------------------------------------------------------------
      */
     public static WeatherNetworkDataSource getInstance(Context context, AppExecutors executors) {
-        Log.d(LOG_TAG, "Getting the network data source");
+        Log.d(TAG, "Getting the network data source");
         if (sInstance == null) {
             synchronized (LOCK) {
                 sInstance = new WeatherNetworkDataSource(context.getApplicationContext(), executors);
-                Log.d(LOG_TAG, "Made new network data source");
+                Log.d(TAG, "Made new network data source");
             }
         }
         return sInstance;
@@ -94,7 +94,7 @@ public class WeatherNetworkDataSource {
     public void startFetchWeatherService() {
         Intent intentToFetch = new Intent(mContext, WeatherSyncIntentService.class);
         mContext.startService(intentToFetch);
-        Log.d(LOG_TAG, "Service created");
+        Log.d(TAG, "startFetchWeatherService : Fetch weather data Service WeatherSyncIntentService created.");
     }
 
     /**
@@ -143,7 +143,7 @@ public class WeatherNetworkDataSource {
 
         // Schedule the Job with the dispatcher
         dispatcher.schedule(syncSunshineJob);
-        Log.d(LOG_TAG, "Job scheduled");
+        Log.d(TAG, "Job scheduled");
     }
 
 
@@ -153,7 +153,7 @@ public class WeatherNetworkDataSource {
      * ---------------------------------------------------------------------------------------------
      */
     public void fetchWeather() {
-        Log.d(LOG_TAG, "Fetch weather started");
+        Log.d(TAG, "Fetch weather method started");
         mExecutors.networkIO().execute(() -> {
             try {
 
@@ -162,27 +162,40 @@ public class WeatherNetworkDataSource {
                 // longitude or off of a simple location as a String.
 
                 URL weatherRequestUrl = NetworkUtils.getUrl(mContext);
+                Log.d(TAG, "weatherRequestUrl : " + weatherRequestUrl);
 
                 // Use the URL to retrieve the JSON
                 String jsonWeatherResponse = NetworkUtils.getResponseFromHttpUrl(weatherRequestUrl);
 
                 // Parse the JSON into a list of weather forecasts
                 WeatherResponse response = new OpenWeatherJsonParser().parse(jsonWeatherResponse);
-                Log.d(LOG_TAG, "JSON Parsing finished");
+                Log.d(TAG, "JSON Parsing finished");
 
 
                 // As long as there are weather forecasts, update the LiveData storing the most recent
                 // weather forecasts. This will trigger observers of that LiveData, such as the
                 // WeatherAppRepository.
                 if (response != null && response.getWeatherForecast().length != 0) {
-                    Log.d(LOG_TAG, "JSON not null and has " + response.getWeatherForecast().length
-                            + " values");
-                    Log.d(LOG_TAG, String.format("First value is %1.0f and %1.0f",
+                    Log.d(TAG, "JSON not null and has " + response.getWeatherForecast().length
+                            + " values : livedata mDownloadedWeatherForecasts will post value WeatherEntry array to main thread, using repository");
+                    Log.d(TAG, String.format("First value is %1.0f and %1.0f",
                             response.getWeatherForecast()[0].getMin(),
                             response.getWeatherForecast()[0].getMax()));
 
+
+                    // Posted to repository observer, networkData.observeForever
+                    // which is observe MutableLiveData<WeatherEntry[]> mDownloadedWeatherForecasts
+                    // getting it with LiveData<WeatherEntry[]> networkData = mWeatherNetworkDataSource.getCurrentWeatherForecast();
+                    // when modified, it deletes previous data and bulk inserts the new ones
+
+                    // the observer in MainActivity, using the viewmodel which observe the weather entry from db,
+                    // will be aware of a changes, and updates the recyclerView :
+                    // MainActivity : mViewModel.getWeatherList().observe(this,weatherEntries
+                    //   getWeatherList() is from MainActivityViewModel : getWeatherList() {return mListWeather;}
+                    // that keep mListWeather updated with : mListWeather = mRepository.getCurrentWeatherForecasts();
+
                     mDownloadedWeatherForecasts.postValue(response.getWeatherForecast());
-                    // Will eventually do something with the downloaded data
+
                 }
             } catch (Exception e) {
                 // Server probably invalid

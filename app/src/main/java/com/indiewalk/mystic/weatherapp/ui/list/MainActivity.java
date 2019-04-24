@@ -97,10 +97,12 @@ public class MainActivity extends AppCompatActivity implements
         // keep ui safe from config changes, init/schedule/retrieves data from network/db
         MainViewModelFactory factory = InjectorUtils.provideMainActivityViewModelFactory(this.getApplicationContext());
         mViewModel = ViewModelProviders.of(this, factory).get(MainActivityViewModel.class);
+        Log.d(TAG, "onCreate: mViewModel created");
 
         // Observe data through Livedata to keep main activity (5 days weather forecasts) of data changes
         // Observe the weather entries, update adpater/list if new ones received and loaded
         mViewModel.getWeatherList().observe(this,weatherEntries -> {
+
             mForecastAdapter.swapForecast(weatherEntries);
             if(mPosition == RecyclerView.NO_POSITION){
                 mPosition = 0;
@@ -109,8 +111,10 @@ public class MainActivity extends AppCompatActivity implements
 
             // show the weather forecast list if loaded otherwise the loading screen
             if (weatherEntries != null &&  weatherEntries.size() > 0) {
+                Log.d(TAG, "onCreate: mViewModel.getWeatherList().observe : new weather data in db, show them. ");
                 showWeatherDataView();
             }else{
+                Log.d(TAG, "onCreate: mViewModel.getWeatherList().observe : No new weather data in db, loading from remote. ");
                 // Show load in progress
                 showLoading();
             }

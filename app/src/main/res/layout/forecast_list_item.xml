@@ -28,11 +28,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/list_item_date_left_margin"
-        android:layout_marginStart="@dimen/list_item_date_start_margin"
         android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+        android:textStyle="bold"
+        app:fontFamily="@font/quicksand"
         app:layout_constraintBottom_toTopOf="@+id/guideline"
         app:layout_constraintLeft_toRightOf="@+id/weather_icon"
-        tools:text="Today, April 03"/>
+        tools:text="Today, April 03" />
 
     <TextView
         android:id="@+id/weather_description"
@@ -40,23 +41,26 @@
         android:layout_height="wrap_content"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textColor="@color/secondary_text"
+        android:textStyle="bold"
+        app:fontFamily="@font/quicksand"
         app:layout_constraintLeft_toLeftOf="@+id/date"
         app:layout_constraintTop_toTopOf="@+id/guideline"
-        tools:text="Rainy"/>
+        tools:text="Rainy" />
 
     <TextView
         android:id="@+id/high_temperature"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/forecast_temperature_space"
         android:layout_marginRight="@dimen/forecast_temperature_space"
         android:fontFamily="sans-serif-light"
         android:textColor="@color/primary_text"
         android:textSize="@dimen/forecast_text_size"
+        android:textStyle="bold"
+        app:fontFamily="@font/quicksand"
         app:layout_constraintBottom_toTopOf="@+id/guideline"
         app:layout_constraintRight_toLeftOf="@+id/low_temperature"
         app:layout_constraintTop_toTopOf="@+id/guideline"
-        tools:text="19\u00b0"/>
+        tools:text="19\u00b0" />
 
     <TextView
         android:id="@+id/low_temperature"
@@ -65,10 +69,12 @@
         android:fontFamily="sans-serif-light"
         android:gravity="end"
         android:textSize="@dimen/forecast_text_size"
+        android:textStyle="bold"
+        app:fontFamily="@font/quicksand"
         app:layout_constraintBottom_toBottomOf="@+id/guideline"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline"
-        tools:text="10\u00b0"/>
+        tools:text="10\u00b0" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline"
