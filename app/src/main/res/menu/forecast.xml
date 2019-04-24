@@ -3,7 +3,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.indiewalk.mystic.weatherapp.ui.list.MainActivity">
+    tools:context="com.indiewalk.mystic.weatherapp.eu.indiewalk.mystic.weatherapp.ui.list.MainActivity">
     <item
         android:id="@+id/action_refresh"
         android:icon="@color/colorPrimaryDark"
