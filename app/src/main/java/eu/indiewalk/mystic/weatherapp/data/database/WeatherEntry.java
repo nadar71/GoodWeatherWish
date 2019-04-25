@@ -6,8 +6,11 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
+import android.util.Log;
 
 import java.util.Date;
+
+import eu.indiewalk.mystic.weatherapp.data.WeatherAppRepository;
 
 /**
  * -------------------------------------------------------------------------------------------------
@@ -18,6 +21,8 @@ import java.util.Date;
  */
 @Entity(tableName = "weather", indices = {@Index(value="date",unique=true)})
 public class WeatherEntry {
+
+    private static final String TAG = WeatherEntry.class.getSimpleName();
 
     @PrimaryKey(autoGenerate = true)
     private int    id;
@@ -55,6 +60,18 @@ public class WeatherEntry {
         this.pressure       = pressure;
         this.wind           = wind;
         this.degrees        = degrees;
+
+        Log.d(TAG, "WeatherEntry: object content : weatherIconId : "+this.weatherIconId
+                + " date " + this.date
+                + " min" + this.min
+                + " max " + this.max
+                + " humidity " + this.humidity
+                + " pressure " + this.pressure
+                + " wind " + this.wind
+                + " degrees " + this.degrees
+                + "\n"
+        );
+
     }
 
 

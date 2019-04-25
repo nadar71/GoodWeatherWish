@@ -18,37 +18,29 @@ import java.util.Date;
  * Parser for OpenWeatherMap JSON data.
  * -------------------------------------------------------------------------------------------------
  */
-final class OpenWeatherJsonParser {
+final class OpenWeatherJsonParserDummyData {
 
-    private static final String TAG = OpenWeatherJsonParser.class.getSimpleName();
+    private static final String TAG = OpenWeatherJsonParserDummyData.class.getSimpleName();
 
     // Weather information. Each day's forecast info is an element of the "list" array
     private static final String OWM_LIST           = "list";
 
-
-
-    // root : All temperatures are children of the "main" object
-    private static final String OWM_TEMPERATURE    = "main";
-
-    // main -> Max temperature for the day
-    private static final String OWM_MAX        = "temp_max";
-    private static final String OWM_MIN        = "temp_min";
-    private static final String OWM_PRESSURE   = "pressure";
-    private static final String OWM_HUMIDITY   = "humidity";
-
-
-    // root : weather
-    private static final String OWM_WEATHER    = "weather";
-    // weather --> id
-    private static final String OWM_WEATHER_ID = "id";
-
-    // root : wind
-    private static final String OWM_WIND           = "wind";
-    // wind -> wind attributes
+    private static final String OWM_PRESSURE       = "pressure";
+    private static final String OWM_HUMIDITY       = "humidity";
     private static final String OWM_WINDSPEED      = "speed";
     private static final String OWM_WIND_DIRECTION = "deg";
 
-    private static final String OWM_MESSAGE_CODE   = "cod";
+    // All temperatures are children of the "temp" object
+    private static final String OWM_TEMPERATURE    = "temp";
+
+    // Max temperature for the day
+    private static final String OWM_MAX = "max";
+    private static final String OWM_MIN = "min";
+
+    private static final String OWM_WEATHER    = "weather";
+    private static final String OWM_WEATHER_ID = "id";
+
+    private static final String OWM_MESSAGE_CODE = "cod";
 
     private static boolean hasHttpError(JSONObject forecastJson) throws JSONException {
         if (forecastJson.has(OWM_MESSAGE_CODE)) {
@@ -108,6 +100,11 @@ final class OpenWeatherJsonParser {
         // We ignore all the datetime values embedded in the JSON and assume that
         // the values are returned in-order by day (which is not guaranteed to be correct).
 
+        double pressure = dayForecast.getDouble(OWM_PRESSURE);
+        int humidity = dayForecast.getInt(OWM_HUMIDITY);
+        double windSpeed = dayForecast.getDouble(OWM_WINDSPEED);
+        double windDirection = dayForecast.getDouble(OWM_WIND_DIRECTION);
+
 
         // Description is in a child array called "weather", which is 1 element long.
         // That element also contains a weather code.
@@ -117,18 +114,10 @@ final class OpenWeatherJsonParser {
         int weatherId = weatherObject.getInt(OWM_WEATHER_ID);
 
 
-        //  Temperatures are sent by Open Weather Map in a child object called "main".
+        //  Temperatures are sent by Open Weather Map in a child object called "temp".
         JSONObject temperatureObject = dayForecast.getJSONObject(OWM_TEMPERATURE);
-        double max      = temperatureObject.getDouble(OWM_MAX);
-        double min      = temperatureObject.getDouble(OWM_MIN);
-        double pressure = temperatureObject.getDouble(OWM_PRESSURE);
-        int humidity    = temperatureObject.getInt(OWM_HUMIDITY);
-
-        // Wind features
-        JSONObject windObject = dayForecast.getJSONObject(OWM_WIND);
-        double windSpeed      = windObject.getDouble(OWM_WINDSPEED);
-        double windDirection  = windObject.getDouble(OWM_WIND_DIRECTION);
-
+        double max = temperatureObject.getDouble(OWM_MAX);
+        double min = temperatureObject.getDouble(OWM_MIN);
 
         // Create the weather entry object
         return new WeatherEntry(weatherId, new Date(dateTimeMillis), max, min,

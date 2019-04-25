@@ -102,10 +102,12 @@ public final class NetworkUtils {
         }
        */
 
-        String locationQuery = "Mountain View,CA";
+        // String locationQuery = "Mountain View,CA";
         // String locationQuery = "Sidney,US";
         // String locationQuery = "Mountain View,CA 94043";
         // String locationQuery = "Chignolo d'isola,IT";
+        // String locationQuery = "London,us";
+        String locationQuery = "Rome,IT";
 
 
         return buildUrlWithLocationQuery(locationQuery);
@@ -128,7 +130,7 @@ public final class NetworkUtils {
                 .appendQueryParameter(LON_PARAM, String.valueOf(longitude))
                 .appendQueryParameter(FORMAT_PARAM, format)
                 .appendQueryParameter(UNITS_PARAM, units)
-                //.appendQueryParameter(DAYS_PARAM, Integer.toString(WeatherNetworkDataSource.NUM_DAYS))
+                .appendQueryParameter(DAYS_PARAM, Integer.toString(WeatherNetworkDataSource.NUM_DAYS))
                 .appendQueryParameter(APPID, MY_OPENWEATHER_APPID)
                 .build();
 
@@ -159,7 +161,7 @@ public final class NetworkUtils {
                 .appendQueryParameter(QUERY_PARAM, locationQuery)
                 .appendQueryParameter(FORMAT_PARAM, format)
                 .appendQueryParameter(UNITS_PARAM, units)
-                // .appendQueryParameter(DAYS_PARAM, Integer.toString(WeatherNetworkDataSource.NUM_DAYS))
+                .appendQueryParameter(DAYS_PARAM, Integer.toString(WeatherNetworkDataSource.NUM_DAYS))
                 .appendQueryParameter(APPID, MY_OPENWEATHER_APPID)
                 .build();
 

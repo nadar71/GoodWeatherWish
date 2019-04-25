@@ -44,6 +44,17 @@ public class WeatherAppRepository {
         LiveData<WeatherEntry[]> networkData = mWeatherNetworkDataSource.getCurrentWeatherForecast();
 
 
+        // TODO : DEBUG, delete this!!!
+        mExecutors.diskIO().execute( () ->{
+                    Log.d(TAG, "WeatherAppRepository observer : New values found, deletes previous and insert new ones: ");
+
+                    // Delete old data
+                    deleteOldData();
+
+                }
+
+        );
+
         // observe the data source in case of change
         networkData.observeForever(newForecastsFromNetwork ->{
             mExecutors.diskIO().execute( () ->{

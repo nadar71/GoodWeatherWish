@@ -27,7 +27,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class WeatherNetworkDataSource {
     // The number of days we want our API to return, set to 14 days or two weeks
-    public static final int NUM_DAYS = 15;
+    public static final int NUM_DAYS = 5;
     private static final String TAG = WeatherNetworkDataSource.class.getSimpleName();
 
     // Interval at which to sync with the weather. Use TimeUnit for convenience, rather than
@@ -106,8 +106,8 @@ public class WeatherNetworkDataSource {
         Driver driver = new GooglePlayDriver(mContext);
         FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(driver);
 
-        // Create the Job to periodically sync Sunshine
-        Job syncSunshineJob = dispatcher.newJobBuilder()
+        // Create the Job to periodically sync WeatheraApp
+        Job syncWeatherAppJob = dispatcher.newJobBuilder()
 
                 // service used to sync data
                 .setService(WeatherFirebaseJobService.class)
@@ -142,7 +142,7 @@ public class WeatherNetworkDataSource {
                 .build();
 
         // Schedule the Job with the dispatcher
-        dispatcher.schedule(syncSunshineJob);
+        dispatcher.schedule(syncWeatherAppJob);
         Log.d(TAG, "Job scheduled");
     }
 
@@ -166,10 +166,11 @@ public class WeatherNetworkDataSource {
 
                 // Use the URL to retrieve the JSON
                 String jsonWeatherResponse = NetworkUtils.getResponseFromHttpUrl(weatherRequestUrl);
+                Log.d(TAG, "JSON answer received , response : " + jsonWeatherResponse);
 
                 // Parse the JSON into a list of weather forecasts
                 WeatherResponse response = new OpenWeatherJsonParser().parse(jsonWeatherResponse);
-                Log.d(TAG, "JSON Parsing finished");
+                Log.d(TAG, "JSON Parsing finished, response : " + response.toString());
 
 
                 // As long as there are weather forecasts, update the LiveData storing the most recent
