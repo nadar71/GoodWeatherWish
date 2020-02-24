@@ -20,11 +20,12 @@ public class WeatherFirebaseJobService extends JobService {
     // private AsyncTask<Void, Void, Void> mFetchWeatherTask;
 
     /**
+     * ---------------------------------------------------------------------------------------------
      * Job entry point, called by the Job Dispatcher .
-     * Run on the application's main thread, so fetchWeather() do the offload work
-     * in a background thread
-     *
+     * Run on the application's main thread,
+     * so fetchWeather() do the offload work in a background thread
      * @return  whether there is more work remaining.
+     * ---------------------------------------------------------------------------------------------
      */
     @Override
     public boolean onStartJob(final JobParameters jobParameters) {

@@ -16,7 +16,7 @@
 
         <!--The manifest entry for our MainActivity. Each Activity requires a manifest entry-->
         <activity
-            android:name="eu.indiewalk.mystic.weatherapp.ui.list.MainActivity"
+            android:name="eu.indiewalk.mystic.weatherapp.ui.forecasts.MainActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop"
             android:theme="@style/AppTheme.Forecast">
@@ -30,23 +30,23 @@
 
         <!--The manifest entry for our DetailActivity. Each Activity requires a manifest entry-->
         <activity
-            android:name="eu.indiewalk.mystic.weatherapp.ui.detail.DetailActivity"
+            android:name="eu.indiewalk.mystic.weatherapp.ui.daydetail.DetailActivity"
             android:label="@string/title_activity_detail"
-            android:parentActivityName="eu.indiewalk.mystic.weatherapp.ui.list.MainActivity"
+            android:parentActivityName="eu.indiewalk.mystic.weatherapp.ui.forecasts.MainActivity"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="eu.indiewalk.mystic.weatherapp.ui.list.MainActivity"/>
+                android:value="eu.indiewalk.mystic.weatherapp.ui.forecasts.MainActivity"/>
 
         </activity>
 
+        <activity android:name=".ui.settings.SettingsActivity" />
 
-        <!--This is required for immediate syncs -->
+
         <service
             android:name="eu.indiewalk.mystic.weatherapp.data.network.WeatherSyncIntentService"
             android:exported="false" />
 
-        <!-- This is the Service declaration used in conjunction with FirebaseJobDispatcher -->
         <service
             android:name="eu.indiewalk.mystic.weatherapp.data.network.WeatherFirebaseJobService"
             android:exported="false">

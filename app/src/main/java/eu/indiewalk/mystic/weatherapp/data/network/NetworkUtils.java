@@ -12,26 +12,17 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Scanner;
 
+import eu.indiewalk.mystic.weatherapp.ui.settings.UserPreferencesData;
+
 /**
  * These utilities will be used to communicate with the weather servers.
  */
 public final class NetworkUtils {
 
     private static final String TAG = NetworkUtils.class.getSimpleName();
-
-    /*
-     * Sunshine was originally built to use OpenWeatherMap's API. However, we wanted to provide
-     * a way to much more easily test the app and provide more varied weather data. After all, in
-     * Mountain View (Google's HQ), it gets very boring looking at a forecast of perfectly clear
-     * skies at 75°F every day... (UGH!) The solution we came up with was to host our own fake
-     * weather server. With this server, there are two URL's you can use. The first (and default)
-     * URL will return dynamic weather data. Each time the app refreshes, you will get different,
-     * completely random weather data. This is incredibly useful for testing the robustness of your
-     * application, as different weather JSON will provide edge cases for some of your methods.
-     *
-     */
+    
     private static final String DYNAMIC_WEATHER_URL =
-            // "https://andfun-weather.udacity.com/weather";
+            // "https://andfun-weather.udacity.com/weather"; // dummy data server form udacity
             "https://api.openweathermap.org/data/2.5/weather";
 
     private static final String STATIC_WEATHER_URL =
@@ -90,27 +81,27 @@ public final class NetworkUtils {
      * ---------------------------------------------------------------------------------------------
      */
     public static URL getUrl(Context context) {
-       /*
+
         if (UserPreferencesData.isLocationLatLonAvailable(context)) {
             double[] preferredCoordinates = UserPreferencesData.getLocationCoordinates(context);
-            double latitude = preferredCoordinates[0];
+            double latitude  = preferredCoordinates[0];
             double longitude = preferredCoordinates[1];
             return buildUrlWithLatitudeLongitude(latitude, longitude);
         } else {
             String locationQuery = UserPreferencesData.getPreferredWeatherLocation(context);
             return buildUrlWithLocationQuery(locationQuery);
         }
-       */
+
 
         // String locationQuery = "Mountain View,CA";
         // String locationQuery = "Sidney,US";
         // String locationQuery = "Mountain View,CA 94043";
         // String locationQuery = "Chignolo d'isola,IT";
         // String locationQuery = "London,us";
-        String locationQuery = "Rome,IT";
+        // String locationQuery = "Rome,IT";
 
 
-        return buildUrlWithLocationQuery(locationQuery);
+        // return buildUrlWithLocationQuery(locationQuery);
     }
 
 

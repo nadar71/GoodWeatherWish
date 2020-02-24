@@ -5,7 +5,7 @@ import android.arch.persistence.room.PrimaryKey;
 
 import java.util.Date;
 
-import eu.indiewalk.mystic.weatherapp.ui.list.MainActivity;
+import eu.indiewalk.mystic.weatherapp.ui.forecasts.MainActivity;
 
 /**
  * -------------------------------------------------------------------------------------------------

@@ -6,8 +6,8 @@
     android:layout_height="match_parent">
 
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-      clipToPadding="false": RecyclerView to not resize the over-scrolling effect
-      when you attempt to scroll past the end of the content (EdgeEffect)                                                 -                       -
+      clipToPadding="false": RecyclerView do not resize the over-scrolling effect
+      when scrolling past the end of the content (EdgeEffect)                                                 -                       -
       - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerview_forecast"

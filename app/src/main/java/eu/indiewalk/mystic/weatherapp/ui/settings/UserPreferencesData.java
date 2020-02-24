@@ -11,7 +11,7 @@ public final class UserPreferencesData {
 
     // Store the latitude and longitude to pinpoint location on map in map intent launched,
     // Use them in queries for the weather.
-    public static final String PREF_COORD_LAT = "coord_lat";
+    public static final String PREF_COORD_LAT  = "coord_lat";
     public static final String PREF_COORD_LONG = "coord_long";
 
     /**
@@ -135,7 +135,7 @@ public final class UserPreferencesData {
     public static boolean isLocationLatLonAvailable(Context context) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
 
-        boolean spContainLatitude = sp.contains(PREF_COORD_LAT);
+        boolean spContainLatitude  = sp.contains(PREF_COORD_LAT);
         boolean spContainLongitude = sp.contains(PREF_COORD_LONG);
 
         boolean spContainBothLatitudeAndLongitude = false;

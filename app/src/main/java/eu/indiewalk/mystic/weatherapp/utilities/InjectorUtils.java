@@ -8,14 +8,15 @@ import eu.indiewalk.mystic.weatherapp.AppExecutors;
 import eu.indiewalk.mystic.weatherapp.data.WeatherAppRepository;
 import eu.indiewalk.mystic.weatherapp.data.database.WeatherAppDatabase;
 import eu.indiewalk.mystic.weatherapp.data.network.WeatherNetworkDataSource;
-import eu.indiewalk.mystic.weatherapp.ui.detail.DetailViewModelFactory;
-import eu.indiewalk.mystic.weatherapp.ui.list.MainViewModelFactory;
+import eu.indiewalk.mystic.weatherapp.ui.daydetail.DetailViewModelFactory;
+import eu.indiewalk.mystic.weatherapp.ui.forecasts.MainViewModelFactory;
 
 import java.util.Date;
 
 /**
  * -------------------------------------------------------------------------------------------------
  * Provides static methods to inject the various classes needed for Weatherapp
+ * TODO : migrate to dagger2
  * -------------------------------------------------------------------------------------------------
  */
 public class InjectorUtils {
@@ -55,7 +56,7 @@ public class InjectorUtils {
 
     /**
      * ---------------------------------------------------------------------------------------------
-     * Observe repository changes for detail activity data
+     * Observe repository changes for daydetail activity data
      * @param context
      * @return
      * ---------------------------------------------------------------------------------------------

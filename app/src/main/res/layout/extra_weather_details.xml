@@ -9,27 +9,30 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/detail_accent_pane_background"
-        android:paddingBottom="@dimen/forecast_detail_vertical_padding"
-        android:paddingEnd="@dimen/forecast_detail_horizontal_padding"
-        android:paddingLeft="@dimen/forecast_detail_horizontal_padding"
-        android:paddingRight="@dimen/forecast_detail_horizontal_padding"
         android:paddingStart="@dimen/forecast_detail_horizontal_padding"
-        android:paddingTop="@dimen/forecast_detail_vertical_padding">
+        android:paddingLeft="@dimen/forecast_detail_horizontal_padding"
+        android:paddingTop="@dimen/forecast_detail_vertical_padding"
+        android:paddingEnd="@dimen/forecast_detail_horizontal_padding"
+        android:paddingRight="@dimen/forecast_detail_horizontal_padding"
+        android:paddingBottom="@dimen/forecast_detail_vertical_padding">
 
         <android.support.constraint.Guideline
             android:id="@+id/horizontal_middle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.5"/>
+            app:layout_constraintGuide_percent="0.500684" />
 
         <TextView
             android:id="@+id/humidity_label"
             style="@style/DetailLabel"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
             android:text="@string/humidity_label"
             android:textStyle="bold"
             app:fontFamily="@font/quicksand"
             app:layout_constraintBottom_toTopOf="@+id/pressure_label"
+            app:layout_constraintEnd_toStartOf="@+id/horizontal_middle"
             app:layout_constraintLeft_toLeftOf="@+id/extra_details"
             app:layout_constraintTop_toTopOf="@+id/extra_details"
             app:layout_constraintVertical_bias="0.33" />
@@ -37,50 +40,66 @@
         <TextView
             android:id="@+id/humidity"
             style="@style/ExtraWeatherMeasurement"
+            android:layout_marginLeft="96dp"
             android:textStyle="bold"
             app:fontFamily="@font/quicksand"
             app:layout_constraintBottom_toBottomOf="@+id/humidity_label"
             app:layout_constraintLeft_toLeftOf="@+id/horizontal_middle"
-            tools:text="38%" />
+            tools:text="38%"
+            android:layout_marginStart="96dp" />
 
         <TextView
             android:id="@+id/pressure_label"
             style="@style/DetailLabel"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
             android:text="@string/pressure_label"
             android:textStyle="bold"
             app:fontFamily="@font/quicksand"
             app:layout_constraintBottom_toBottomOf="@+id/extra_details"
-            app:layout_constraintLeft_toLeftOf="@+id/extra_details"
-            app:layout_constraintTop_toTopOf="@+id/extra_details" />
+            app:layout_constraintEnd_toStartOf="@+id/horizontal_middle"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/humidity_label"
+            app:layout_constraintTop_toTopOf="@+id/extra_details"
+            app:layout_constraintVertical_bias="0.518" />
 
         <TextView
             android:id="@+id/pressure"
             style="@style/ExtraWeatherMeasurement"
+            android:layout_marginLeft="96dp"
             android:textStyle="bold"
             app:fontFamily="@font/quicksand"
             app:layout_constraintBottom_toBottomOf="@+id/pressure_label"
             app:layout_constraintLeft_toLeftOf="@+id/horizontal_middle"
-            tools:text="995 hPa" />
+            tools:text="995 hPa"
+            android:layout_marginStart="96dp" />
 
         <TextView
             android:id="@+id/wind_label"
             style="@style/DetailLabel"
+            android:layout_marginEnd="40dp"
+            android:layout_marginRight="40dp"
             android:text="@string/wind_label"
             android:textStyle="bold"
             app:fontFamily="@font/quicksand"
             app:layout_constraintBottom_toBottomOf="@+id/extra_details"
-            app:layout_constraintLeft_toLeftOf="@+id/extra_details"
+            app:layout_constraintEnd_toStartOf="@+id/horizontal_middle"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/pressure_label"
             app:layout_constraintTop_toBottomOf="@+id/pressure_label"
-            app:layout_constraintVertical_bias="0.65999997" />
+            app:layout_constraintVertical_bias="0.625" />
 
         <TextView
             android:id="@+id/wind_measurement"
             style="@style/ExtraWeatherMeasurement"
+            android:layout_marginLeft="96dp"
             android:textStyle="bold"
             app:fontFamily="@font/quicksand"
             app:layout_constraintBottom_toBottomOf="@+id/wind_label"
             app:layout_constraintLeft_toLeftOf="@+id/horizontal_middle"
-            tools:text="4km/h NW" />
+            tools:text="4km/h NW"
+            android:layout_marginStart="96dp" />
 
     </android.support.constraint.ConstraintLayout>
+
 </layout>

@@ -1,4 +1,4 @@
-package eu.indiewalk.mystic.weatherapp.ui.list;
+package eu.indiewalk.mystic.weatherapp.ui.forecasts;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
@@ -28,7 +28,6 @@ public class MainActivityViewModel extends ViewModel {
         // mDate        = date;
         // keep ListWeatherEntry updated retrieving data from network/db
         mListWeather = mRepository.getCurrentWeatherForecasts();
-
     }
 
     public LiveData<List<ListWeatherEntry>> getWeatherList() {

@@ -6,7 +6,8 @@ import eu.indiewalk.mystic.weatherapp.data.database.WeatherEntry;
 
 /**
  * -------------------------------------------------------------------------------------------------
- * Weather response from the backend. Contains the weather forecasts.
+ * Class to store weather forecasts response from remote request.
+ * Used in WetherNetworkDataSource.fetchWeather
  * -------------------------------------------------------------------------------------------------
  */
 class WeatherResponse {

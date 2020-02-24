@@ -44,7 +44,7 @@
     <string name="pref_location_key" translatable="false">location</string>
 
     <!-- Default postal code for location preference [CHAR LIMIT=NONE] -->
-    <string name="pref_location_default" translatable="false">Mountain View, CA 94043</string>
+    <string name="pref_location_default" translatable="false">Mountain View,CA</string>
 
     <!-- Label for the temperature units preference [CHAR LIMIT=30] -->
     <string name="pref_units_label">Temperature Units</string>

@@ -68,7 +68,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-light"
         android:gravity="end"
-        android:textSize="@dimen/forecast_text_size"
+        android:textSize="18sp"
         android:textStyle="bold"
         app:fontFamily="@font/quicksand"
         app:layout_constraintBottom_toBottomOf="@+id/guideline"

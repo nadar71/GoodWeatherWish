@@ -23,20 +23,39 @@
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.5"
             tools:layout_editor_absoluteX="192dp"
-            tools:layout_editor_absoluteY="0dp"/>
+            tools:layout_editor_absoluteY="0dp" />
+
+        <TextView
+            android:id="@+id/location_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:textColor="@color/primary_text"
+            android:textSize="18sp"
+            app:fontFamily="@font/quicksand"
+            app:layout_constraintBottom_toTopOf="@+id/date"
+            app:layout_constraintEnd_toStartOf="@+id/date"
+            app:layout_constraintStart_toEndOf="@+id/date"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Rome, IT" />
 
         <!-- Selected day's date  -->
         <TextView
             android:id="@+id/date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
             android:textSize="20sp"
             android:textStyle="bold"
             app:fontFamily="@font/quicksand"
             app:layout_constraintBottom_toTopOf="@+id/weather_icon"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/location_tv"
             tools:text="Saturday, September 24" />
 
         <!-- Weather condition icon -->
@@ -44,24 +63,29 @@
             android:id="@+id/weather_icon"
             android:layout_width="96dp"
             android:layout_height="96dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="4dp"
             android:adjustViewBounds="true"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/weather_description"
+            app:layout_constraintHorizontal_bias="0.481"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@+id/horizontal_middle"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/art_clouds"/>
+            app:layout_constraintTop_toBottomOf="@+id/date"
+            tools:src="@drawable/art_clouds" />
 
         <!-- Weather condition description-->
         <TextView
             android:id="@+id/weather_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="16dp"
             android:textColor="@color/secondary_text"
             android:textSize="20sp"
             android:textStyle="bold"
             app:fontFamily="@font/quicksand"
-            app:layout_constraintHorizontal_bias="0.52"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.513"
             app:layout_constraintLeft_toLeftOf="@+id/weather_icon"
             app:layout_constraintRight_toRightOf="@+id/weather_icon"
             app:layout_constraintTop_toBottomOf="@+id/weather_icon"
@@ -72,7 +96,7 @@
             android:id="@+id/high_temperature"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="72sp"
+            android:textSize="56sp"
             android:textStyle="bold"
             app:fontFamily="@font/quicksand"
             app:layout_constraintBottom_toBottomOf="@+id/weather_icon"
@@ -93,6 +117,7 @@
             android:textStyle="bold"
             app:fontFamily="@font/quicksand"
             app:layout_constraintBaseline_toBaselineOf="@+id/weather_description"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="@+id/high_temperature"
             app:layout_constraintRight_toRightOf="@+id/high_temperature"
             tools:text="10\u00b0" />

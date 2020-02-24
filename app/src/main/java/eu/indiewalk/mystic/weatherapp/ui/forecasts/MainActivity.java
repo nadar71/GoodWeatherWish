@@ -1,9 +1,9 @@
 
-package eu.indiewalk.mystic.weatherapp.ui.list;
+package eu.indiewalk.mystic.weatherapp.ui.forecasts;
 
-// import mystic.arch.lifecycle.LifecycleActivity;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,9 +17,11 @@ import android.widget.ProgressBar;
 
 import eu.indiewalk.mystic.weatherapp.R;
 import eu.indiewalk.mystic.weatherapp.data.network.WeatherNetworkDataSource;
-import eu.indiewalk.mystic.weatherapp.ui.detail.DetailActivity;
+import eu.indiewalk.mystic.weatherapp.ui.daydetail.DetailActivity;
 // import SettingsActivity;
 // import UserPreferencesData;
+import eu.indiewalk.mystic.weatherapp.ui.settings.SettingsActivity;
+import eu.indiewalk.mystic.weatherapp.ui.settings.UserPreferencesData;
 import eu.indiewalk.mystic.weatherapp.utilities.InjectorUtils;
 
 import java.util.Date;
@@ -35,7 +37,6 @@ import java.util.Date;
  * -------------------------------------------------------------------------------------------------
  */
 
-// public class MainActivity extends LifecycleActivity implements
 public class MainActivity extends AppCompatActivity implements
         ForecastAdapter.ForecastAdapterOnItemClickHandler {
 
@@ -66,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements
     private ProgressBar     mLoadingIndicator;
     private MainActivityViewModel mViewModel;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements
 
         // Get the recycle view layout
         mRecyclerView = findViewById(R.id.recyclerview_forecast);
+
 
         // ProgressBar Loader
         mLoadingIndicator = findViewById(R.id.pb_loading_indicator);
@@ -99,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements
         Log.d(TAG, "onCreate: mViewModel created");
 
         // Observe data through Livedata to keep main activity (5 days weather forecasts) of data changes
-        // Observe the weather entries, update adpater/list if new ones received and loaded
+        // Observe the weather entries, update adapter/list if new ones received and loaded
         mViewModel.getWeatherList().observe(this,weatherEntries -> {
 
             mForecastAdapter.swapForecast(weatherEntries);
@@ -131,6 +134,7 @@ public class MainActivity extends AppCompatActivity implements
         */
 
     }
+
 
 
 
@@ -173,6 +177,12 @@ public class MainActivity extends AppCompatActivity implements
 
 
 
+
+
+
+
+
+
     // ---------------------------------------------------------------------------------------------
     //                                           MENU STUFF
     // ---------------------------------------------------------------------------------------------
@@ -193,8 +203,6 @@ public class MainActivity extends AppCompatActivity implements
         // Refresh data
         if (id == R.id.action_refresh) {
 
-
-
             /*
             // delete and reload the data in RecyclerView
             mForecastAdapter.swapCursor(null);
@@ -203,12 +211,14 @@ public class MainActivity extends AppCompatActivity implements
             getSupportLoaderManager().restartLoader(FORECAST_LOADER_ID, null, this);
             */
 
-
             // TODO : TEST resynch with remote data; data on screen must be updated too
             // resynch with remote data
             WeatherNetworkDataSource networkDataSource =
                     InjectorUtils.provideNetworkDataSource(this.getApplicationContext());
             networkDataSource.fetchWeather();
+
+            // TODO : better use repository and something like :
+            // LiveData<WeatherEntry[]> networkData = mWeatherNetworkDataSource.getCurrentWeatherForecast();
 
             return true;
         }
@@ -241,7 +251,7 @@ public class MainActivity extends AppCompatActivity implements
      */
     private void openLocationInMap() {
 
-        /*
+
         // Debug locations
         // String addressString = "20 via Giotto,chignolo d'isola, IT";
         // String addressString = "1600 Amphitheatre Parkway, CA";
@@ -262,7 +272,7 @@ public class MainActivity extends AppCompatActivity implements
                     + ", no receiving apps installed!");
         }
 
-        */
+
 
     }
 
@@ -273,8 +283,8 @@ public class MainActivity extends AppCompatActivity implements
      * -------------------------------------------------------------------------------------------------
      */
     private void openSettings() {
-        // Intent intent = new Intent(this, SettingsActivity.class);
-        // startActivity(intent);
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
     }
 
 

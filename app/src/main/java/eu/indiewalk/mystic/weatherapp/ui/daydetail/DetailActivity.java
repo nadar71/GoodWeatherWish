@@ -1,5 +1,5 @@
 
-package eu.indiewalk.mystic.weatherapp.ui.detail;
+package eu.indiewalk.mystic.weatherapp.ui.daydetail;
 
 // import mystic.arch.lifecycle.LifecycleActivity;
 import android.support.v4.app.ShareCompat;
@@ -16,6 +16,7 @@ import eu.indiewalk.mystic.weatherapp.databinding.ActivityDetailBinding;
 
 import eu.indiewalk.mystic.weatherapp.R;
 import eu.indiewalk.mystic.weatherapp.data.database.WeatherEntry;
+import eu.indiewalk.mystic.weatherapp.ui.settings.UserPreferencesData;
 import eu.indiewalk.mystic.weatherapp.utilities.InjectorUtils;
 import eu.indiewalk.mystic.weatherapp.utilities.WeatherAppDateUtility;
 import eu.indiewalk.mystic.weatherapp.utilities.WeatherAppGenericUtility;
@@ -26,7 +27,7 @@ import java.util.Date;
 
 /**
  * -------------------------------------------------------------------------------------------------
- * Activity for showing each day forecast from main list in detail,
+ * Activity for showing each day forecast from main list in daydetail,
  * with main part  with main info above, and below the detailed ones.
  * -------------------------------------------------------------------------------------------------
  */
@@ -151,6 +152,12 @@ public class DetailActivity extends AppCompatActivity {
     // @param data   The cursor returned.
     // ---------------------------------------------------------------------------------------------
     private void bindWeatherToUI(WeatherEntry weatherEntry) {
+
+        // set location label if any
+        String location = UserPreferencesData.getPreferredWeatherLocation(this);
+        if (!location.isEmpty()) {
+            mDetailBinding.primaryInfo.locationTv.setText(location);
+        }
 
         // -----------------------
         //    Weather Icon
@@ -302,7 +309,7 @@ public class DetailActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        // Sharing detail day forecast, using a app chooser
+        // Sharing daydetail day forecast, using a app chooser
         if (id == R.id.action_share) {
             forecastSharing(choosenDayWeatherParam);
             return true;
@@ -330,7 +337,6 @@ public class DetailActivity extends AppCompatActivity {
         String mimeType = "text/plain";
         String title    = "Today weather forecast details.";
         ShareCompat.IntentBuilder
-                /* The from method specifies the Context from which this share is coming from */
                 .from(this)
                 .setType(mimeType)
                 .setChooserTitle(title)

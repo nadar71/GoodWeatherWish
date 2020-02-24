@@ -1,4 +1,4 @@
-package eu.indiewalk.mystic.weatherapp.ui.list;
+package eu.indiewalk.mystic.weatherapp.ui.forecasts;
 
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;

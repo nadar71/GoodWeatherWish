@@ -1,5 +1,5 @@
 
-package eu.indiewalk.mystic.weatherapp.ui.list;
+package eu.indiewalk.mystic.weatherapp.ui.forecasts;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import eu.indiewalk.mystic.weatherapp.R;
 import eu.indiewalk.mystic.weatherapp.data.database.ListWeatherEntry;
+import eu.indiewalk.mystic.weatherapp.ui.settings.UserPreferencesData;
 import eu.indiewalk.mystic.weatherapp.utilities.WeatherAppDateUtility;
 import eu.indiewalk.mystic.weatherapp.utilities.WeatherAppGenericUtility;
 
@@ -41,6 +42,8 @@ class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapt
 
     // private List<WeatherEntry> mForecast;
     private List<ListWeatherEntry> mForecast;
+
+    private TextView location_tv;
 
 
 
@@ -75,8 +78,11 @@ class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapt
         int layoutId = getLayoutIdByType(viewType);
         View view = LayoutInflater.from(mContext).inflate(layoutId, viewGroup, false);
         view.setFocusable(true);
+
         return new ForecastAdapterViewHolder(view);
     }
+
+
 
 
 
@@ -92,6 +98,16 @@ class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapt
         // go to the right position for get the data
         // mCursor.moveToPosition(position);
         ListWeatherEntry currentWeather = mForecast.get(position);
+
+        // set location title if today forecast item
+        int viewType = getItemViewType(position);
+        if (viewType == VIEW_TYPE_TODAY){
+            String location = UserPreferencesData.getPreferredWeatherLocation(mContext);
+            if (!location.isEmpty()) {
+                forecastAdapterViewHolder.location_tv.setText(location);
+            }
+        }
+
 
         // Weather Icon
         // int weatherId = mCursor.getInt(MainActivity.INDEX_WEATHER_CONDITION_ID);
@@ -309,15 +325,17 @@ class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapt
         final TextView descriptionView;
         final TextView highTempView;
         final TextView lowTempView;
+        final TextView location_tv;
 
         ForecastAdapterViewHolder(View view) {
             super(view);
 
-            iconView = view.findViewById(R.id.weather_icon);
-            dateView = view.findViewById(R.id.date);
-            descriptionView = view.findViewById(R.id.weather_description);
-            highTempView = view.findViewById(R.id.high_temperature);
-            lowTempView = view.findViewById(R.id.low_temperature);
+            iconView         = view.findViewById(R.id.weather_icon);
+            dateView         = view.findViewById(R.id.date);
+            descriptionView  = view.findViewById(R.id.weather_description);
+            highTempView     = view.findViewById(R.id.high_temperature);
+            lowTempView      = view.findViewById(R.id.low_temperature);
+            location_tv      = view.findViewById(R.id.location_tv);
 
             view.setOnClickListener(this);
         }

@@ -76,7 +76,7 @@ public interface WeatherDao {
     /**
      * ---------------------------------------------------------------------------------------------
      * Get all the weather entries as {@link ListWeatherEntry}
-     * simplified for {@link com.indiewalk.mystic.weatherapp.ui.list}  from given date
+     * simplified for {@link eu.indiewalk.mystic.weatherapp.ui.forecasts.MainActivity}  from given date
      * @param date
      * @return
      * ---------------------------------------------------------------------------------------------

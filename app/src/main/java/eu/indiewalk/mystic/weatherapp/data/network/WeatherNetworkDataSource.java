@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * -------------------------------------------------------------------------------------------------
- * Provides an API for doing all operations with the server data
+ * Provides an API for doing all operations with the remote server data
  * -------------------------------------------------------------------------------------------------
  */
 public class WeatherNetworkDataSource {
@@ -30,10 +30,10 @@ public class WeatherNetworkDataSource {
     public static final int NUM_DAYS = 5;
     private static final String TAG = WeatherNetworkDataSource.class.getSimpleName();
 
-    // Interval at which to sync with the weather. Use TimeUnit for convenience, rather than
-    // writing out a bunch of multiplication ourselves and risk making a silly mistake.
+    // Interval at which to sync with the weather. Use TimeUnit for convenience to avoid mistake.
     private static final int SYNC_INTERVAL_HOURS = 3;
     private static final int SYNC_INTERVAL_SECONDS = (int) TimeUnit.HOURS.toSeconds(SYNC_INTERVAL_HOURS);
+    // available time window for job
     private static final int SYNC_FLEXTIME_SECONDS = SYNC_INTERVAL_SECONDS / 3;
     private static final String WEATHERAPP_SYNC_TAG = "weatherapp-sync";
 
@@ -51,13 +51,12 @@ public class WeatherNetworkDataSource {
     private WeatherNetworkDataSource(Context context, AppExecutors executors) {
         mContext = context;
         mExecutors = executors;
-
         mDownloadedWeatherForecasts = new MutableLiveData<WeatherEntry[]>();
     }
 
     /**
      * ---------------------------------------------------------------------------------------------
-     * Get the singleton for this class
+     * Get singleton instance
      * ---------------------------------------------------------------------------------------------
      */
     public static WeatherNetworkDataSource getInstance(Context context, AppExecutors executors) {
@@ -106,42 +105,28 @@ public class WeatherNetworkDataSource {
         Driver driver = new GooglePlayDriver(mContext);
         FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(driver);
 
-        // Create the Job to periodically sync WeatheraApp
+        // Create the Job t
         Job syncWeatherAppJob = dispatcher.newJobBuilder()
-
-                // service used to sync data
                 .setService(WeatherFirebaseJobService.class)
 
-                // set the UNIQUE tag used to identify this Job
+                // UNIQUE tag to identify this Job
                 .setTag(WEATHERAPP_SYNC_TAG)
 
-                // Network constraints on which this Job should run.
-                // Run on any network
                 // TODO : include a preference for this: wifi, while charging etc.
                 .setConstraints(Constraint.ON_ANY_NETWORK)
 
                 // setLifetime. Options : forever" or  die the next time the device boots up.
                 .setLifetime(Lifetime.FOREVER)
-
-                // Tell the Job that must recur.
                 .setRecurring(true)
 
-                /*
-                 * Weather data must be synced every 3 to 4 hours. The first argument for
-                 * Trigger's static executionWindow method is the start of the time frame when the
-                 * sync should be performed. The second argument is the latest point in time at
-                 * which the data should be synced. Please note that this end time is not
-                 * guaranteed, but is more of a guideline for FirebaseJobDispatcher to go off of.
-                 */
+                // triggered on time window starting from each recurrence time
                 .setTrigger(Trigger.executionWindow(
                         SYNC_INTERVAL_SECONDS,
                         SYNC_INTERVAL_SECONDS + SYNC_FLEXTIME_SECONDS))
-
-                // If a Job with the tag  already exists, replace
                 .setReplaceCurrent(true)
                 .build();
 
-        // Schedule the Job with the dispatcher
+        // Schedule job
         dispatcher.schedule(syncWeatherAppJob);
         Log.d(TAG, "Job scheduled");
     }
