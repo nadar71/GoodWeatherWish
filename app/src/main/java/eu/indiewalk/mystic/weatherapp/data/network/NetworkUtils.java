@@ -20,7 +20,7 @@ import eu.indiewalk.mystic.weatherapp.ui.settings.UserPreferencesData;
 public final class NetworkUtils {
 
     private static final String TAG = NetworkUtils.class.getSimpleName();
-    
+
     private static final String DYNAMIC_WEATHER_URL =
             // "https://andfun-weather.udacity.com/weather"; // dummy data server form udacity
             "https://api.openweathermap.org/data/2.5/weather";

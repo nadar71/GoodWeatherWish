@@ -10,11 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 
-/**
- * -------------------------------------------------------------------------------------------------
- * Provides all the operations on {@link WeatherAppDatabase}
- * -------------------------------------------------------------------------------------------------
- */
+
 @Dao
 public interface WeatherDao {
     /**
@@ -75,8 +71,7 @@ public interface WeatherDao {
 
     /**
      * ---------------------------------------------------------------------------------------------
-     * Get all the weather entries as {@link ListWeatherEntry}
-     * simplified for {@link eu.indiewalk.mystic.weatherapp.ui.forecasts.MainActivity}  from given date
+     * Get all the weather entries as ListWeatherEntry simplified for MainActivity}  from given date
      * @param date
      * @return
      * ---------------------------------------------------------------------------------------------

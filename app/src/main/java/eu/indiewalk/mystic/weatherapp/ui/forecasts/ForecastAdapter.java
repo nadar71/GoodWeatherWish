@@ -22,14 +22,13 @@ import java.util.List;
 
 /**
  * -------------------------------------------------------------------------------------------------
- * Exposes a list of weather forecasts from a list of {@link ListWeatherEntry}
- * to a {@link RecyclerView}.
+ * Exposes a list of weather forecasts from ListWeatherEntry
  * -------------------------------------------------------------------------------------------------
  */
 class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapterViewHolder> {
 
-    // IDs for the ViewType : today and  one of future day
-    private static final int VIEW_TYPE_TODAY = 0;
+    // IDs for the ViewType : today and future day
+    private static final int VIEW_TYPE_TODAY      = 0;
     private static final int VIEW_TYPE_FUTURE_DAY = 1;
 
     private final Context mContext;
@@ -96,7 +95,6 @@ class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapt
     @Override
     public void onBindViewHolder(ForecastAdapterViewHolder forecastAdapterViewHolder, int position) {
         // go to the right position for get the data
-        // mCursor.moveToPosition(position);
         ListWeatherEntry currentWeather = mForecast.get(position);
 
         // set location title if today forecast item
@@ -110,15 +108,14 @@ class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapt
 
 
         // Weather Icon
-        // int weatherId = mCursor.getInt(MainActivity.INDEX_WEATHER_CONDITION_ID);
         int weatherIconId = currentWeather.getWeatherIconId();
         int weatherImageResourceId = getWeatherImageId(weatherIconId, position);
         forecastAdapterViewHolder.iconView.setImageResource(weatherImageResourceId);
 
         // Weather Date
         // Get date from cursor
-        // mCursor.getLong(MainActivity.INDEX_WEATHER_DATE);
         long dateInMillis = currentWeather.getDate().getTime();
+
         /// Date human readable format
         String dateString = WeatherAppDateUtility.getFriendlyDateString(mContext, dateInMillis, false);
         forecastAdapterViewHolder.dateView.setText(dateString);
@@ -130,7 +127,6 @@ class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapt
         forecastAdapterViewHolder.descriptionView.setContentDescription(descriptionAcc);
 
         // High (max) temperature
-        // mCursor.getDouble(MainActivity.INDEX_WEATHER_MAX_TEMP);
         double highInCelsius = currentWeather.getMax();
         // Conversion if needed
         String highString = WeatherAppGenericUtility.formatTemperature(mContext, highInCelsius);
@@ -139,7 +135,6 @@ class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapt
         forecastAdapterViewHolder.highTempView.setContentDescription(highAcc);
 
         // Low (min) temperature
-        // mCursor.getDouble(MainActivity.INDEX_WEATHER_MIN_TEMP);
         double lowInCelsius = currentWeather.getMin();
 
         // Conversion if needed
@@ -264,19 +259,7 @@ class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapt
 
     }
 
-    /**
-     * ---------------------------------------------------------------------------------------------
-     * Swap the cursor for showing new data, and notifying about changes.
-     * Called from MainActivity after finishing loading data, or to reset them.
-     * @param newCursor the new cursor to use as ForecastAdapter's data source
-     * ---------------------------------------------------------------------------------------------
-     */
-    /*
-    void swapCursor(Cursor newCursor) {
-        mCursor = newCursor;
-        notifyDataSetChanged();
-    }
-    */
+
 
 
     /**

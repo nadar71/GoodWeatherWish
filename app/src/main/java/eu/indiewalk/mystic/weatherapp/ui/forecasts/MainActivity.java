@@ -27,15 +27,6 @@ import eu.indiewalk.mystic.weatherapp.utilities.InjectorUtils;
 import java.util.Date;
 
 
-/**
- * -------------------------------------------------------------------------------------------------
- * MainActivity
- * Implements :
- * - ForecastAdapter.ForecastAdapterOnClickHandler : for clicking on an list item
- * - LoaderCallbacks<Cursor[]> : for processing list of data loaded through cursor loader
- * loading/changing data displayed
- * -------------------------------------------------------------------------------------------------
- */
 
 public class MainActivity extends AppCompatActivity implements
         ForecastAdapter.ForecastAdapterOnItemClickHandler {

@@ -8,9 +8,8 @@ import java.util.Date;
 
 /**
  * -------------------------------------------------------------------------------------------------
- * {@link TypeConverter} for long to {@link Date}
- * <p>
- * This stores the date as a long in the database, but returns it as a {@link Date}
+ * TypeConverter for long to Date and viceversa.
+ * This stores the date as a long in the database, but returns it as a Date
  * -------------------------------------------------------------------------------------------------
  */
 class DateConverter {

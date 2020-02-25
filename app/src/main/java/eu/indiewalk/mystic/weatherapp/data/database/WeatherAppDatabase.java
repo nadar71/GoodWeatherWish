@@ -22,7 +22,6 @@ public abstract class WeatherAppDatabase extends RoomDatabase {
     public abstract WeatherDao weatherDao();
 
 
-    // must have only a database instance : singleton creation
     public static WeatherAppDatabase getInstance(Context context){
         if (singleInstance == null){
             synchronized (LOCK){

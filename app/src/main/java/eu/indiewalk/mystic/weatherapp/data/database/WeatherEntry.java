@@ -15,8 +15,8 @@ import eu.indiewalk.mystic.weatherapp.data.WeatherAppRepository;
 /**
  * -------------------------------------------------------------------------------------------------
  *  TODO :
- *  The date must be unique because we load the weather for one location only.
- *  Remember in case of reporting weather to more locations
+ *  * The date must be unique because we load the weather for one location only.
+ *    Remember in case of reporting weather to more locations
  *  ------------------------------------------------------------------------------------------------
  */
 @Entity(tableName = "weather", indices = {@Index(value="date",unique=true)})
@@ -37,8 +37,7 @@ public class WeatherEntry {
 
     /**
      * ---------------------------------------------------------------------------------------------
-     * This constructor is used by OpenWeatherJsonParser to convert network fetched json data
-     * to a WeatherEntry
+     * Used by OpenWeatherJsonParser to convert network fetched json data to a WeatherEntry
      *
      * @param weatherIconId Image id for weather
      * @param date Date of weather
@@ -77,7 +76,7 @@ public class WeatherEntry {
 
     /**
      * ---------------------------------------------------------------------------------------------
-     * Constructor used by Rooms
+     * Used by db
      * @param id
      * @param weatherIconId
      * @param date

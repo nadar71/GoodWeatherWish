@@ -9,9 +9,7 @@ import eu.indiewalk.mystic.weatherapp.ui.forecasts.MainActivity;
 
 /**
  * -------------------------------------------------------------------------------------------------
- * More efficient {@link WeatherEntry} with the only fields need for
- * {@link com.indiewalk.mystic.weatherapp.ui.list.ForecastAdapter}
- * in {@link MainActivity}
+ * WeatherEntry for ForecastAdapter in MainActivity
  * -------------------------------------------------------------------------------------------------
  */
 public class ListWeatherEntry {
@@ -26,8 +24,7 @@ public class ListWeatherEntry {
 
     /**
      * ---------------------------------------------------------------------------------------------
-     * This constructor is used by OpenWeatherJsonParser. When the network fetch has JSON data, it
-     * converts this data to WeatherEntry objects using this constructor.
+     * Used by OpenWeatherJsonParser to convert to WeatherEntry object
      * @param weatherIconId Image id for weather
      * @param date Date of weather
      * @param min Min temperature
@@ -45,12 +42,7 @@ public class ListWeatherEntry {
 
     /**
      * ---------------------------------------------------------------------------------------------
-     * Constructor used by Rooms
-     * @param id
-     * @param weatherIconId
-     * @param date
-     * @param min
-     * @param max
+     * Db object entry
      * ---------------------------------------------------------------------------------------------
      */
     public ListWeatherEntry(int id, int weatherIconId, Date date, double min, double max) {
